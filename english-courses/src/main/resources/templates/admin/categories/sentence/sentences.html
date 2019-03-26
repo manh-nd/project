@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+      xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
+      layout:decorate="~{layouts/dashboard-layout}">
+<head>
+    <title>Danh sách câu</title>
+</head>
+
+<body>
+<div layout:fragment="content" class="page-content fade-in-up">
+    <div class="ibox">
+        <div class="ibox-head">
+            <div class="ibox-title">Danh sách khoá học</div>
+            <div class="ibox-tools">
+                <a class="ibox-collapse">
+                    <i class="fa fa-minus"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-body">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Câu</th>
+                    <th>IPA</th>
+                    <th>Nghĩa</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="sentence-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="page-level-scripts">
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script>
+        $(document).ready(function () {
+            var tbody = document.querySelector("#sentence-body");
+
+            var url = '/api/v1/sentences?page=0&size=10';
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () { // cài đặt sự kiện khi trang thái xhr thay đổi
+                switch (xhr.readyState) {
+                    case XMLHttpRequest.UNSENT:
+                        console.log("Chưa gửi");
+                        break;
+                    case XMLHttpRequest.OPENED:
+                        console.log("Mở kết nối");
+                        break;
+                    case XMLHttpRequest.HEADERS_RECEIVED:
+                        console.log("Đã nhận header");
+                        break;
+                    case XMLHttpRequest.LOADING:
+                        console.log("Đang tải dữ liệu");
+                        break;
+                    case XMLHttpRequest.DONE:
+                        console.log("Kết thúc quá trình.");
+                        console.log(xhr.response);
+                        var content = xhr.response.content;
+                        for (var i = 0; i < content.length; i++) {
+                            var tr = document.createElement("tr");
+                            var id = document.createElement("td");
+                            id.textContent = content[i].id;
+                            var text = document.createElement("td");
+                            text.textContent = content[i].text;
+                            var ipa = document.createElement("td");
+                            ipa.textContent = content[i].ipa;
+                            var meaning = document.createElement("td");
+                            meaning.textContent = content[i].meaning;
+                            tr.appendChild(id);
+                            tr.appendChild(text);
+                            tr.appendChild(ipa);
+                            tr.appendChild(meaning);
+                            tbody.appendChild(tr);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            // HTTP VERB
+            xhr.open('GET', url);
+            xhr.responseType = 'json';
+            xhr.send();
+
+            // $.get("/api/v1/sentences?page=0&size=10", function (response) {
+            //     var content = response.content;
+            //     for (var i = 0; i < content.length; i++) {
+            //         var tr = document.createElement("tr");
+            //         var id = document.createElement("td");
+            //         id.textContent = content[i].id;
+            //         var text = document.createElement("td");
+            //         text.textContent = content[i].text;
+            //         var ipa = document.createElement("td");
+            //         ipa.textContent = content[i].ipa;
+            //         var meaning = document.createElement("td");
+            //         meaning.textContent = content[i].meaning;
+            //         tr.appendChild(id);
+            //         tr.appendChild(text);
+            //         tr.appendChild(ipa);
+            //         tr.appendChild(meaning);
+            //         tbody.appendChild(tr);
+            //     }
+            // });
+        });
+    </script>
+</th:block>
+</body>
+</html>

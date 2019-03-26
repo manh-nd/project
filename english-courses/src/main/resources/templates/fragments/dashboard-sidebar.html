@@ -1,0 +1,281 @@
+<!-- START SIDEBAR-->
+<nav xmlns:th="http://www.thymeleaf.org" th:fragment="sidebar" class="page-sidebar" id="sidebar">
+	<div id="sidebar-collapse">
+		<div class="admin-block d-flex">
+			<div>
+				<img src="../../static/images/admin.png" th:src="@{/images/admin.png}" alt="Avatar" width="45px" />
+			</div>
+			<div class="admin-info">
+				<div class="font-strong">Manh Nguyen</div>
+				<small>Administrator</small>
+			</div>
+		</div>
+		<ul class="side-menu metismenu">
+			<li>
+				<!--/*@thymesVar id="dashboard" type="string"*/-->
+				<a th:classappend="${dashboard} ? 'active'" th:href="@{/admin/dashboard}">
+					<i class="sidebar-item-icon fa fa-th-large"></i>
+					<span class="nav-label">Dashboard</span>
+				</a>
+			</li>
+			<li class="heading">Danh mục</li>
+			<li>
+				<a href="javascript:void(0)">
+					<i class="sidebar-item-icon fa fa-bookmark"></i>
+					<span class="nav-label">Quản lý danh mục</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<!--/*@thymesVar id="categories" type="java.lang.Boolean"*/-->
+				<ul class="nav-2-level collapse" th:classappend="${categories} ? 'in'">
+					<li>
+						<!--/*@thymesVar id="courses" type="java.lang.Boolean"*/-->
+						<a th:classappend="${courses} ? 'active'"
+						   th:href="@{/admin/courses}">Khoá học</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="sentences" type="java.lang.Boolean"*/-->
+						<a th:classappend="${sentences} ? 'active'"
+						   th:href="@{/admin/sentences}">Câu</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="vocabularies" type="java.lang.Boolean"*/-->
+						<a th:classappend="${vocabularies} ? 'active'"
+						   th:href="@{/admin/vocabularies}">Từ vựng</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="verbPhrases" type="java.lang.Boolean"*/-->
+						<a th:classappend="${verbPhrases} ? 'active'"
+						   th:href="@{/admin/verb-phrases}">Cụm động từ</a>
+					</li>
+				</ul>
+			</li>
+			<li class="heading">FEATURES</li>
+			<li>
+				<a href="javascript:void(0)">
+					<i class="sidebar-item-icon fa fa-bookmark"></i>
+					<span class="nav-label">Basic UI</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<!--/*@thymesVar id="basicUI" type="java.lang.Boolean"*/-->
+				<ul class="nav-2-level collapse" th:classappend="${basicUI} ? 'in'">
+					<li>
+						<!--/*@thymesVar id="colors" type="java.lang.Boolean"*/-->
+						<a th:classappend="${colors} ? 'active'"
+							th:href="@{/admin/template/basic-ui/colors}">Colors</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="typography" type="java.lang.Boolean"*/-->
+						<a th:classappend="${typography} ? 'active'"
+							th:href="@{/admin/template/basic-ui/typography}">Typography</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="panels" type="java.lang.Boolean"*/-->
+						<a th:classappend="${panels} ? 'active'"
+							th:href="@{/admin/template/basic-ui/panels}">Panels</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="buttons" type="java.lang.Boolean"*/-->
+						<a th:classappend="${buttons} ? 'active'"
+							th:href="@{/admin/template/basic-ui/buttons}">Buttons</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="tabs" type="java.lang.Boolean"*/-->
+						<a th:classappend="${tabs} ? 'active'" th:href="@{/admin/template/basic-ui/tabs}">Tabs</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="alertsTooltips" type="java.lang.Boolean"*/-->
+						<a th:classappend="${alertsTooltips} ? 'active'"
+							th:href="@{/admin/template/basic-ui/alerts-tooltips}">Alerts &amp; Tooltips</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="badgesProgress" type="java.lang.Boolean"*/-->
+						<a th:classappend="${badgesProgress} ? 'active'"
+							th:href="@{/admin/template/basic-ui/badges-progress}">Badges &amp; Progress</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="lists" type="java.lang.Boolean"*/-->
+						<a th:classappend="${lists} ? 'active'"
+							th:href="@{/admin/template/basic-ui/lists}">List</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="cards" type="java.lang.Boolean"*/-->
+						<a th:classappend="${cards} ? 'active'"
+							th:href="@{/admin/template/basic-ui/cards}">Card</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:void(0)">
+					<i class="sidebar-item-icon fa fa-edit"></i>
+					<span class="nav-label">Forms</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<!--/*@thymesVar id="forms" type="java.lang.Boolean"*/-->
+				<ul class="nav-2-level collapse" th:classappend="${forms} ? 'in'">
+					<li>
+						<!--/*@thymesVar id="formBasic" type="java.lang.Boolean"*/-->
+						<a th:classappend="${formBasic} ? 'active'" th:href="@{/admin/template/forms/form-basic}">Basic Forms</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="formAdvanced" type="java.lang.Boolean"*/-->
+						<a th:classappend="${formAdvanced} ? 'active'" th:href="@{/admin/template/forms/form-advanced}">Advanced Plugins</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="formInputMasks" type="java.lang.Boolean"*/-->
+						<a th:classappend="${formInputMasks} ? 'active'" th:href="@{/admin/template/forms/form-input-masks}">Form input masks</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="formValidation" type="java.lang.Boolean"*/-->
+						<a th:classappend="${formValidation} ? 'active'" th:href="@{/admin/template/forms/form-validation}">Form Validation</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="textEditors" type="java.lang.Boolean"*/-->
+						<a th:classappend="${textEditors} ? 'active'" th:href="@{/admin/template/forms/text-editors}">Text Editors</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+					<i class="sidebar-item-icon fa fa-table"></i>
+					<span class="nav-label">Tables</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<!--/*@thymesVar id="tables" type="java.lang.Boolean"*/-->
+				<ul class="nav-2-level collapse" th:classappend="${tables} ? 'in'">
+					<li>
+						<!--/*@thymesVar id="tableBasic" type="java.lang.Boolean"*/-->
+						<a th:classappend="${tableBasic} ? 'active'" th:href="@{/admin/template/tables/table-basic}">Basic Tables</a>
+					</li>
+					<li>
+						<!--/*@thymesVar id="dataTables" type="java.lang.Boolean"*/-->
+						<a th:classappend="${dataTables} ? 'active'" th:href="@{/admin/template/tables/datatables}">Datatables</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+					<i class="sidebar-item-icon fa fa-bar-chart"></i>
+					<span class="nav-label">Charts</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<ul class="nav-2-level collapse">
+					<li>
+						<a th:href="@{charts_flot}">Flot Charts</a>
+					</li>
+					<li>
+						<a th:href="@{charts_morris}">Morris Charts</a>
+					</li>
+					<li>
+						<a th:href="@{chartjs}">Chart.js</a>
+					</li>
+					<li>
+						<a th:href="@{charts_sparkline}">Sparkline Charts</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+					<i class="sidebar-item-icon fa fa-map"></i>
+					<span class="nav-label">Maps</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<ul class="nav-2-level collapse">
+					<li>
+						<a th:href="@{maps_vector}">Vector maps</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a th:href="@{icons}">
+					<i class="sidebar-item-icon fa fa-smile-o"></i>
+					<span class="nav-label">Icons</span>
+				</a>
+			</li>
+			<li class="heading">PAGES</li>
+			<li>
+				<a href="javascript:void(0);">
+					<i class="sidebar-item-icon fa fa-envelope"></i>
+					<span class="nav-label">Mailbox</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<ul class="nav-2-level collapse">
+					<li>
+						<a th:href="@{mailbox}">Inbox</a>
+					</li>
+					<li>
+						<a th:href="@{mail_view}">Mail view</a>
+					</li>
+					<li>
+						<a th:href="@{mail_compose}">Compose mail</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a th:href="@{calendar}">
+					<i class="sidebar-item-icon fa fa-calendar"></i>
+					<span class="nav-label">Calendar</span>
+				</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+					<i class="sidebar-item-icon fa fa-file-text"></i>
+					<span class="nav-label">Pages</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<ul class="nav-2-level collapse">
+					<li>
+						<a th:href="@{invoice}">Invoice</a>
+					</li>
+					<li>
+						<a th:href="@{profile}">Profile</a>
+					</li>
+					<li>
+						<a th:href="@{login}">Login</a>
+					</li>
+					<li>
+						<a th:href="@{register}">Register</a>
+					</li>
+					<li>
+						<a th:href="@{lockscreen}">Lockscreen</a>
+					</li>
+					<li>
+						<a th:href="@{forgot_password}">Forgot password</a>
+					</li>
+					<li>
+						<a th:href="@{error_404}">404 error</a>
+					</li>
+					<li>
+						<a th:href="@{error_500}">500 error</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+					<i class="sidebar-item-icon fa fa-sitemap"></i>
+					<span class="nav-label">Menu Levels</span>
+					<i class="fa fa-angle-left arrow"></i>
+				</a>
+				<ul class="nav-2-level collapse">
+					<li>
+						<a href="javascript:void(0);">Level 2</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);">
+							<span class="nav-label">Level 2</span>
+							<i class="fa fa-angle-left arrow"></i>
+						</a>
+						<ul class="nav-3-level collapse">
+							<li>
+								<a href="javascript:void(0);">Level 3</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);">Level 3</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</nav>
+<!-- END SIDEBAR-->

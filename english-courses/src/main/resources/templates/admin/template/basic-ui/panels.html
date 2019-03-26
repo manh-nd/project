@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+	xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
+	  layout:decorate="~{layouts/dashboard-layout}">
+<head>
+<title>Panels</title>
+</head>
+<body>
+	<div layout:fragment="content" class="page-content fade-in-up">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="ibox">
+					<div class="ibox-head">
+						<div class="ibox-title">Simple collapsed panel</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-ellipsis-v"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item">option 1</a>
+								<a class="dropdown-item">option 2</a>
+							</div>
+						</div>
+					</div>
+					<div class="ibox-body">Ut in adipiscing incididunt ex ut
+						proident culpa fugiat nulla ea do ex reprehenderit est aute sunt
+						dolore cillum est sunt culpa mollit magna sunt ut sint et magna
+						dolor duis eiusmod enim quis dolore sed ad sit ad ut consectetur
+						duis elit laboris dolor elit cupidatat reprehenderit consectetur
+						mollit ad aute eiusmod labore enim reprehenderit labore proident
+						excepteur ut aliqua do lorem velit ut veniam exercitation
+						exercitation ad pariatur sit nisi velit nulla incididunt dolor
+						exercitation occaecat dolor ad ullamco aute exercitation fugiat
+						ullamco occaecat commodo eiusmod voluptate sint nostrud ipsum
+						fugiat labore reprehenderit ut officia in in in</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="ibox">
+					<div class="ibox-head">
+						<div class="ibox-title">Fullscreen option</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="fullscreen-link">
+								<i class="fa fa-expand"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-body">Est id officia reprehenderit magna
+						esse tempor nostrud in lorem dolore dolor sunt ut qui deserunt sit
+						pariatur culpa ipsum anim eu dolor duis id incididunt proident
+						laborum ea in laborum labore sint deserunt tempor eiusmod occaecat
+						in est sit labore non irure sunt elit ipsum aliquip officia labore
+						duis cupidatat ullamco adipiscing veniam deserunt dolor ea laboris
+						deserunt anim dolore ea officia dolor amet magna exercitation
+						commodo dolor sunt incididunt nostrud voluptate mollit ex in
+						adipiscing ea ut occaecat voluptate incididunt lorem culpa
+						occaecat esse amet tempor non laborum consectetur sunt
+						exercitation officia ipsum ex ut ea nostrud in</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="ibox">
+					<div class="ibox-head">
+						<div class="ibox-title">Height with scroll</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="fullscreen-link">
+								<i class="fa fa-expand"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-body">
+						<p>
+							add
+							<code>.scroller</code>
+							and set height in
+							<code>data-height</code>
+							attribute.
+						</p>
+						<div class="scroller" data-height="200px">Dolore nostrud
+							laboris cillum non adipiscing excepteur incididunt qui aliquip do
+							non reprehenderit dolore pariatur exercitation amet adipiscing in
+							proident ea dolor qui sunt quis incididunt ex proident fugiat
+							nostrud culpa culpa ad anim anim in anim tempor sit est eiusmod
+							aliquip laborum veniam quis lorem nostrud sed dolor ipsum qui
+							lorem veniam dolore laboris ea ex in deserunt enim aliquip culpa
+							qui dolore tempor nostrud consequat dolore adipiscing quis
+							commodo duis tempor aliqua in occaecat consequat officia
+							adipiscing ut cillum nisi duis sed veniam in irure mollit sint
+							veniam exercitation magna voluptate adipiscing mollit culpa culpa
+							excepteur in duis esse sit laboris commodo ea anim tempor
+							pariatur dolore irure mollit ut dolore eu est lorem in tempor in
+							et in veniam est occaecat cupidatat exercitation veniam est magna
+							cillum adipiscing id nulla tempor et cillum ullamco reprehenderit
+							consequat id eiusmod sed aliquip quis occaecat ut ad officia
+							commodo deserunt</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="ibox">
+					<div class="ibox-head">
+						<div class="ibox-title">Removable panel</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="ibox-remove">
+								<i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-body">Anim consequat ad culpa ut sit ut
+						mollit est excepteur adipiscing sed duis consectetur quis et nisi
+						et magna ullamco exercitation commodo sit irure do voluptate
+						commodo cillum sunt elit ut qui do consectetur quis ut nostrud
+						laboris dolor deserunt quis sed in exercitation duis quis sunt
+						sunt elit sit laboris irure enim qui laboris adipiscing veniam
+						cillum esse sint adipiscing veniam cillum laborum eu aliquip
+						deserunt non ex aute nulla voluptate aliquip dolor dolor irure qui
+						fugiat in aliquip incididunt nulla veniam exercitation ut laboris
+						aliquip anim in nostrud in id consectetur est aliquip aliquip
+						aliquip consequat tempor laboris eiusmod consequat nulla nostrud
+						ipsum labore quis aliquip dolore veniam</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="ibox ibox-success">
+					<div class="ibox-head">
+						<div class="ibox-title">Simple collapsed panel</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="ibox-remove">
+								<i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-body">Magna velit reprehenderit sit enim ad
+						sint est dolor sed dolor commodo laborum nisi cupidatat magna
+						culpa nostrud irure ipsum in consectetur est veniam ut excepteur
+						ut fugiat non consequat dolor pariatur eu eu magna dolore pariatur
+						consequat in aliqua non non cillum in nostrud ullamco ut aliquip
+						dolor adipiscing nostrud non aute veniam aliqua in duis velit anim
+						dolor cupidatat adipiscing irure quis consectetur eiusmod culpa
+						tempor lorem sit officia tempor proident esse dolore do qui ea
+						mollit sunt commodo in officia in ad elit aliqua aliqua labore
+						laborum amet elit ad lorem consequat dolore sunt ex exercitation
+						pariatur</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="ibox ibox-primary">
+					<div class="ibox-head">
+						<div class="ibox-title">Fullscreen option</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-ellipsis-v"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item">option 1</a>
+								<a class="dropdown-item">option 2</a>
+							</div>
+						</div>
+					</div>
+					<div class="ibox-body">Labore aliquip cupidatat in pariatur
+						aliquip quis et lorem adipiscing aliquip consectetur esse ad elit
+						ut ut in ad mollit laboris enim in excepteur excepteur cillum
+						eiusmod amet tempor nostrud anim deserunt reprehenderit cupidatat
+						nostrud id dolor aliqua sed labore pariatur cillum aute occaecat
+						veniam veniam non exercitation voluptate exercitation esse aute
+						aliqua officia eiusmod nisi reprehenderit non dolor velit est
+						cillum enim ullamco in ut ut non irure minim magna anim sed anim
+						do tempor ullamco ipsum adipiscing amet consectetur esse lorem eu
+						sit sunt incididunt ipsum sint in amet non sit nisi minim duis
+						velit consequat tempor nisi</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="ibox ibox-info">
+					<div class="ibox-head">
+						<div class="ibox-title">Simple collapsed panel</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="ibox-remove">
+								<i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-body">Ut et amet deserunt lorem ea proident
+						sit voluptate eiusmod non labore commodo est ut dolore culpa
+						aliqua voluptate laboris et adipiscing labore ut aliquip ut nulla
+						cillum ut esse amet aliquip excepteur tempor dolore aliquip id
+						enim irure ipsum id dolor velit sed laboris consequat ad
+						adipiscing veniam labore officia voluptate lorem cupidatat
+						voluptate culpa in sit pariatur pariatur sed eu dolore dolore
+						fugiat ullamco amet in ea consequat sint cupidatat cillum in ut
+						dolore magna sit irure in anim occaecat deserunt in nulla nisi
+						dolore non ea laboris est veniam aliquip labore est fugiat ea ut
+						anim nisi</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="ibox ibox-warning">
+					<div class="ibox-head">
+						<div class="ibox-title">Fullscreen option</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-ellipsis-v"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item">option 1</a>
+								<a class="dropdown-item">option 2</a>
+							</div>
+						</div>
+					</div>
+					<div class="ibox-body">Ut qui amet nisi dolor laborum eu sunt
+						do ullamco ad anim labore qui velit et ut pariatur in amet sint
+						dolor laboris sint consectetur pariatur esse irure culpa non
+						aliqua ipsum ut dolor cupidatat eiusmod tempor ut cupidatat velit
+						culpa non dolore ea consequat in in aute velit occaecat ullamco
+						minim quis exercitation ipsum et ea tempor non pariatur tempor ut
+						qui sit enim consectetur duis sed dolor ad non anim incididunt
+						commodo proident culpa sit sunt et esse qui aute excepteur
+						deserunt incididunt exercitation ad in laborum nisi veniam officia
+						tempor et ex cupidatat tempor culpa est elit</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="ibox ibox-danger">
+					<div class="ibox-head">
+						<div class="ibox-title">Simple collapsed panel</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="ibox-remove">
+								<i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-body">Ad reprehenderit ut ad sit dolor ut
+						irure reprehenderit ipsum pariatur tempor dolor reprehenderit
+						nulla mollit id quis sit ex velit enim nulla esse ad nisi
+						consequat ea culpa enim labore do velit nostrud elit deserunt
+						eiusmod excepteur deserunt aliqua sit anim excepteur qui
+						consectetur consectetur ipsum enim ea veniam magna esse in quis
+						nulla qui ea qui ut enim voluptate non mollit sit deserunt est
+						cupidatat commodo esse est anim sit nostrud ipsum tempor esse
+						proident lorem laboris culpa in minim ut proident dolore sit in
+						aliquip eu laboris aliqua commodo anim nulla culpa nulla et
+						reprehenderit consequat ex</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="ibox ibox-grey">
+					<div class="ibox-head">
+						<div class="ibox-title">Fullscreen option</div>
+						<div class="ibox-tools">
+							<a class="ibox-collapse">
+								<i class="fa fa-minus"></i>
+							</a>
+							<a class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-ellipsis-v"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item">option 1</a>
+								<a class="dropdown-item">option 2</a>
+							</div>
+						</div>
+					</div>
+					<div class="ibox-body">Veniam aliqua aute consequat pariatur
+						adipiscing esse ut nisi aliqua amet nostrud esse sed nulla irure
+						adipiscing dolor ex dolore voluptate dolore quis in dolor nulla do
+						fugiat sunt irure velit eiusmod minim reprehenderit et ad est
+						laborum ex in in nulla non elit sed aliquip velit ipsum in sed
+						proident qui ullamco ut nulla consequat veniam magna ad irure
+						dolor velit occaecat elit eu aliqua officia officia incididunt
+						velit amet cupidatat ex non enim labore in ea exercitation non
+						quis occaecat ut cillum excepteur dolor deserunt qui esse dolor in
+						sunt voluptate sunt dolore magna nostrud enim proident aliquip</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

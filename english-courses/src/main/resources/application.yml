@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    username: project2
+    password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/self_learning?useSSL=false
+  data:
+    elasticsearch:
+      cluster-name:
+      cluster-nodes: localhost:9300
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
+  mail:
+    protocol: smtp
+    host: smtp.gmail.com
+    port: 587
+    username: manhnd.695@gmail.com
+    password: Manh1234
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  thymeleaf:
+    cache: false
+    enable-spring-el-compiler: true
