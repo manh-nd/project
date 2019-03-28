@@ -18,6 +18,8 @@
             </div>
         </div>
         <div class="ibox-body">
+            <input type="text" class="form-control" placeholder="Tìm kiếm"/>
+            <div class="my-2"></div>
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -25,87 +27,162 @@
                     <th>Câu</th>
                     <th>IPA</th>
                     <th>Nghĩa</th>
+                    <th>Âm thanh</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody id="sentence-body">
                 </tbody>
             </table>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination" id="pagination">
+                </ul>
+            </nav>
+
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="sentenceModal" tabindex="-1" role="dialog" aria-labelledby="sentenceModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sentenceModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
     <script>
         $(document).ready(function () {
             var tbody = document.querySelector("#sentence-body");
+            var pagination = document.querySelector("#pagination");
+            var url = '/api/v1/sentences';
 
-            var url = '/api/v1/sentences?page=0&size=10';
+            var size = 10;
+            var page = 0;
 
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () { // cài đặt sự kiện khi trang thái xhr thay đổi
-                switch (xhr.readyState) {
-                    case XMLHttpRequest.UNSENT:
-                        console.log("Chưa gửi");
-                        break;
-                    case XMLHttpRequest.OPENED:
-                        console.log("Mở kết nối");
-                        break;
-                    case XMLHttpRequest.HEADERS_RECEIVED:
-                        console.log("Đã nhận header");
-                        break;
-                    case XMLHttpRequest.LOADING:
-                        console.log("Đang tải dữ liệu");
-                        break;
-                    case XMLHttpRequest.DONE:
-                        console.log("Kết thúc quá trình.");
-                        console.log(xhr.response);
-                        var content = xhr.response.content;
-                        for (var i = 0; i < content.length; i++) {
-                            var tr = document.createElement("tr");
-                            var id = document.createElement("td");
-                            id.textContent = content[i].id;
-                            var text = document.createElement("td");
-                            text.textContent = content[i].text;
-                            var ipa = document.createElement("td");
-                            ipa.textContent = content[i].ipa;
-                            var meaning = document.createElement("td");
-                            meaning.textContent = content[i].meaning;
-                            tr.appendChild(id);
-                            tr.appendChild(text);
-                            tr.appendChild(ipa);
-                            tr.appendChild(meaning);
-                            tbody.appendChild(tr);
-                        }
-                        break;
-                    default:
-                        break;
+            getSentences(page);
+
+            function getSentences(page) {
+                $.ajax({
+                    method: 'GET',
+                    url: url,
+                    data: {
+                        page: page,
+                        size: size
+                    },
+                    dataType: 'json'
+                }).done(success).fail(error);
+            }
+
+            function success(response) {
+                var content = response.content;
+                var pageable = response.pageable;
+                var totalElements = response.totalElements;
+                var totalPages = response.totalPages;
+                var first = response.first;
+                var last = response.last;
+
+                removeAllChild(tbody);
+                for (var i = 0; i < content.length; i++) {
+                    var tr = document.createElement("tr");
+
+                    var ordinalNumber = document.createElement("td");
+                    ordinalNumber.textContent = pageable.offset + 1 + i;
+
+                    var text = document.createElement("td");
+                    text.textContent = content[i].text;
+
+                    var ipa = document.createElement("td");
+                    ipa.textContent = content[i].ipa;
+
+                    var meaning = document.createElement("td");
+                    meaning.textContent = content[i].meaning;
+
+                    var audio = document.createElement('td');
+                    audio.classList.add('text-center');
+                    var link = document.createElement('a');
+                    var icon = document.createElement('i');
+                    icon.classList.add('fa', 'fa-volume-up');
+                    link.appendChild(icon);
+                    link.setAttribute('href', url + '/' + content[i].id + '/audio');
+                    link.addEventListener('click', function(event){
+                       event.preventDefault();
+                    });
+                    audio.appendChild(link);
+
+                    var editBtn = document.createElement("button");
+                    editBtn.textContent = 'Sửa';
+                    editBtn.dataset.sentenceId = content[i].id;
+                    editBtn.classList.add('btn', 'btn-warning');
+                    editBtn.addEventListener('click', function (event) {
+                        console.log(event.target.dataset.sentenceId);
+                        $('#sentenceModal').modal('show');
+                    });
+                    var actions = document.createElement("td");
+                    actions.appendChild(editBtn);
+
+                    tr.appendChild(ordinalNumber);
+                    tr.appendChild(text);
+                    tr.appendChild(ipa);
+                    tr.appendChild(meaning);
+                    tr.appendChild(audio);
+                    tr.appendChild(actions);
+
+                    tbody.appendChild(tr);
+                }
+
+                removeAllChild(pagination);
+                for (var j = 0; j < 10; j++) {
+                    var pageLink = document.createElement('a');
+                    pageLink.setAttribute('href', '#');
+                    pageLink.textContent = j;
+                    pageLink.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        setPage(+event.target.innerText);
+                    });
+                    pageLink.classList.add('page-link');
+                    var pageItem = document.createElement('li');
+                    pageItem.classList.add('page-item');
+                    pageItem.appendChild(pageLink);
+                    pagination.appendChild(pageItem);
                 }
             }
-            // HTTP VERB
-            xhr.open('GET', url);
-            xhr.responseType = 'json';
-            xhr.send();
 
-            // $.get("/api/v1/sentences?page=0&size=10", function (response) {
-            //     var content = response.content;
-            //     for (var i = 0; i < content.length; i++) {
-            //         var tr = document.createElement("tr");
-            //         var id = document.createElement("td");
-            //         id.textContent = content[i].id;
-            //         var text = document.createElement("td");
-            //         text.textContent = content[i].text;
-            //         var ipa = document.createElement("td");
-            //         ipa.textContent = content[i].ipa;
-            //         var meaning = document.createElement("td");
-            //         meaning.textContent = content[i].meaning;
-            //         tr.appendChild(id);
-            //         tr.appendChild(text);
-            //         tr.appendChild(ipa);
-            //         tr.appendChild(meaning);
-            //         tbody.appendChild(tr);
-            //     }
-            // });
+            function removeAllChild(element) {
+                while (element.firstChild) {
+                    element.removeChild(element.firstChild);
+                }
+            }
+
+            function error(response) {
+                console.log("Error");
+                console.log(response);
+            }
+
+            function setPage(page) {
+                if (this.page != page) {
+                    this.page = page;
+                    getSentences(this.page);
+                }
+            }
+
         });
     </script>
 </th:block>

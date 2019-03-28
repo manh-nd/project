@@ -21,15 +21,15 @@
 <body class="fixed-navbar">
 
 <div class="page-wrapper">
-    <header th:replace="fragments/dashboard-header :: header"></header>
-    <nav th:replace="fragments/dashboard-sidebar :: sidebar"></nav>
+    <header th:replace="~{fragments/dashboard-header :: header}"></header>
+    <nav th:replace="~{fragments/dashboard-sidebar :: sidebar}"></nav>
     <div class="content-wrapper">
         <div layout:fragment="content" class="page-content fade-in-up"></div>
-        <footer th:replace="fragments/dashboard-footer :: footer"></footer>
+        <footer th:replace="~{fragments/dashboard-footer :: footer}"></footer>
     </div>
 </div>
 
-<div th:replace="fragments/dashboard-theme-config :: theme-config"></div>
+<div th:replace="~{fragments/dashboard-theme-config :: theme-config}"></div>
 
 <!-- BEGIN PAGA BACKDROPS-->
 <div class="sidenav-backdrop backdrop"></div>
