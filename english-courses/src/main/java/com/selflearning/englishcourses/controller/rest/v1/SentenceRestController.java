@@ -32,6 +32,7 @@ public class SentenceRestController {
     private String audioPath;
 
 
+    @PostMapping("/sentences")
     public ResponseEntity<SentenceDto> createSentence(@RequestBody SentenceDto sentenceDto) {
         Sentence sentence = sentenceService.convertDtoToEntity(sentenceDto);
         sentenceService.save(sentence);

@@ -8,20 +8,20 @@ $(document).ready(function () {
     var playing = false;
     var pause = true;
     var saveHistory = true;
-    var URL = window.URL || window.webkitURL;
 
     audio.playing = function () {
+        console.log("playing...")
         playing = true;
         pause = false;
     };
 
     audio.pause = function () {
+        console.log("paused")
         pause = true;
         playing = false;
     };
 
     init();
-
 
     $("#searchBtn").on('click', function (event) {
         var text = $("#searchBox").val();
@@ -56,6 +56,13 @@ $(document).ready(function () {
         }
     });
 
+    $('#sentenceAddButton').on('click', function () {
+        var $modal = $('#sentenceModal');
+        $modal.find('#sentenceModalTitle').text('Thêm câu');
+        clearForm($modal);
+        $modal.modal('show');
+    });
+
     function init() {
         page = 0;
         var pathname = window.location.pathname;
@@ -70,6 +77,14 @@ $(document).ready(function () {
         } else {
             getSentences(page);
         }
+    }
+
+    function clearForm($modal) {
+        $modal.find('#id').val(null);
+        $modal.find('#text').val(null);
+        $modal.find('#ipa').val(null);
+        $modal.find('#meaning').val(null);
+        $modal.find('#audioPath').val(null);
     }
 
     window.onpopstate = function (event) {
@@ -117,15 +132,20 @@ $(document).ready(function () {
         if (sentence.id) {
             url = '/api/v1/sentences/' + sentence.id;
             method = 'PUT';
+        } else {
+            sentence.id = null;
         }
         $.ajax({
             method: method,
             url: url,
             data: JSON.stringify(sentence),
-            contentType: 'application/json',
+            contentType: 'application/json'
         }).done(function (response) {
             $('#sentenceModal').modal('hide');
-            reload();
+            if(!sentence.id){
+                $('#searchBox').val(response.text);
+                search(0, response.text);
+            }
         }).fail(function () {
             alert("update fail");
         });
@@ -172,6 +192,7 @@ $(document).ready(function () {
 
         function success(response) {
             var audio = document.querySelector("#audioPlayer");
+            var URL = window.URL || window.webkitURL;
             audio.src = URL.createObjectURL(response);
             audio.play();
         }
@@ -225,7 +246,7 @@ $(document).ready(function () {
                     icon.classList.add('fa', 'fa-pencil');
                     editBtn.appendChild(icon);
                     editBtn.dataset.sentenceId = content[i].id;
-                    editBtn.classList.add('btn', 'btn-warning');
+                    editBtn.classList.add('btn', 'btn-warning', 'btn-sm');
                     editBtn.addEventListener('click', function (event) {
                         var id = $(this).data("sentenceId");
                         var $modal = $('#sentenceModal').modal('show');
@@ -233,7 +254,7 @@ $(document).ready(function () {
                             method: 'GET',
                             url: '/api/v1/sentences/' + id,
                             dataType: 'json'
-                        }).done(function (data, status) {
+                        }).done(function (data) {
                             $modal.find('#sentenceModalTitle').text('Sửa câu');
                             $modal.find('#id').val(data.id);
                             $modal.find('#text').val(data.text);
