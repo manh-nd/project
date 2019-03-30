@@ -1,6 +1,8 @@
 package com.selflearning.englishcourses.service.impl;
 
 import com.selflearning.englishcourses.domain.Vocabulary;
+import com.selflearning.englishcourses.domain.Word;
+import com.selflearning.englishcourses.domain.WordClass;
 import com.selflearning.englishcourses.repository.elasticsearch.VocabularyElasticsearchRepository;
 import com.selflearning.englishcourses.repository.elasticsearch.WordClassElasticsearchRepository;
 import com.selflearning.englishcourses.repository.elasticsearch.WordElasticsearchRepository;
@@ -14,9 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -81,10 +85,25 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     }
 
+    @Transactional
     @Override
     public void saveAll(Iterable<Vocabulary> iterable) {
-        vocabularyJpaRepository.saveAll(iterable);
-        vocabularyElasticsearchRepository.saveAll(iterable);
+        Iterator<Vocabulary> iterator = iterable.iterator();
+        while (iterator.hasNext()) {
+            Vocabulary vocabulary = iterator.next();
+            Word word = vocabulary.getWord();
+            Word wordInDb = wordJpaRepository.findByTextAndIpa(word.getText(), word.getIpa());
+            if(Objects.nonNull(wordInDb)){
+                vocabulary.setWord(wordInDb);
+            }
+            WordClass wordClass = vocabulary.getWordClass();
+            WordClass wordClassInDb = wordClassJpaRepository.findByName(wordClass.getName());
+            if(Objects.nonNull(wordInDb)){
+                vocabulary.setWordClass(wordClassInDb);
+            }
+            vocabularyJpaRepository.save(vocabulary);
+            vocabularyElasticsearchRepository.save(vocabulary);
+        }
     }
 
     @Override

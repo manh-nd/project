@@ -6,10 +6,10 @@ public interface ModelMapperService<E, Dto> {
 
     E convertDtoToEntity(Dto dto);
 
-    default List<E> convertDtoToEntity(List<Dto> dtoList){return null;}
+    List<E> convertDtoToEntity(List<Dto> dtoList);
 
     Dto convertEntityToDto(E entity);
 
-    default List<Dto> convertEntityToDto(List<E> entityList){ return null;}
+    List<Dto> convertEntityToDto(List<E> entityList);
 
 }

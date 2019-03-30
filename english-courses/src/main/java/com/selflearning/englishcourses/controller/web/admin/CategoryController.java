@@ -1,9 +1,12 @@
 package com.selflearning.englishcourses.controller.web.admin;
 
+import com.selflearning.englishcourses.controller.rest.v1.SentenceRestController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -18,6 +21,12 @@ public class CategoryController {
 
     @GetMapping("/sentences")
     public String sentencePage(Model model) {
+        model.addAttribute("sentences", true);
+        return "admin/categories/sentence/sentences";
+    }
+
+    @GetMapping("/sentences/page/{number}")
+    public String sentencePage(Model model, @PathVariable("number") Integer number) {
         model.addAttribute("sentences", true);
         return "admin/categories/sentence/sentences";
     }

@@ -12,7 +12,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: none
     open-in-view: true
@@ -32,3 +32,6 @@ spring:
   thymeleaf:
     cache: false
     enable-spring-el-compiler: true
+
+path:
+  audio: /Users/manhnd/Data/English/TAGT360

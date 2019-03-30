@@ -22,9 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -96,10 +94,9 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Transactional
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void save(User user) {
-        setDefaultUserProperty(user);
         userJpaRepository.save(user);
     }
 
@@ -129,12 +126,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> convertDtoToEntity(List<UserDto> userDtos) {
+        return null;
+    }
+
+    @Override
     public UserDto convertEntityToDto(User entity) {
         return null;
     }
 
-    @Transactional
     @Override
+    public List<UserDto> convertEntityToDto(List<User> entityList) {
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void register(RegistrationToken registrationToken) {
         User user = registrationToken.getUser();
         setDefaultUserProperty(user);
@@ -165,7 +172,7 @@ public class UserServiceImpl implements UserService {
         } else {
             Role role = new Role(USER_ROLE);
             roleJpaRepository.save(role);
-            if (role.getId() != null) {
+            if (Objects.nonNull(role.getId())) {
                 user.setRoles(Arrays.asList(role));
             } else {
                 throw new RuntimeException("Cannot create Role!");
