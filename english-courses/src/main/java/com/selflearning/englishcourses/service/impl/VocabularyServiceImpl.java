@@ -72,43 +72,45 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     @Override
     public Vocabulary get(String id) {
-        return null;
+        return vocabularyJpaRepository.findById(UUID.fromString(id)).orElse(null);
     }
 
     @Override
     public Vocabulary get(UUID id) {
-        return null;
+        return vocabularyJpaRepository.findById(id).orElse(null);
     }
 
     @Override
     public void save(Vocabulary obj) {
-
+        vocabularyJpaRepository.save(obj);
+        vocabularyElasticsearchRepository.save(obj);
     }
 
-    @Transactional
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void saveAll(Iterable<Vocabulary> iterable) {
         Iterator<Vocabulary> iterator = iterable.iterator();
         while (iterator.hasNext()) {
             Vocabulary vocabulary = iterator.next();
             Word word = vocabulary.getWord();
             Word wordInDb = wordJpaRepository.findByTextAndIpa(word.getText(), word.getIpa());
-            if(Objects.nonNull(wordInDb)){
+            if (Objects.nonNull(wordInDb)) {
                 vocabulary.setWord(wordInDb);
             }
             WordClass wordClass = vocabulary.getWordClass();
             WordClass wordClassInDb = wordClassJpaRepository.findByName(wordClass.getName());
-            if(Objects.nonNull(wordInDb)){
+            if (Objects.nonNull(wordClassInDb)) {
                 vocabulary.setWordClass(wordClassInDb);
             }
             vocabularyJpaRepository.save(vocabulary);
-            vocabularyElasticsearchRepository.save(vocabulary);
         }
+        vocabularyElasticsearchRepository.saveAll(iterable);
     }
 
     @Override
     public void delete(Vocabulary obj) {
-
+        vocabularyJpaRepository.delete(obj);
+        vocabularyElasticsearchRepository.delete(obj);
     }
 
     @Override
@@ -118,7 +120,7 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     @Override
     public Page<Vocabulary> findAll(Pageable pageable) {
-        return null;
+        return vocabularyJpaRepository.findAll(pageable);
     }
 
     @Override

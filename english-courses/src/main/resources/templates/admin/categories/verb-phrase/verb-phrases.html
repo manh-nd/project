@@ -10,7 +10,7 @@
 <div layout:fragment="content" class="page-content fade-in-up">
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Danh sách khoá học</div>
+            <div class="ibox-title">Danh sách cụm động từ</div>
             <div class="ibox-tools">
                 <a class="ibox-collapse">
                     <i class="fa fa-minus"></i>
@@ -18,27 +18,32 @@
             </div>
         </div>
         <div class="ibox-body">
+            <div class="input-group"><input id="search-input" type="text" class="form-control" placeholder="Tìm kiếm"/>
+                <button id="search-button" class="btn btn-success">Tìm kiếm</button>
+            </div>
+            <div class="my-3"></div>
 
-            <table>
+            <table id="verb-phrases-table" class="table table-sm table-hover table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Tên khoá học</th>
-                    <th></th>
+                    <th>#</th>
+                    <th>Cụm động từ</th>
+                    <th>Ipa</th>
+                    <th>Nghĩa</th>
+                    <th>Thao tác</th>
                 </tr>
                 </thead>
                 <tbody>
-                    <td></td>
                 </tbody>
             </table>
+            <nav id="verb-phrases-pagination"></nav>
         </div>
     </div>
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
-    <script>
-        alert("hello world!")
-    </script>
+    <script th:src="@{/js/service/service.js}"></script>
+    <script th:src="@{/js/pages/verb-phrase.js}"></script>
 </th:block>
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 /**
  * @author manhnd
@@ -28,15 +29,15 @@ public class Vocabulary {
     @Column(name = "VOCABULARY_ID", length = 16)
     private UUID id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="WORD_ID", nullable = false)
     private Word word;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="WORD_CLASS_ID", nullable = false)
     private WordClass wordClass;
 
-    @Column(name="VOCABULARY_DESCRIPTION")
+    @Column(name="VOCABULARY_DESCRIPTION", length = 500)
     private String description;
 
     @Column(name="VOCABULARY_MEANING")
@@ -44,5 +45,11 @@ public class Vocabulary {
 
     @Column(name="VOCABULARY_IMAGE_PATH")
     private String imagePath;
+
+    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updatedTime;
 
 }

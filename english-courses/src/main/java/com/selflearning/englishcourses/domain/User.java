@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -61,10 +62,10 @@ public class User implements UserDetails {
     @Column(name = "GENDER", nullable = false)
     private Boolean gender;
 
-    @Column(name = "ENABLED", nullable = false)
+    @Column(name = "ENABLED", nullable = false, columnDefinition = "BIT(1) DEFAULT 0b00")
     private Boolean enabled;
 
-    @Column(name = "LOCKED", nullable = false)
+    @Column(name = "LOCKED", columnDefinition = "BIT(1) DEFAULT 0b00")
     private Boolean locked;
 
     @OneToMany(mappedBy = "user")
@@ -75,6 +76,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RegistrationToken> registrationTokens;
+
+    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updatedTime;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

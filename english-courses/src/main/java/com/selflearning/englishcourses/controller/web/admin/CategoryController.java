@@ -27,8 +27,7 @@ public class CategoryController {
 
     @GetMapping("/sentences/page/{number}")
     public String sentencePage(Model model, @PathVariable("number") Integer number) {
-        model.addAttribute("sentences", true);
-        return "admin/categories/sentence/sentences";
+        return sentencePage(model);
     }
 
     @GetMapping("/vocabularies")
@@ -37,10 +36,20 @@ public class CategoryController {
         return "admin/categories/vocabulary/vocabularies";
     }
 
+    @GetMapping("/vocabularies/page/{page}")
+    public String vocabularyPage(Model model, @PathVariable("page") Integer page) {
+        return vocabularyPage(model);
+    }
+
     @GetMapping("/verb-phrases")
     public String verbPhrasePage(Model model) {
         model.addAttribute("verbPhrases", true);
         return "admin/categories/verb-phrase/verb-phrases";
+    }
+
+    @GetMapping("/verb-phrases/page/{page}/")
+    public String verbPhrasePage(Model model, @PathVariable("page") Integer page) {
+        return verbPhrasePage(model);
     }
 
     @ModelAttribute("categories")

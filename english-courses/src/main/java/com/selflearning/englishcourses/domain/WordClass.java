@@ -1,14 +1,12 @@
 package com.selflearning.englishcourses.domain;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -17,8 +15,8 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@ToString(exclude = "vocabularies")
-@EqualsAndHashCode(exclude = "vocabularies")
+//@ToString(exclude = "vocabularies")
+//@EqualsAndHashCode(exclude = "vocabularies")
 @Entity
 @Table(name="word_classes")
 @Document(indexName = "word_classes", shards = 2)
@@ -39,6 +37,13 @@ public class WordClass {
     @Column(name="WORD_CLASS_DESCRIPTION", length = 1000)
     private String description;
 
-    @OneToMany(mappedBy = "wordClass", cascade = CascadeType.ALL)
-    private List<Vocabulary> vocabularies;
+//    @OneToMany(mappedBy = "wordClass", cascade = CascadeType.ALL)
+//    private List<Vocabulary> vocabularies;
+
+    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updatedTime;
+
 }

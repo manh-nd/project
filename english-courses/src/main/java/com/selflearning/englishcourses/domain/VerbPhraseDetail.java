@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,8 @@ public class VerbPhraseDetail {
     @Column(name = "VERB_PHRASE_DETAIL_ID", length = 16)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name="VERB_PHRASE_ID", nullable = false)
     private VerbPhrase verbPhrase;
 
@@ -44,7 +46,13 @@ public class VerbPhraseDetail {
     @Column(name="VERB_PHRASE_SYNONYMS", length = 500)
     private String synonyms;
 
-    @Column(name="VERB_PHRASE_NOTE")
+    @Column(name="VERB_PHRASE_NOTE", length = 1000)
     private String note;
+
+    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updatedTime;
 
 }

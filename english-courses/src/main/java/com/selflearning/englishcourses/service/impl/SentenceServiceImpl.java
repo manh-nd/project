@@ -110,17 +110,6 @@ public class SentenceServiceImpl implements SentenceService {
     }
 
     @Override
-    public void updateSentenceAudioPath() {
-//        List<Sentence> sentences = sentenceJpaRepository.findAllSentencesWhereAudioPathIsNotEmpty();
-//        sentences.forEach(sentence -> {
-//            String audioPath = sentence.getAudioPath();
-//            audioPath = audioPath.replaceAll("\\\\", "/").replaceAll("E:/Documents/EngProjectData/audios", "/Audios");
-//            sentenceJpaRepository.updateSentenceAudioPath(audioPath, sentence.getId());
-//            sentenceElasticsearchRepository.save(sentence);
-//        });
-    }
-
-    @Override
     public Page<Sentence> searchByText(String text, Pageable pageable) {
         return sentenceElasticsearchRepository.findByText(text, pageable);
     }

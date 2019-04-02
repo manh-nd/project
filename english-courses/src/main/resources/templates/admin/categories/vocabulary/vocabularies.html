@@ -10,7 +10,7 @@
 <div layout:fragment="content" class="page-content fade-in-up">
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Danh sách khoá học</div>
+            <div class="ibox-title">Danh sách từ vựng</div>
             <div class="ibox-tools">
                 <a class="ibox-collapse">
                     <i class="fa fa-minus"></i>
@@ -18,27 +18,38 @@
             </div>
         </div>
         <div class="ibox-body">
-
-            <table>
+            <div class="input-group"><input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm"/>
+                <button id="searchBtn" class="btn btn-success">Tìm kiếm</button>
+            </div>
+            <div class="my-3"></div>
+            <table id="vocabulary-table" class="table table-sm table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Tên khoá học</th>
-                    <th></th>
+                    <th>#</th>
+                    <th>Từ</th>
+                    <th>Từ loại</th>
+                    <th>Nghĩa</th>
+                    <th>Mô tả</th>
+                    <th>Tiếng</th>
+                    <th>
+                        <button class="btn btn-sm btn-block btn-success">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
-                    <td></td>
                 </tbody>
             </table>
+            <nav id="pagination-navigator"></nav>
         </div>
+        <audio id="audioPlayer"></audio>
     </div>
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
-    <script>
-        alert("hello world!")
-    </script>
+    <script th:src="@{/js/service/service.js}"></script>
+    <script th:src="@{/js/pages/vocabulary.js}"></script>
 </th:block>
 </body>
 </html>

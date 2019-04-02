@@ -28,8 +28,8 @@ public class SentenceRestController {
 
     private SentenceService sentenceService;
 
-    @Value("${path.audio}")
-    private String audioPath;
+    @Value("${base-path}")
+    private String path;
 
 
     @PostMapping("/sentences")
@@ -77,7 +77,7 @@ public class SentenceRestController {
     public ResponseEntity<byte[]> getAudio(@PathVariable String id) throws IOException {
         Sentence sentence = sentenceService.get(id);
         String audioPath = sentence.getAudioPath();
-        File file = new File(this.audioPath + audioPath);
+        File file = new File(this.path + audioPath);
         Resource resource = new FileSystemResource(file);
         byte[] bytes = Files.readAllBytes(file.toPath());
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
