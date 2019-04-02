@@ -37,6 +37,11 @@ public class CategoryController {
         return "admin/categories/vocabulary/vocabularies";
     }
 
+    @GetMapping("/vocabularies/page/{page}")
+    public String vocabularyPage(Model model, @PathVariable("page") Integer page) {
+        return vocabularyPage(model);
+    }
+
     @GetMapping("/verb-phrases")
     public String verbPhrasePage(Model model) {
         model.addAttribute("verbPhrases", true);

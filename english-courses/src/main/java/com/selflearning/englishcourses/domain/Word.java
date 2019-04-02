@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,8 +18,8 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@ToString(exclude = "vocabularies")
-@EqualsAndHashCode(exclude = "vocabularies")
+//@ToString(exclude = "vocabularies")
+//@EqualsAndHashCode(exclude = "vocabularies")
 @Entity
 @Table(name="words",
         uniqueConstraints = @UniqueConstraint(name = "WORD_UNIQUE", columnNames = {"WORD_TEXT", "WORD_IPA"}))
@@ -43,7 +44,13 @@ public class Word {
     @Column(name="WORD_SPECIAL_AUDIO_PATH", length = 1000)
     private String specialAudioPath;
 
-    @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
-    private List<Vocabulary> vocabularies;
+//    @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
+//    private List<Vocabulary> vocabularies;
+
+    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updatedTime;
 
 }

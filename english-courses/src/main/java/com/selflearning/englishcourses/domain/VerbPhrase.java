@@ -37,7 +37,13 @@ public class VerbPhrase {
     @Column(name="VERB_PHRASE_IPA")
     private String ipa;
 
-    @OneToMany(mappedBy = "verbPhrase", targetEntity = VerbPhraseDetail.class)
-    private List<VerbPhrase> verbPhrases;
+    @OneToMany(mappedBy = "verbPhrase", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<VerbPhraseDetail> verbPhraseDetails;
+
+    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updatedTime;
 
 }

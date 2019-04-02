@@ -4,27 +4,65 @@ import com.selflearning.englishcourses.domain.Vocabulary;
 import com.selflearning.englishcourses.service.VocabularyService;
 import com.selflearning.englishcourses.service.dto.VocabularyDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
 public class VocabularyRestController {
 
-    @Autowired
     private VocabularyService vocabularyService;
 
+    @Value("${base-path}")
+    private String path;
+
+    @Autowired
+    public void setVocabularyService(VocabularyService vocabularyService) {
+        this.vocabularyService = vocabularyService;
+    }
+
+    @GetMapping("/vocabularies")
+    public ResponseEntity<Page<VocabularyDto>> getVocabularies(Pageable pageable) {
+        Page<Vocabulary> vocabularyPage = vocabularyService.findAll(pageable);
+        List<Vocabulary> content = vocabularyPage.getContent();
+        long total = vocabularyPage.getTotalElements();
+        List<VocabularyDto> vocabularyDtos = vocabularyService.convertEntityToDto(content);
+        Page<VocabularyDto> vocabularyDtoPage = new PageImpl<>(vocabularyDtos, pageable, total);
+        return new ResponseEntity<>(vocabularyDtoPage, HttpStatus.OK);
+    }
+
     @PostMapping("/vocabularies/save-all")
-    public ResponseEntity<List<VocabularyDto>> saveAll(@RequestBody List<VocabularyDto> vocabularyDtos){
+    public ResponseEntity<List<VocabularyDto>> saveAll(@RequestBody List<VocabularyDto> vocabularyDtos) {
         List<Vocabulary> vocabularies = vocabularyService.convertDtoToEntity(vocabularyDtos);
         vocabularyService.saveAll(vocabularies);
         vocabularyDtos = vocabularyService.convertEntityToDto(vocabularies);
         return new ResponseEntity<>(vocabularyDtos, HttpStatus.CREATED);
     }
+
+    @GetMapping("/vocabularies/{id}/audio")
+    public ResponseEntity<byte[]> getVocabularyAudios(@PathVariable("id") String id) throws IOException {
+        Vocabulary vocabulary = vocabularyService.get(id);
+        String audioPath = vocabulary.getWord().getSpecialAudioPath();
+        File file = new File(this.path + audioPath);
+        Resource resource = new FileSystemResource(file);
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .body(bytes);
+    }
+
 }

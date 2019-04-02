@@ -1,8 +1,12 @@
 package com.selflearning.englishcourses.service.impl;
 
+import com.selflearning.englishcourses.domain.Vocabulary;
 import com.selflearning.englishcourses.domain.Word;
+import com.selflearning.englishcourses.repository.elasticsearch.VocabularyElasticsearchRepository;
+import com.selflearning.englishcourses.repository.elasticsearch.WordElasticsearchRepository;
 import com.selflearning.englishcourses.repository.jpa.WordJpaRepository;
 import com.selflearning.englishcourses.service.WordService;
+import com.selflearning.englishcourses.service.dto.WordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +21,19 @@ public class WordServiceImpl implements WordService {
 
     private WordJpaRepository wordJpaRepository;
 
+    private WordElasticsearchRepository wordElasticsearchRepository;
+
+    @Autowired
+    private VocabularyElasticsearchRepository vocabularyElasticsearchRepository;
+
     @Autowired
     public void setWordJpaRepository(WordJpaRepository wordJpaRepository) {
         this.wordJpaRepository = wordJpaRepository;
+    }
+
+    @Autowired
+    public void setVocabularyElasticsearchRepository(VocabularyElasticsearchRepository vocabularyElasticsearchRepository) {
+        this.vocabularyElasticsearchRepository = vocabularyElasticsearchRepository;
     }
 
     @Override
@@ -58,26 +72,26 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public Page<Word> findAll(Pageable pageable) {
+        return wordJpaRepository.findAll(pageable);
+    }
+
+    @Override
+    public Word convertDtoToEntity(WordDto wordDto) {
         return null;
     }
 
     @Override
-    public Word convertDtoToEntity(UUID uuid) {
+    public List<Word> convertDtoToEntity(List<WordDto> wordDtos) {
         return null;
     }
 
     @Override
-    public List<Word> convertDtoToEntity(List<UUID> uuids) {
+    public WordDto convertEntityToDto(Word entity) {
         return null;
     }
 
     @Override
-    public UUID convertEntityToDto(Word entity) {
-        return null;
-    }
-
-    @Override
-    public List<UUID> convertEntityToDto(List<Word> entityList) {
+    public List<WordDto> convertEntityToDto(List<Word> entityList) {
         return null;
     }
 

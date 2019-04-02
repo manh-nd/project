@@ -25,11 +25,6 @@ public class SentenceServiceTest {
     private SentenceElasticsearchRepository sentenceElasticsearchRepository;
 
     @Test
-    public void testUpdateAudioPath(){
-        sentenceService.updateSentenceAudioPath();
-    }
-
-    @Test
     public void testSynchronizeElasticsearch(){
         List<Sentence> sentences = sentenceJpaRepository.findAll();
         sentences.forEach(sentence -> {

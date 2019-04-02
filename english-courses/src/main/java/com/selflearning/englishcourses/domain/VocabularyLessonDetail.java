@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 /**
  * @author manhnd
@@ -39,5 +40,11 @@ public class VocabularyLessonDetail {
     @ManyToOne
     @JoinColumn(name = "VOCABULARY_LESSON_ID", nullable = false)
     private VocabularyLesson vocabularyLesson;
+
+    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Date updatedTime;
 
 }

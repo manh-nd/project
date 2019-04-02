@@ -8,8 +8,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface SentenceService extends BaseCurdService<Sentence, UUID>, ModelMapperService<Sentence, SentenceDto> {
-
-    void updateSentenceAudioPath();
-
     Page<Sentence> searchByText(String text, Pageable pageable);
 }
