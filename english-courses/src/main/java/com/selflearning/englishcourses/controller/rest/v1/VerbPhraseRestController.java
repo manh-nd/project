@@ -4,12 +4,12 @@ import com.selflearning.englishcourses.domain.VerbPhrase;
 import com.selflearning.englishcourses.service.VerbPhraseService;
 import com.selflearning.englishcourses.service.dto.VerbPhraseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +18,15 @@ import java.util.List;
 public class VerbPhraseRestController {
 
     private VerbPhraseService verbPhraseService;
+
+    @GetMapping("/verb-phrases")
+    public ResponseEntity<Page<VerbPhraseDto>> getVerbPhrases(Pageable pageable){
+        Page<VerbPhrase> verbPhrasePage = verbPhraseService.findAll(pageable);
+        List<VerbPhrase> content = verbPhrasePage.getContent();
+        long total = verbPhrasePage.getTotalElements();
+        Page<VerbPhraseDto> verbPhraseDtoPage = new PageImpl<>(verbPhraseService.convertEntityToDto(content), pageable, total);
+        return new ResponseEntity<>(verbPhraseDtoPage, HttpStatus.OK);
+    }
 
     @PostMapping("/verb-phrases/save-all")
     public ResponseEntity<List<VerbPhraseDto>> createVerbPhrases(@RequestBody List<VerbPhraseDto> verbPhraseDtos) {

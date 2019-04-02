@@ -80,7 +80,7 @@ public class VerbPhraseServiceImpl implements VerbPhraseService {
 
     @Override
     public Page<VerbPhrase> findAll(Pageable pageable) {
-        return null;
+        return verbPhraseElasticsearchRepository.findAll(pageable);
     }
 
     @Override
