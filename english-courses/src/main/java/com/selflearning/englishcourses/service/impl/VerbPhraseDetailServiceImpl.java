@@ -5,6 +5,8 @@ import com.selflearning.englishcourses.service.VerbPhraseDetailService;
 import com.selflearning.englishcourses.service.dto.VerbPhraseDetailDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,5 +52,10 @@ public class VerbPhraseDetailServiceImpl implements VerbPhraseDetailService {
     @Override
     public List<VerbPhraseDetailDto> convertEntityToDto(List<VerbPhraseDetail> verbPhraseDetails) {
         return verbPhraseDetails.stream().map(verbPhraseDetail -> convertEntityToDto(verbPhraseDetail)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<VerbPhraseDetailDto> convertEntityPageToDtoPage(Page<VerbPhraseDetail> page) {
+        return new PageImpl<>(convertEntityToDto(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 }

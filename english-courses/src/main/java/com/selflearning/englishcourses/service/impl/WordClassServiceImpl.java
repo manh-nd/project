@@ -7,6 +7,7 @@ import com.selflearning.englishcourses.service.WordClassService;
 import com.selflearning.englishcourses.service.dto.WordClassDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,5 +89,10 @@ public class WordClassServiceImpl implements WordClassService {
     @Override
     public List<WordClassDto> convertEntityToDto(List<WordClass> entityList) {
         return null;
+    }
+
+    @Override
+    public Page<WordClassDto> convertEntityPageToDtoPage(Page<WordClass> page) {
+        return new PageImpl<>(convertEntityToDto(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 }

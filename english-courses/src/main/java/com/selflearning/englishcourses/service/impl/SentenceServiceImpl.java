@@ -8,6 +8,7 @@ import com.selflearning.englishcourses.service.dto.SentenceDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
@@ -111,6 +112,11 @@ public class SentenceServiceImpl implements SentenceService {
     @Override
     public List<SentenceDto> convertEntityToDto(List<Sentence> sentences) {
         return sentences.stream().map(sentence -> convertEntityToDto(sentence)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<SentenceDto> convertEntityPageToDtoPage(Page<Sentence> page) {
+        return new PageImpl<>(convertEntityToDto(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 
     @Override

@@ -141,6 +141,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<UserDto> convertEntityPageToDtoPage(Page<User> page) {
+        return null;
+    }
+
+    @Override
     @Transactional(rollbackFor = Throwable.class)
     public void register(RegistrationToken registrationToken) {
         User user = registrationToken.getUser();
