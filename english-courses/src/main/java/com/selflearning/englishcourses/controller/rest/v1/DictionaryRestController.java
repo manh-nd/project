@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class DictionaryRestController {
 
-
     @GetMapping(value = "/dictionary", params = "all")
     public ResponseEntity<DictionaryDto> result(@RequestParam("search") String keyword){
         return null;

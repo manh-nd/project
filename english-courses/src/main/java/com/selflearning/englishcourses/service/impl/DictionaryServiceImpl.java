@@ -1,28 +1,40 @@
 package com.selflearning.englishcourses.service.impl;
 
-import com.selflearning.englishcourses.domain.Sentence;
-import com.selflearning.englishcourses.domain.VerbPhrase;
 import com.selflearning.englishcourses.service.DictionaryService;
 import com.selflearning.englishcourses.service.SentenceService;
+import com.selflearning.englishcourses.service.VerbPhraseService;
+import com.selflearning.englishcourses.service.VocabularyService;
 import com.selflearning.englishcourses.service.dto.DictionaryDto;
 import com.selflearning.englishcourses.service.dto.SentenceDto;
+import com.selflearning.englishcourses.service.dto.VerbPhraseDto;
 import com.selflearning.englishcourses.service.dto.VocabularyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class DictionaryServiceImpl implements DictionaryService {
 
     private SentenceService sentenceService;
 
+    private VerbPhraseService verbPhraseService;
+
+    private VocabularyService vocabularyService;
+
     @Autowired
     public void setSentenceService(SentenceService sentenceService) {
         this.sentenceService = sentenceService;
+    }
+
+    @Autowired
+    public void setVocabularyService(VocabularyService vocabularyService) {
+        this.vocabularyService = vocabularyService;
+    }
+
+    @Autowired
+    public void setVerbPhraseService(VerbPhraseService verbPhraseService) {
+        this.verbPhraseService = verbPhraseService;
     }
 
     @Override
@@ -32,20 +44,17 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public Page<SentenceDto> searchSentence(String keyword, Pageable pageable) {
-        Page<Sentence> sentencePage = sentenceService.search(keyword, pageable);
-        List<Sentence> sentencePageContent = sentencePage.getContent();
-        sentencePage.getTotalElements()
-        return ;
+        return sentenceService.convertEntityPageToDtoPage(sentenceService.search(keyword, pageable));
     }
 
     @Override
     public Page<VocabularyDto> searchVocabulary(String keyword, Pageable pageable) {
-        return null;
+        return vocabularyService.convertEntityPageToDtoPage(vocabularyService.search(keyword, pageable));
     }
 
     @Override
-    public Page<VerbPhrase> searchVerbPhrase(String keyword, Pageable pageable) {
-        return null;
+    public Page<VerbPhraseDto> searchVerbPhrase(String keyword, Pageable pageable) {
+        return verbPhraseService.convertEntityPageToDtoPage(verbPhraseService.search(keyword, pageable));
     }
 
 

@@ -1,13 +1,11 @@
 package com.selflearning.englishcourses.service;
 
-import com.selflearning.englishcourses.domain.VerbPhrase;
 import com.selflearning.englishcourses.service.dto.DictionaryDto;
 import com.selflearning.englishcourses.service.dto.SentenceDto;
+import com.selflearning.englishcourses.service.dto.VerbPhraseDto;
 import com.selflearning.englishcourses.service.dto.VocabularyDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface DictionaryService {
 
@@ -17,6 +15,6 @@ public interface DictionaryService {
 
     Page<VocabularyDto> searchVocabulary(String keyword, Pageable pageable);
 
-    Page<VerbPhrase> searchVerbPhrase(String keyword, Pageable pageable);
+    Page<VerbPhraseDto> searchVerbPhrase(String keyword, Pageable pageable);
 
 }

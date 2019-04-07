@@ -1,5 +1,7 @@
 package com.selflearning.englishcourses.service;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface ModelMapperService<E, Dto> {
@@ -11,5 +13,7 @@ public interface ModelMapperService<E, Dto> {
     Dto convertEntityToDto(E entity);
 
     List<Dto> convertEntityToDto(List<E> entityList);
+
+    Page<Dto> convertEntityPageToDtoPage(Page<E> page);
 
 }

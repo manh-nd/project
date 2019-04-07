@@ -29,9 +29,13 @@ public class SentenceRestController {
 
     private SentenceService sentenceService;
 
+    @Autowired
+    public void setSentenceService(SentenceService sentenceService) {
+        this.sentenceService = sentenceService;
+    }
+
     @Value("${base-path}")
     private String path;
-
 
     @PostMapping("/sentences")
     public ResponseEntity<SentenceDto> createSentence(@Valid @RequestBody SentenceDto sentenceDto) {
@@ -56,9 +60,8 @@ public class SentenceRestController {
 
     @GetMapping("/sentences")
     public ResponseEntity<Page<SentenceDto>> getSentences(Pageable pageable) {
-        Page<Sentence> sentencePage = sentenceService.findAll(pageable);
-        List<SentenceDto> sentenceDtos = sentenceService.convertEntityToDto(sentencePage.getContent());
-        return new ResponseEntity<>(new PageImpl<>(sentenceDtos, pageable, sentencePage.getTotalElements()), HttpStatus.OK);
+        return new ResponseEntity<>(sentenceService.convertEntityPageToDtoPage(sentenceService.findAll(pageable)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/sentences/{id}")
@@ -69,9 +72,8 @@ public class SentenceRestController {
 
     @GetMapping(value = "/sentences", params = "search")
     public ResponseEntity<Page<SentenceDto>> searchSentence(@RequestParam("search") String value, Pageable pageable) {
-        Page<Sentence> sentencePage = sentenceService.search(value, pageable);
-        List<SentenceDto> sentenceDtos = sentenceService.convertEntityToDto(sentencePage.getContent());
-        return new ResponseEntity<>(new PageImpl<>(sentenceDtos, pageable, sentencePage.getTotalElements()), HttpStatus.OK);
+        return new ResponseEntity<>(sentenceService.convertEntityPageToDtoPage(sentenceService.search(value, pageable)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/sentences/{id}/audio")
@@ -84,12 +86,6 @@ public class SentenceRestController {
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                 .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.APPLICATION_OCTET_STREAM))
                 .body(bytes);
-    }
-
-
-    @Autowired
-    public void setSentenceService(SentenceService sentenceService) {
-        this.sentenceService = sentenceService;
     }
 
 }

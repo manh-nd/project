@@ -15,6 +15,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -158,6 +159,11 @@ public class VocabularyServiceImpl implements VocabularyService {
     @Override
     public List<VocabularyDto> convertEntityToDto(List<Vocabulary> vocabularies) {
         return vocabularies.stream().map(vocabulary -> convertEntityToDto(vocabulary)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<VocabularyDto> convertEntityPageToDtoPage(Page<Vocabulary> page) {
+        return new PageImpl<>(convertEntityToDto(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 
     @Override

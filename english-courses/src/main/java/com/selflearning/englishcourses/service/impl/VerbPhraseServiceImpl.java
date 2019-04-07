@@ -12,6 +12,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
@@ -113,6 +114,11 @@ public class VerbPhraseServiceImpl implements VerbPhraseService {
     @Override
     public List<VerbPhraseDto> convertEntityToDto(List<VerbPhrase> verbPhrases) {
         return verbPhrases.stream().map(verbPhrase-> convertEntityToDto(verbPhrase)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<VerbPhraseDto> convertEntityPageToDtoPage(Page<VerbPhrase> page) {
+        return new PageImpl<>(convertEntityToDto(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 
     @Override
