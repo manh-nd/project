@@ -10,6 +10,7 @@ import com.selflearning.englishcourses.service.dto.VerbPhraseDto;
 import com.selflearning.englishcourses.service.dto.VocabularyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,15 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public DictionaryDto searchAll(String keyword) {
-        return null;
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<SentenceDto> sentenceDtoPage = this.searchSentence(keyword, pageable);
+        Page<VocabularyDto> vocabularyDtos = this.searchVocabulary(keyword, pageable);
+        Page<VerbPhraseDto> verbPhraseDtos = this.searchVerbPhrase(keyword, pageable);
+        DictionaryDto dictionaryDto = new DictionaryDto();
+        dictionaryDto.setSentenceDtoPage(sentenceDtoPage);
+        dictionaryDto.setVocabularyDtoPage(vocabularyDtos);
+        dictionaryDto.setVerbPhraseDtoPage(verbPhraseDtos);
+        return dictionaryDto;
     }
 
     @Override

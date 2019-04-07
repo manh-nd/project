@@ -12,11 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class CourseDtoImpl implements CourseService {
+public class CourseServiceImpl implements CourseService {
 
     private CourseJpaRepository courseJpaRepository;
 
@@ -80,16 +81,15 @@ public class CourseDtoImpl implements CourseService {
     @Override
     public Course convertDtoToEntity(CourseDto courseDto) {
         Course course = modelMapper.map(courseDto, Course.class);
-        if (courseDto.getId() != null)
-            course.setId(UUID.fromString(courseDto.getId()));
+        String id = courseDto.getId();
+        if (Objects.nonNull(id))
+            course.setId(UUID.fromString(id));
         return course;
     }
 
     @Override
     public List<Course> convertDtoToEntity(List<CourseDto> courseDtos) {
-        return courseDtos.stream().map(courseDto -> {
-            return convertDtoToEntity(courseDto);
-        }).collect(Collectors.toList());
+        return courseDtos.stream().map(this::convertDtoToEntity).collect(Collectors.toList());
     }
 
     @Override
@@ -101,10 +101,13 @@ public class CourseDtoImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDto> convertEntityToDto(List<Course> entityList) {
-        return entityList.stream().map(entity -> {
-            return convertEntityToDto(entity);
-        }).collect(Collectors.toList());
+    public List<CourseDto> convertEntityToDto(List<Course> courses) {
+        return courses.stream().map(this::convertEntityToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<CourseDto> convertEntityPageToDtoPage(Page<Course> page) {
+        return null;
     }
 
 
