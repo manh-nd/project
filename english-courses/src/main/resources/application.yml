@@ -22,7 +22,7 @@ spring:
     password: ${sql.password}
   data:
     elasticsearch:
-      cluster-name:
+      cluster-name: elasticsearch_english_project
       cluster-nodes: ${nosql.elastichsearch.cluster-nodes}
   jpa:
     show-sql: true

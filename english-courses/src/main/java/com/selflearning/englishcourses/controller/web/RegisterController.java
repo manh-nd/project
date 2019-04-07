@@ -18,14 +18,18 @@ public class RegisterController {
 
     private UserService userService;
 
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/register")
     public String register() {
         return "register";
     }
 
     @PostMapping("/register")
-    @ResponseBody
-    public ResponseEntity<User> createUser(@Valid @RequestBody Registration registration) {
+    public @ResponseBody ResponseEntity<User> createUser(@Valid @RequestBody Registration registration) {
         User user = new User();
         user.setUsername(registration.getUsername());
         user.setPassword(registration.getPassword());
@@ -46,11 +50,6 @@ public class RegisterController {
         UUID uuid = UUID.fromString(token);
         userService.activateAccount(uuid);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
     }
 
 }

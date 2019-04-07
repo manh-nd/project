@@ -93,7 +93,7 @@ function removeAllChildren(parentElement) {
 }
 
 function playAudio(event) {
-    var url = event.srcElement.parentElement.getAttribute('href');
+    var url = event.target.parentElement.getAttribute('href');
     $.ajax({
         method: 'GET',
         url: url,
@@ -144,8 +144,18 @@ function get(url, data, onSuccess, onError) {
     }).done(onSuccess).fail(onError);
 }
 
+function post(url, data, onSuccess, onError) {
+    $.ajax({
+        method: 'POST',
+        url: url,
+        data: data,
+        dataType: 'json'
+    }).done(onSuccess).fail(onError);
+}
+
 function createColumn(createContent) {
     var td = document.createElement('td');
+    td.classList.add('align-middle');
     createContent(td);
     return td;
 }
@@ -156,4 +166,16 @@ function createRow(tbody, columns) {
         row.appendChild(columns[i]);
     }
     tbody.appendChild(row);
+}
+
+function showErrorMessage(message, parent, input) {
+    var label = document.createElement('label');
+    label.classList.add('help-block', 'error');
+    label.textContent = message;
+    parent.classList.add('has-error');
+    if (input.nextElementSibling) {
+        parent.insertBefore(label, input.nextElementSibling);
+    } else {
+        parent.appendChild(label);
+    }
 }

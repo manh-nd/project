@@ -9,12 +9,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 
 @Service
 public class SentenceServiceImpl implements SentenceService {
@@ -110,7 +114,11 @@ public class SentenceServiceImpl implements SentenceService {
     }
 
     @Override
-    public Page<Sentence> searchByText(String text, Pageable pageable) {
-        return sentenceElasticsearchRepository.findByText(text, pageable);
+    public Page<Sentence> search(String value, Pageable pageable) {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(multiMatchQuery(value, "text", "meaning"))
+                .withPageable(pageable)
+                .build();
+        return sentenceElasticsearchRepository.search(searchQuery);
     }
 }

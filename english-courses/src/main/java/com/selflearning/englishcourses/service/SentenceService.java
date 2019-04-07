@@ -8,5 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface SentenceService extends BaseCurdService<Sentence, UUID>, ModelMapperService<Sentence, SentenceDto> {
-    Page<Sentence> searchByText(String text, Pageable pageable);
+
+    Page<Sentence> search(String value, Pageable pageable);
+
 }

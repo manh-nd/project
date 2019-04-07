@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @Column(name = "USER_ID", length = 16)
     private UUID id;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "USER_ID", nullable = false),
@@ -62,7 +62,7 @@ public class User implements UserDetails {
     @Column(name = "GENDER", nullable = false)
     private Boolean gender;
 
-    @Column(name = "ENABLED", nullable = false, columnDefinition = "BIT(1) DEFAULT 0b00")
+    @Column(name = "ENABLED", columnDefinition = "BIT(1) DEFAULT 0b00")
     private Boolean enabled;
 
     @Column(name = "LOCKED", columnDefinition = "BIT(1) DEFAULT 0b00")
@@ -77,15 +77,15 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RegistrationToken> registrationTokens;
 
-    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;
 
-    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name="UPDATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Date updatedTime;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList());
     }
 
     @Override

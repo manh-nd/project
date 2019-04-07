@@ -27,9 +27,7 @@ public class SentenceServiceTest {
     @Test
     public void testSynchronizeElasticsearch(){
         List<Sentence> sentences = sentenceJpaRepository.findAll();
-        sentences.forEach(sentence -> {
-            sentenceElasticsearchRepository.save(sentence);
-        });
+        sentenceElasticsearchRepository.saveAll(sentences);
     }
 
 }

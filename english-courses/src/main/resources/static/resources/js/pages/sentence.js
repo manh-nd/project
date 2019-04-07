@@ -1,69 +1,77 @@
 $(document).ready(function () {
     var tbody = document.querySelector("#sentence-table > tbody");
     var pagination = document.querySelector("#pagination-navigator");
-    var audio = document.querySelector("#audioPlayer");
-    var url = '/api/v1/sentences';
+    var searchButton = document.querySelector("#search-button");
+    var searchInput = document.querySelector("#search-input");
+    var sentenceSaveButton = document.querySelector("#sentence-save-button");
+    var sentenceAddButton = document.querySelector("#sentence-add-button");
+    var audioFileButton = document.querySelector("#audioFile");
+    var apiUrl = '/api/v1/sentences';
     var size = 20;
     var page = 0;
-    var sort = 'text,asc';
-    var playing = false;
-    var pause = true;
     var isSaveHistory = true;
-
-    audio.playing = function () {
-        console.log("playing...");
-        playing = true;
-        pause = false;
-    };
-
-    audio.pause = function () {
-        console.log("paused");
-        pause = true;
-        playing = false;
-    };
 
     init();
 
-    $("#searchBtn").on('click', function (event) {
-        var text = $("#searchBox").val();
+    window.onpopstate = function (event) {
+        if (event.state) {
+            isSaveHistory = false;
+            init();
+        }
+    };
+
+    searchButton.addEventListener('click', function () {
         isSaveHistory = true;
-        search(0, text);
+        search(0, getSearchInputValue());
     });
 
-    $("#searchBox").on('keyup', function (event) {
-        var text = $(this).val();
+    searchInput.addEventListener('keyup', function (event) {
         if (event.keyCode === 13) {
             isSaveHistory = true;
-            search(0, text);
+            search(0, getSearchInputValue());
         }
     });
 
-    $('#saveSentenceBtn').on('click', function (event) {
-        var $modal = $('#sentenceModal');
+    audioFileButton.addEventListener('change', function (event) {
+        var file = event.target.files[0];
+        if (file) {
+            if (file.type !== 'audio/mp3') {
+                alert("File không hợp lệ. Yêu cầu định dạng mp3");
+                event.target.files = undefined;
+                event.target.value = '';
+            }
+        }
+    });
+
+    sentenceSaveButton.addEventListener('click', function (event) {
+        var $modal = $('#sentence-modal');
         var id = $modal.find('#id').val();
         var text = $modal.find('#text').val();
         var ipa = $modal.find('#ipa').val();
         var meaning = $modal.find('#meaning').val();
         var audioPath = $modal.find('#audioPath').val();
+        var audioFile = $modal.find('#audioFile');
         var sentence = {
             id: id,
             text: text,
             ipa: ipa,
             meaning: meaning,
-            audioPath: audioPath
+            audioPath: audioPath,
+            audioFile: audioFile[0].files[0]
         };
         if (sentence) {
             save(sentence);
         }
     });
 
-    $('#sentenceAddButton').on('click', function () {
-        var $modal = $('#sentenceModal');
-        $modal.find('#sentenceModalTitle').text('Thêm câu');
+    sentenceAddButton.addEventListener('click', function () {
+        var $modal = $('#sentence-modal');
+        $modal.find('#sentence-modal-title').text('Thêm câu');
         clearForm($modal);
         $modal.modal('show');
     });
 
+    // methods
     function init() {
         page = 0;
         var pathname = window.location.pathname;
@@ -72,12 +80,18 @@ $(document).ready(function () {
             page = pathElements[4] - 1;
         }
         var searchParams = new URLSearchParams(window.location.search);
-        if (searchParams.get('search')) {
-            $("#searchBox").val(searchParams.get('search'));
-            search(page, searchParams.get('search'));
+        var searchParam = searchParams.get('search');
+        if (searchParam) {
+            setSearchInputValue(searchParam);
+            search(page, getSearchInputValue());
         } else {
             getSentences(page);
         }
+    }
+
+    function reload() {
+        isSaveHistory = false;
+        init();
     }
 
     function clearForm($modal) {
@@ -88,50 +102,35 @@ $(document).ready(function () {
         $modal.find('#audioPath').val(null);
     }
 
-    window.onpopstate = function (event) {
-        if (event.state) {
-            isSaveHistory = false;
-            init();
-        }
-    };
-
     function getSentences(page) {
-        $.ajax({
-            method: 'GET',
-            url: url,
-            data: {
-                page: page,
-                size: size
-            },
-            dataType: 'json'
-        }).done(onSuccess).fail(onError);
-    }
-
-    function getText() {
-        return $("#searchBox").val().trim();
+        get(apiUrl, {page: page, size: size}, onSuccess, onError);
     }
 
     function search(page, text) {
-        if (!text.length) return;
+        if (!text.length) {
+            var pElement = document.createElement("p");
+            setTimeout(function () {
+                pElement.remove();
+            }, 3000);
+            pElement.style.color = "red";
+            pElement.textContent = "Vui lòng nhập từ khoá tìm kiếm.";
+            var parent = searchInput.parentElement;
+            var grandParent = parent.parentElement;
+            if (parent.nextSibling) {
+                grandParent.insertBefore(pElement, parent.nextSibling);
+            }
+            return;
+        }
         if (!page)
             page = 0;
-        $.ajax({
-            method: 'GET',
-            url: '/api/v1/sentences',
-            data: {
-                search: text,
-                page: page,
-                size: size
-            },
-            dataType: 'json'
-        }).done(onSuccess).fail(onError);
+        get(apiUrl, {search: text, page: page, size: size}, onSuccess, onError);
     }
 
     function save(sentence) {
         var method = 'POST';
-        var url = '/api/v1/sentences';
+        var url = apiUrl;
         if (sentence.id) {
-            url = '/api/v1/sentences/' + sentence.id;
+            url = apiUrl + "/" + sentence.id;
             method = 'PUT';
         } else {
             sentence.id = null;
@@ -140,39 +139,58 @@ $(document).ready(function () {
             method: method,
             url: url,
             data: JSON.stringify(sentence),
-            contentType: 'application/json'
+            contentType: 'multipart/form-data',
+            dataType: 'json'
         }).done(function (response) {
-            $('#sentenceModal').modal('hide');
+            $('#sentence-modal').modal('hide');
             if (!sentence.id) {
-                $('#searchBox').val(response.text);
+                setSearchInputValue(response.text);
                 search(0, response.text);
             } else {
                 reload();
             }
-        }).fail(function () {
-            alert("update fail");
+        }).fail(function (response) {
+            var errors = response.responseJSON.errors;
+            if (errors) {
+                if (errors.meaning) {
+                    var meaning = document.getElementById("meaning");
+                    var parent = meaning.parentElement;
+                    for (var i = 0; i < errors.meaning.length; i++) {
+                        var message = errors.meaning[i].message;
+                        showErrorMessage(message, parent, meaning);
+                    }
+                }
+                if (errors.text) {
+                    var text = document.getElementById("text");
+                    var parent = text.parentElement;
+                    for (var i = 0; i < errors.text.length; i++) {
+                        var message = errors.text[i].message;
+                        showErrorMessage(message, parent, text);
+                    }
+                }
+            }
         });
     }
 
-    function reload() {
-        saveHistory = false;
-        init();
-    }
 
     function onSuccess(response) {
         setTableContent(response);
         paginate(pagination, response, setPage);
-        if (saveHistory) {
-            if (getText()) {
-                window.history.pushState(
-                    {page: response.pageable.pageNumber},
-                    'Danh sách câu tìm kiếm',
-                    '/admin/sentences/page/' + (response.pageable.pageNumber + 1) + "/?search=" + getText());
+        if (isSaveHistory) {
+            var currentPage = response.pageable.pageNumber;
+            var searchValue = getSearchInputValue();
+            if (searchValue) {
+                saveHistory({
+                    data: {page: currentPage},
+                    title: 'Danh sách câu tìm kiếm',
+                    url: '/admin/sentences/page/' + (currentPage + 1) + '/?search=' + searchValue
+                });
             } else {
-                window.history.pushState(
-                    {page: response.pageable.pageNumber},
-                    'Danh sách câu',
-                    '/admin/sentences/page/' + (response.pageable.pageNumber + 1) + "/");
+                saveHistory({
+                    data: {page: currentPage},
+                    title: 'Danh sách câu tìm kiếm',
+                    url: '/admin/sentences/page/' + (currentPage + 1) + '/'
+                });
             }
         }
     }
@@ -201,21 +219,21 @@ $(document).ready(function () {
                         td.textContent = content[i].meaning;
                     }),
                     createColumn(function (td) {
-                        td.classList.add('text-center');
                         if (content[i].audioPath) {
                             var link = document.createElement('a');
                             var icon = document.createElement('i');
                             icon.classList.add('fa', 'fa-volume-up');
                             link.appendChild(icon);
-                            link.setAttribute('href', url + '/' + content[i].id + '/audio');
+                            link.setAttribute('href', apiUrl + '/' + content[i].id + '/audio');
                             link.addEventListener('click', function (event) {
                                 event.preventDefault();
                                 playAudio(event);
                             });
                             td.appendChild(link);
                         }
+                        td.classList.add('text-center');
                     }),
-                    createColumn(function(td){
+                    createColumn(function (td) {
                         var button = document.createElement("button");
                         var icon = document.createElement('i');
                         icon.classList.add('fa', 'fa-pencil');
@@ -224,20 +242,20 @@ $(document).ready(function () {
                         button.classList.add('btn', 'btn-warning', 'btn-sm');
                         button.addEventListener('click', function (event) {
                             var id = $(this).data("sentenceId");
-                            var $modal = $('#sentenceModal').modal('show');
+                            var $modal = $('#sentence-modal').modal('show');
                             $.ajax({
                                 method: 'GET',
-                                url: '/api/v1/sentences/' + id,
+                                url: apiUrl + '/' + id,
                                 dataType: 'json'
                             }).done(function (data) {
-                                $modal.find('#sentenceModalTitle').text('Sửa câu');
+                                $modal.find('#sentence-modal-title').text('Sửa câu');
                                 $modal.find('#id').val(data.id);
                                 $modal.find('#text').val(data.text);
                                 $modal.find('#ipa').val(data.ipa);
                                 $modal.find('#meaning').val(data.meaning);
                                 $modal.find('#audioPath').val(data.audioPath);
-                            }).fail(function () {
-
+                            }).fail(function (response) {
+                                alert(response);
                             });
                         });
                         td.appendChild(button);
@@ -246,26 +264,32 @@ $(document).ready(function () {
                 createRow(tbody, columns);
             }
         } else {
-            var row = document.createElement("tr");
-            createColumn(row, function () {
-                var td = createColumn("Không có dữ liệu");
+            var columns = [createColumn(function (td) {
                 td.setAttribute('colspan', '6');
-                return td;
-            });
-            createRow(tbody, row);
+                td.textContent = 'Không có bản ghi';
+            })];
+            createRow(tbody, columns);
         }
     }
 
     function setPage(page) {
         if (this.page != page) {
             this.page = page;
-            saveHistory = true;
-            if (getText()) {
-                search(page, getText());
+            isSaveHistory = true;
+            if (getSearchInputValue()) {
+                search(page, getSearchInputValue());
             } else {
                 getSentences(this.page);
             }
         }
+    }
+
+    function getSearchInputValue() {
+        return searchInput.value.trim();
+    }
+
+    function setSearchInputValue(value) {
+        searchInput.value = value;
     }
 
 });

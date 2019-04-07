@@ -13,4 +13,6 @@ public interface UserService extends BaseCurdService<User, UUID>, ModelMapperSer
 
     void activateAccount(UUID token);
 
+    void updatePassword(String password, String username);
+
 }
