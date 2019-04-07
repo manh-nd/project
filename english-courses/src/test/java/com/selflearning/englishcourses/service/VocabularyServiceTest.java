@@ -37,11 +37,11 @@ public class VocabularyServiceTest {
         this.vocabularyElasticsearchRepository = vocabularyElasticsearchRepository;
     }
 
-//    @Test
-//    public void synchronizeMysqlToElasticsearch(){
-//        List<Vocabulary> all = vocabularyJpaRepository.findAll();
-//        vocabularyElasticsearchRepository.saveAll(all);
-//    }
+    @Test
+    public void synchronizeMysqlToElasticsearch(){
+        List<Vocabulary> all = vocabularyJpaRepository.findAll();
+        vocabularyElasticsearchRepository.saveAll(all);
+    }
 
     @Test
     public void testRenameImagePath(){

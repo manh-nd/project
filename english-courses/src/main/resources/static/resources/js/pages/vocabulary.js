@@ -1,21 +1,33 @@
 $(document).ready(function () {
     var tbody = document.querySelector('#vocabulary-table > tbody')
     var pagination = document.querySelector('#pagination-navigator');
-    var searchBtn = document.querySelector('#searchBtn');
-    var searchInput = document.queryCommandEnabled('#searchInput');
+    var searchButton = document.querySelector('#search-button');
+    var searchInput = document.querySelector('#search-input');
     var page = 0;
     var size = 30;
-    var sort = 'word.text,asc';
     var isSaveHistory = true;
+    var path  = '/admin/vocabularies/page/';
 
     init();
 
     window.onpopstate = function (event) {
         if (event.state) {
-            saveHistory = false;
+            isSaveHistory = false;
             init();
         }
     };
+
+    searchButton.addEventListener('click', function (evt) {
+        isSaveHistory = true;
+        search(0, getSearchInputValue());
+    });
+
+    searchInput.addEventListener('keyup', function(event){
+        if (event.keyCode === 13) {
+            isSaveHistory = true;
+            search(0, getSearchInputValue());
+        }
+    });
 
     function init() {
         page = 0;
@@ -27,11 +39,16 @@ $(document).ready(function () {
         var searchParams = new URLSearchParams(window.location.search);
         var searchParamsValue = searchParams.get('search');
         if (searchParamsValue) {
-            searchInput.value = searchParamsValue;
-            search(page, searchInput.value);
+            setTextInputValue(searchParamsValue);
+            search(page, getSearchInputValue());
         } else {
             getVocabularyPage(page);
         }
+    }
+
+    function reload() {
+        isSaveHistory = false;
+        init();
     }
 
     function getVocabularyPage(page) {
@@ -40,8 +57,7 @@ $(document).ready(function () {
             url: '/api/v1/vocabularies',
             data: {
                 page: page,
-                size: size,
-                sort: sort
+                size: size
             },
             dataType: 'json'
         }).done(onSuccess).fail(onError);
@@ -51,24 +67,26 @@ $(document).ready(function () {
         renderTableContent(response);
         paginate(pagination, response, setPage);
         if (isSaveHistory) {
-            saveHistory({
-                data: {page: response.pageNumber},
-                title: 'Quản lý từ vựng',
-                url: '/admin/vocabularies/page/' + (response.number + 1) + '/'
-            });
+            var currentPage = response.pageable.pageNumber;
+            var searchValue = getSearchInputValue();
+            if (searchValue) {
+                saveHistory({
+                    data: {page: currentPage},
+                    title: 'Quản lý từ vựng - Tìm kiếm',
+                    url: path + (currentPage + 1) + '/?search=' + searchValue
+                });
+            } else {
+                saveHistory({
+                    data: {page: currentPage},
+                    title: 'Quản lý từ vựng',
+                    url: path + (currentPage + 1) + '/'
+                });
+            }
         }
     }
-
 
     function onError(response) {
         console.error("err");
-    }
-
-    function getSearchInputValue() {
-        if (searchInput.value) {
-            return searchInput.value;
-        }
-        return null;
     }
 
     function search(page, text) {
@@ -80,8 +98,7 @@ $(document).ready(function () {
             data: {
                 search: text,
                 page: page,
-                size: size,
-                sort: sort
+                size: size
             },
             dataType: 'json'
         }).done(onSuccess).fail(onError);
@@ -98,6 +115,14 @@ $(document).ready(function () {
                 getVocabularyPage(this.page);
             }
         }
+    }
+
+    function setTextInputValue(value) {
+        searchInput.value = value;
+    }
+
+    function getSearchInputValue(){
+        return searchInput.value;
     }
 
     function renderTableContent(page) {
@@ -144,27 +169,15 @@ $(document).ready(function () {
                         td.appendChild(button);
                     })
                 ];
-                addRow(columns);
+                createRow(tbody, columns);
             }
         } else {
-            addRow(function (td) {
-                td.setAttribute('colspan', '5');
-                td.textContent = 'Không có dữ liệu';
-            });
-        }
-
-        function createColumn(createContent) {
-            var td = document.createElement('td');
-            createContent(td);
-            return td;
-        }
-
-        function addRow(columns) {
-            var row = document.createElement('tr');
-            for (var i = 0; i < columns.length; i++) {
-                row.appendChild(columns[i]);
-            }
-            tbody.appendChild(row);
+            createRow(tbody, [
+                createColumn(function (td) {
+                    td.setAttribute('colspan', '7');
+                    td.textContent = "Không có bản ghi";
+                })
+            ]);
         }
     }
 

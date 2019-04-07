@@ -38,11 +38,13 @@ public class VocabularyRestController {
     @GetMapping("/vocabularies")
     public ResponseEntity<Page<VocabularyDto>> getVocabularies(Pageable pageable) {
         Page<Vocabulary> vocabularyPage = vocabularyService.findAll(pageable);
-        List<Vocabulary> content = vocabularyPage.getContent();
-        long total = vocabularyPage.getTotalElements();
-        List<VocabularyDto> vocabularyDtos = vocabularyService.convertEntityToDto(content);
-        Page<VocabularyDto> vocabularyDtoPage = new PageImpl<>(vocabularyDtos, pageable, total);
-        return new ResponseEntity<>(vocabularyDtoPage, HttpStatus.OK);
+        return getPageResponseEntity(pageable, vocabularyPage);
+    }
+
+    @GetMapping(value = "/vocabularies", params = "search")
+    public ResponseEntity<Page<VocabularyDto>> searchVocabularies(@RequestParam("search") String value, Pageable pageable){
+        Page<Vocabulary> vocabularyPage = vocabularyService.search(value, pageable);
+        return getPageResponseEntity(pageable, vocabularyPage);
     }
 
     @PostMapping("/vocabularies/save-all")
@@ -63,6 +65,13 @@ public class VocabularyRestController {
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                 .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.APPLICATION_OCTET_STREAM))
                 .body(bytes);
+    }
+
+    private ResponseEntity<Page<VocabularyDto>> getPageResponseEntity(Pageable pageable, Page<Vocabulary> vocabularyPage) {
+        List<Vocabulary> content = vocabularyPage.getContent();
+        long total = vocabularyPage.getTotalElements();
+        Page<VocabularyDto> vocabularyDtoPage = new PageImpl<>(vocabularyService.convertEntityToDto(content), pageable, total);
+        return new ResponseEntity<>(vocabularyDtoPage, HttpStatus.OK);
     }
 
 }

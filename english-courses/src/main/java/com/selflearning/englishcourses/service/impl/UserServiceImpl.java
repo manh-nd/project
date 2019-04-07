@@ -165,6 +165,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void updatePassword(String password, String username) {
+        userJpaRepository.updatePassword(password, username);
+    }
+
+
     private void setDefaultUserProperty(User user) {
         Optional<Role> optionalRole = roleJpaRepository.findByName(USER_ROLE);
         if (optionalRole.isPresent()) {

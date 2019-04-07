@@ -21,27 +21,27 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name="forget_password_tokens")
+@Table(name = "forget_password_tokens")
 @Document(indexName = "forget_password_tokens", shards = 2)
 public class ForgetPasswordToken {
 
     @Id
-    @GenericGenerator(name="uuid", strategy = "uuid2")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
     @Column(name = "FORGET_PASSWORD_TOKEN_ID", length = 16)
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name="USER_ID", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @Column(name="ACTIVE", nullable = false)
+    @Column(name = "ACTIVE", nullable = false)
     private Boolean active;
 
-    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;
 
-    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "UPDATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Date updatedTime;
 
 }

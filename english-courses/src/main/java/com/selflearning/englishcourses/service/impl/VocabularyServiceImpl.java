@@ -11,10 +11,14 @@ import com.selflearning.englishcourses.repository.jpa.WordClassJpaRepository;
 import com.selflearning.englishcourses.repository.jpa.WordJpaRepository;
 import com.selflearning.englishcourses.service.VocabularyService;
 import com.selflearning.englishcourses.service.dto.VocabularyDto;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 @Service
 public class VocabularyServiceImpl implements VocabularyService {
@@ -107,6 +113,7 @@ public class VocabularyServiceImpl implements VocabularyService {
         vocabularyElasticsearchRepository.saveAll(iterable);
     }
 
+    @Transactional
     @Override
     public void delete(Vocabulary obj) {
         vocabularyJpaRepository.delete(obj);
@@ -115,7 +122,7 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     @Override
     public void deleteAll(Iterable<Vocabulary> iterable) {
-
+        throw new RuntimeException("Not support yet.");
     }
 
     @Override
@@ -153,4 +160,12 @@ public class VocabularyServiceImpl implements VocabularyService {
         return vocabularies.stream().map(vocabulary -> convertEntityToDto(vocabulary)).collect(Collectors.toList());
     }
 
+    @Override
+    public Page<Vocabulary> search(String value, Pageable pageable) {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(multiMatchQuery(value, "word.text", "meaning"))
+                .withPageable(pageable)
+                .build();
+        return vocabularyElasticsearchRepository.search(searchQuery);
+    }
 }

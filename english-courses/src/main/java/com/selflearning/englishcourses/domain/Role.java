@@ -33,7 +33,7 @@ public class Role {
     @Column(name="ROLE_NAME", unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private List<User> users;
 
 }

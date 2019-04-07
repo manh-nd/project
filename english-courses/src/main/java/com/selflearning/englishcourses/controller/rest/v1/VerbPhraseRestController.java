@@ -19,13 +19,15 @@ public class VerbPhraseRestController {
 
     private VerbPhraseService verbPhraseService;
 
+    @Autowired
+    public void setVerbPhraseService(VerbPhraseService verbPhraseService) {
+        this.verbPhraseService = verbPhraseService;
+    }
+
     @GetMapping("/verb-phrases")
     public ResponseEntity<Page<VerbPhraseDto>> getVerbPhrases(Pageable pageable){
         Page<VerbPhrase> verbPhrasePage = verbPhraseService.findAll(pageable);
-        List<VerbPhrase> content = verbPhrasePage.getContent();
-        long total = verbPhrasePage.getTotalElements();
-        Page<VerbPhraseDto> verbPhraseDtoPage = new PageImpl<>(verbPhraseService.convertEntityToDto(content), pageable, total);
-        return new ResponseEntity<>(verbPhraseDtoPage, HttpStatus.OK);
+        return getPageResponseEntity(pageable, verbPhrasePage);
     }
 
     @PostMapping("/verb-phrases/save-all")
@@ -35,9 +37,18 @@ public class VerbPhraseRestController {
         return new ResponseEntity<>(verbPhraseService.convertEntityToDto(verbPhrases), HttpStatus.CREATED);
     }
 
-    @Autowired
-    public void setVerbPhraseService(VerbPhraseService verbPhraseService) {
-        this.verbPhraseService = verbPhraseService;
+    @GetMapping(value = "/verb-phrases", params = "search")
+    public ResponseEntity<Page<VerbPhraseDto>> search(@RequestParam("search") String value, Pageable pageable){
+        Page<VerbPhrase> verbPhrasePage = verbPhraseService.search(value, pageable);
+        return getPageResponseEntity(pageable, verbPhrasePage);
     }
+
+    private ResponseEntity<Page<VerbPhraseDto>> getPageResponseEntity(Pageable pageable, Page<VerbPhrase> verbPhrasePage) {
+        List<VerbPhrase> content = verbPhrasePage.getContent();
+        long total = verbPhrasePage.getTotalElements();
+        Page<VerbPhraseDto> verbPhraseDtoPage = new PageImpl<>(verbPhraseService.convertEntityToDto(content), pageable, total);
+        return new ResponseEntity<>(verbPhraseDtoPage, HttpStatus.OK);
+    }
+
 
 }

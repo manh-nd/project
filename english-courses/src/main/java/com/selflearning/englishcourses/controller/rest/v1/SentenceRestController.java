@@ -16,6 +16,7 @@ import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +34,7 @@ public class SentenceRestController {
 
 
     @PostMapping("/sentences")
-    public ResponseEntity<SentenceDto> createSentence(@RequestBody SentenceDto sentenceDto) {
+    public ResponseEntity<SentenceDto> createSentence(@Valid @RequestBody SentenceDto sentenceDto) {
         Sentence sentence = sentenceService.convertDtoToEntity(sentenceDto);
         sentenceService.save(sentence);
         return new ResponseEntity<>(sentenceService.convertEntityToDto(sentence), HttpStatus.CREATED);
@@ -67,8 +68,8 @@ public class SentenceRestController {
     }
 
     @GetMapping(value = "/sentences", params = "search")
-    public ResponseEntity<Page<SentenceDto>> searchSentence(@RequestParam("search") String text, Pageable pageable) {
-        Page<Sentence> sentencePage = sentenceService.searchByText(text, pageable);
+    public ResponseEntity<Page<SentenceDto>> searchSentence(@RequestParam("search") String value, Pageable pageable) {
+        Page<Sentence> sentencePage = sentenceService.search(value, pageable);
         List<SentenceDto> sentenceDtos = sentenceService.convertEntityToDto(sentencePage.getContent());
         return new ResponseEntity<>(new PageImpl<>(sentenceDtos, pageable, sentencePage.getTotalElements()), HttpStatus.OK);
     }
