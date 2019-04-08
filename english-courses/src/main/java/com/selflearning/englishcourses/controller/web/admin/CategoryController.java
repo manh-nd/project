@@ -10,18 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/management")
 public class CategoryController {
-
-    @GetMapping("/courses")
-    public String coursePage(Model model) {
-        model.addAttribute("courses", true);
-        return "admin/categories/course/courses";
-    }
 
     @GetMapping("/sentences")
     public String sentencePage(Model model) {
-        model.addAttribute("sentences", true);
+        model.addAttribute("sentenceManagement", true);
         return "admin/categories/sentence/sentences";
     }
 
@@ -32,7 +26,7 @@ public class CategoryController {
 
     @GetMapping("/vocabularies")
     public String vocabularyPage(Model model) {
-        model.addAttribute("vocabularies", true);
+        model.addAttribute("vocabularyManagement", true);
         return "admin/categories/vocabulary/vocabularies";
     }
 
@@ -43,7 +37,7 @@ public class CategoryController {
 
     @GetMapping("/phrases")
     public String phrasePage(Model model) {
-        model.addAttribute("phrases", true);
+        model.addAttribute("phraseManagement", true);
         return "admin/categories/phrase/phrases";
     }
 

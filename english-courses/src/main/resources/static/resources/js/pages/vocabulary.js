@@ -1,12 +1,14 @@
 $(document).ready(function () {
-    var tbody = document.querySelector('#vocabulary-table > tbody')
-    var pagination = document.querySelector('#pagination-navigator');
-    var searchButton = document.querySelector('#search-button');
-    var searchInput = document.querySelector('#search-input');
-    var page = 0;
-    var size = 30;
-    var isSaveHistory = true;
-    var path  = '/admin/vocabularies/page/';
+    const tbody = document.querySelector('#vocabulary-table > tbody')
+    const pagination = document.querySelector('#pagination-navigator');
+    const searchButton = document.querySelector('#search-button');
+    const searchInput = document.querySelector('#search-input');
+    const title = 'Quản lý từ vựng';
+    const path = '/admin/management/vocabularies/page/';
+
+    let page = 0;
+    let size = 30;
+    let isSaveHistory = true;
 
     init();
 
@@ -22,7 +24,7 @@ $(document).ready(function () {
         search(0, getSearchInputValue());
     });
 
-    searchInput.addEventListener('keyup', function(event){
+    searchInput.addEventListener('keyup', function (event) {
         if (event.keyCode === 13) {
             isSaveHistory = true;
             search(0, getSearchInputValue());
@@ -31,13 +33,13 @@ $(document).ready(function () {
 
     function init() {
         page = 0;
-        var pathname = window.location.pathname;
-        var pathElements = pathname.split('/');
+        let pathname = window.location.pathname;
+        let pathElements = pathname.split('/');
         if (pathElements.length && pathElements[4]) {
             page = pathElements[4] - 1;
         }
-        var searchParams = new URLSearchParams(window.location.search);
-        var searchParamsValue = searchParams.get('search');
+        let searchParams = new URLSearchParams(window.location.search);
+        let searchParamsValue = searchParams.get('search');
         if (searchParamsValue) {
             setTextInputValue(searchParamsValue);
             search(page, getSearchInputValue());
@@ -67,18 +69,18 @@ $(document).ready(function () {
         renderTableContent(response);
         paginate(pagination, response, setPage);
         if (isSaveHistory) {
-            var currentPage = response.pageable.pageNumber;
-            var searchValue = getSearchInputValue();
+            let currentPage = response.pageable.pageNumber;
+            let searchValue = getSearchInputValue();
             if (searchValue) {
                 saveHistory({
                     data: {page: currentPage},
-                    title: 'Quản lý từ vựng - Tìm kiếm',
+                    title: title,
                     url: path + (currentPage + 1) + '/?search=' + searchValue
                 });
             } else {
                 saveHistory({
                     data: {page: currentPage},
-                    title: 'Quản lý từ vựng',
+                    title: title,
                     url: path + (currentPage + 1) + '/'
                 });
             }
@@ -108,7 +110,7 @@ $(document).ready(function () {
         if (this.page != page) {
             this.page = page;
             isSaveHistory = true;
-            var text = getSearchInputValue();
+            let text = getSearchInputValue();
             if (text) {
                 search(page, text);
             } else {
@@ -121,17 +123,17 @@ $(document).ready(function () {
         searchInput.value = value;
     }
 
-    function getSearchInputValue(){
+    function getSearchInputValue() {
         return searchInput.value;
     }
 
     function renderTableContent(page) {
         removeAllChildren(tbody);
-        var content = page.content;
-        var pageable = page.pageable;
+        let content = page.content;
+        let pageable = page.pageable;
         if (content.length) {
-            for (var i = 0; i < content.length; i++) {
-                var columns = [
+            for (let i = 0; i < content.length; i++) {
+                let columns = [
                     createColumn(function (td) {
                         td.textContent = pageable.offset + i + 1;
                     }),
@@ -147,9 +149,9 @@ $(document).ready(function () {
                     createColumn(function (td) {
                         td.textContent = content[i].description;
                     }), createColumn(function (td) {
-                        var icon = createIcon(['fa', 'fa-volume-up']);
+                        let icon = createIcon(['fa', 'fa-volume-up']);
                         td.classList.add('text-center');
-                        var link = document.createElement('a');
+                        let link = document.createElement('a');
                         link.href = "/api/v1/vocabularies/" + content[i].id + "/audio";
                         link.appendChild(icon);
                         link.addEventListener('click', function (event) {
@@ -158,8 +160,8 @@ $(document).ready(function () {
                         });
                         td.appendChild(link);
                     }), createColumn(function (td) {
-                        var icon = createIcon(['fa', 'fa-pencil']);
-                        var button = document.createElement('button');
+                        let icon = createIcon(['fa', 'fa-pencil']);
+                        let button = document.createElement('button');
                         button.dataset.id = content[i].id;
                         button.classList.add('btn', 'btn-warning', 'btn-sm');
                         button.appendChild(icon);

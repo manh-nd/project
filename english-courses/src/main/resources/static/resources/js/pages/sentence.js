@@ -1,15 +1,19 @@
 $(document).ready(function () {
-    var tbody = document.querySelector("#sentence-table > tbody");
-    var pagination = document.querySelector("#pagination-navigator");
-    var searchButton = document.querySelector("#search-button");
-    var searchInput = document.querySelector("#search-input");
-    var sentenceSaveButton = document.querySelector("#sentence-save-button");
-    var sentenceAddButton = document.querySelector("#sentence-add-button");
-    var audioFileButton = document.querySelector("#audioFile");
-    var apiUrl = '/api/v1/sentences';
-    var size = 20;
-    var page = 0;
-    var isSaveHistory = true;
+    const tbody = document.querySelector("#sentence-table > tbody");
+    const pagination = document.querySelector("#pagination-navigator");
+    const searchButton = document.querySelector("#search-button");
+    const searchInput = document.querySelector("#search-input");
+    const sentenceSaveButton = document.querySelector("#sentence-save-button");
+    const sentenceAddButton = document.querySelector("#sentence-add-button");
+    const audioFileButton = document.querySelector("#audioFile");
+    const apiUrl = '/api/v1/sentences';
+
+    const title = 'Quản lý câu';
+    const path = '/admin/management/sentences/page/';
+
+    let size = 20;
+    let page = 0;
+    let isSaveHistory = true;
 
     init();
 
@@ -33,7 +37,7 @@ $(document).ready(function () {
     });
 
     audioFileButton.addEventListener('change', function (event) {
-        var file = event.target.files[0];
+        let file = event.target.files[0];
         if (file) {
             if (file.type !== 'audio/mp3') {
                 alert("File không hợp lệ. Yêu cầu định dạng mp3");
@@ -43,15 +47,15 @@ $(document).ready(function () {
         }
     });
 
-    sentenceSaveButton.addEventListener('click', function (event) {
-        var $modal = $('#sentence-modal');
-        var id = $modal.find('#id').val();
-        var text = $modal.find('#text').val();
-        var ipa = $modal.find('#ipa').val();
-        var meaning = $modal.find('#meaning').val();
-        var audioPath = $modal.find('#audioPath').val();
-        var audioFile = $modal.find('#audioFile');
-        var sentence = {
+    sentenceSaveButton.addEventListener('click', function () {
+        const $modal = $('#sentence-modal');
+        const id = $modal.find('#id').val();
+        const text = $modal.find('#text').val();
+        const ipa = $modal.find('#ipa').val();
+        const meaning = $modal.find('#meaning').val();
+        const audioPath = $modal.find('#audioPath').val();
+        const audioFile = $modal.find('#audioFile');
+        const sentence = {
             id: id,
             text: text,
             ipa: ipa,
@@ -65,7 +69,7 @@ $(document).ready(function () {
     });
 
     sentenceAddButton.addEventListener('click', function () {
-        var $modal = $('#sentence-modal');
+        let $modal = $('#sentence-modal');
         $modal.find('#sentence-modal-title').text('Thêm câu');
         clearForm($modal);
         $modal.modal('show');
@@ -74,13 +78,13 @@ $(document).ready(function () {
     // methods
     function init() {
         page = 0;
-        var pathname = window.location.pathname;
-        var pathElements = pathname.split('/');
+        const pathname = window.location.pathname;
+        const pathElements = pathname.split('/');
         if (pathElements.length && pathElements[4]) {
             page = pathElements[4] - 1;
         }
-        var searchParams = new URLSearchParams(window.location.search);
-        var searchParam = searchParams.get('search');
+        const searchParams = new URLSearchParams(window.location.search);
+        const searchParam = searchParams.get('search');
         if (searchParam) {
             setSearchInputValue(searchParam);
             search(page, getSearchInputValue());
@@ -108,14 +112,14 @@ $(document).ready(function () {
 
     function search(page, text) {
         if (!text.length) {
-            var pElement = document.createElement("p");
+            const pElement = document.createElement("p");
             setTimeout(function () {
                 pElement.remove();
             }, 3000);
             pElement.style.color = "red";
             pElement.textContent = "Vui lòng nhập từ khoá tìm kiếm.";
-            var parent = searchInput.parentElement;
-            var grandParent = parent.parentElement;
+            const parent = searchInput.parentElement;
+            const grandParent = parent.parentElement;
             if (parent.nextSibling) {
                 grandParent.insertBefore(pElement, parent.nextSibling);
             }
@@ -150,21 +154,21 @@ $(document).ready(function () {
                 reload();
             }
         }).fail(function (response) {
-            var errors = response.responseJSON.errors;
+            const errors = response.responseJSON.errors;
             if (errors) {
                 if (errors.meaning) {
-                    var meaning = document.getElementById("meaning");
-                    var parent = meaning.parentElement;
-                    for (var i = 0; i < errors.meaning.length; i++) {
-                        var message = errors.meaning[i].message;
+                    const meaning = document.getElementById("meaning");
+                    const parent = meaning.parentElement;
+                    for (let i = 0; i < errors.meaning.length; i++) {
+                        const message = errors.meaning[i].message;
                         showErrorMessage(message, parent, meaning);
                     }
                 }
                 if (errors.text) {
-                    var text = document.getElementById("text");
-                    var parent = text.parentElement;
-                    for (var i = 0; i < errors.text.length; i++) {
-                        var message = errors.text[i].message;
+                    const text = document.getElementById("text");
+                    const parent = text.parentElement;
+                    for (let i = 0; i < errors.text.length; i++) {
+                        const message = errors.text[i].message;
                         showErrorMessage(message, parent, text);
                     }
                 }
@@ -177,19 +181,19 @@ $(document).ready(function () {
         setTableContent(response);
         paginate(pagination, response, setPage);
         if (isSaveHistory) {
-            var currentPage = response.pageable.pageNumber;
-            var searchValue = getSearchInputValue();
+            const currentPage = response.pageable.pageNumber;
+            const searchValue = getSearchInputValue();
             if (searchValue) {
                 saveHistory({
                     data: {page: currentPage},
-                    title: 'Danh sách câu tìm kiếm',
-                    url: '/admin/sentences/page/' + (currentPage + 1) + '/?search=' + searchValue
+                    title: title,
+                    url: path + (currentPage + 1) + '/?search=' + searchValue
                 });
             } else {
                 saveHistory({
                     data: {page: currentPage},
-                    title: 'Danh sách câu tìm kiếm',
-                    url: '/admin/sentences/page/' + (currentPage + 1) + '/'
+                    title: title,
+                    url: path + (currentPage + 1) + '/'
                 });
             }
         }
@@ -200,12 +204,12 @@ $(document).ready(function () {
     }
 
     function setTableContent(page) {
-        var content = page.content;
-        var pageable = page.pageable;
+        let content = page.content;
+        let pageable = page.pageable;
         removeAllChildren(tbody);
         if (content.length) {
-            for (var i = 0; i < content.length; i++) {
-                var columns = [
+            for (let i = 0; i < content.length; i++) {
+                const columns = [
                     createColumn(function (td) {
                         td.textContent = pageable.offset + 1 + i;
                     }),
@@ -220,8 +224,8 @@ $(document).ready(function () {
                     }),
                     createColumn(function (td) {
                         if (content[i].audioPath) {
-                            var link = document.createElement('a');
-                            var icon = document.createElement('i');
+                            const link = document.createElement('a');
+                            const icon = document.createElement('i');
                             icon.classList.add('fa', 'fa-volume-up');
                             link.appendChild(icon);
                             link.setAttribute('href', apiUrl + '/' + content[i].id + '/audio');
@@ -234,15 +238,15 @@ $(document).ready(function () {
                         td.classList.add('text-center');
                     }),
                     createColumn(function (td) {
-                        var button = document.createElement("button");
-                        var icon = document.createElement('i');
+                        const button = document.createElement("button");
+                        const icon = document.createElement('i');
                         icon.classList.add('fa', 'fa-pencil');
                         button.appendChild(icon);
                         button.dataset.sentenceId = content[i].id;
                         button.classList.add('btn', 'btn-warning', 'btn-sm');
-                        button.addEventListener('click', function (event) {
-                            var id = $(this).data("sentenceId");
-                            var $modal = $('#sentence-modal').modal('show');
+                        button.addEventListener('click', function () {
+                            const id = $(this).data("sentenceId");
+                            const $modal = $('#sentence-modal').modal('show');
                             $.ajax({
                                 method: 'GET',
                                 url: apiUrl + '/' + id,
@@ -264,7 +268,7 @@ $(document).ready(function () {
                 createRow(tbody, columns);
             }
         } else {
-            var columns = [createColumn(function (td) {
+            const columns = [createColumn(function (td) {
                 td.setAttribute('colspan', '6');
                 td.textContent = 'Không có bản ghi';
             })];
