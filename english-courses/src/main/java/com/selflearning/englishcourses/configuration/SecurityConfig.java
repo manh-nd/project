@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/", "/login", "/register", "/dictionary", "/api/**", "/favicon.ico"
+            "/", "/auth/login", "/register", "/dictionary", "/api/**", "/favicon.ico"
     };
 
     @Autowired
@@ -54,11 +54,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/auth/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .failureForwardUrl("/login?error")
+                .failureForwardUrl("/auth/login?error=true")
                 .defaultSuccessUrl("/default")
 
                 .and()
@@ -69,7 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/auth/login?logout")
+                .deleteCookies("JSESSIONID")
 
                 .and()
                 .csrf().disable();

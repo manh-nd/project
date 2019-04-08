@@ -21,24 +21,24 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name="verb_phrases", uniqueConstraints = @UniqueConstraint(columnNames = {"VERB_PHRASE_TEXT", "VERB_PHRASE_IPA"}))
-@Document(indexName = "verb_phrases", shards = 2)
-public class VerbPhrase {
+@Table(name="phrases", uniqueConstraints = @UniqueConstraint(columnNames = {"PHRASE_TEXT", "PHRASE_IPA"}))
+@Document(indexName = "phrases", shards = 2)
+public class Phrase {
 
     @Id
     @GenericGenerator(name="uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
-    @Column(name = "VERB_PHRASE_ID", length = 16)
+    @Column(name = "PHRASE_ID", length = 16)
     private UUID id;
 
-    @Column(name="VERB_PHRASE_TEXT", unique = true, nullable = false)
+    @Column(name="PHRASE_TEXT", unique = true, nullable = false)
     private String text;
 
-    @Column(name="VERB_PHRASE_IPA")
+    @Column(name="PHRASE_IPA")
     private String ipa;
 
-    @OneToMany(mappedBy = "verbPhrase", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<VerbPhraseDetail> verbPhraseDetails;
+    @OneToMany(mappedBy = "phrase", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<PhraseDetail> phraseDetails;
 
     @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;

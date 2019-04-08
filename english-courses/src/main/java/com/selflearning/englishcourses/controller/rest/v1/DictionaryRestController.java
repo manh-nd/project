@@ -2,8 +2,8 @@ package com.selflearning.englishcourses.controller.rest.v1;
 
 import com.selflearning.englishcourses.service.DictionaryService;
 import com.selflearning.englishcourses.service.dto.DictionaryDto;
+import com.selflearning.englishcourses.service.dto.PhraseDto;
 import com.selflearning.englishcourses.service.dto.SentenceDto;
-import com.selflearning.englishcourses.service.dto.VerbPhraseDto;
 import com.selflearning.englishcourses.service.dto.VocabularyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,23 +26,26 @@ public class DictionaryRestController {
         this.dictionaryService = dictionaryService;
     }
 
-    @GetMapping(value = "/dictionary")
-    public ResponseEntity<DictionaryDto> search(@RequestParam("search") String keyword) {
+    @GetMapping(value = "/dictionary/all")
+    public ResponseEntity<DictionaryDto> search(@RequestParam(name = "search", defaultValue = "") String keyword) {
         return new ResponseEntity<>(dictionaryService.searchAll(keyword), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/dictionary", params = "vocabulary")
-    public ResponseEntity<Page<VocabularyDto>> searchVocabulary(@RequestParam("search") String keyword, Pageable pageable) {
+    @GetMapping(value = "/dictionary/vocabulary")
+    public ResponseEntity<Page<VocabularyDto>> searchVocabulary(
+            @RequestParam(name = "search", defaultValue = "") String keyword, Pageable pageable) {
         return new ResponseEntity<>(dictionaryService.searchVocabulary(keyword, pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/dictionary", params = "verb-phrase")
-    public ResponseEntity<Page<VerbPhraseDto>> searchVerbPhrase(@RequestParam("search") String keyword, Pageable pageable) {
-        return new ResponseEntity<>(dictionaryService.searchVerbPhrase(keyword, pageable), HttpStatus.OK);
+    @GetMapping(value = "/dictionary/phrase")
+    public ResponseEntity<Page<PhraseDto>> searchVerbPhrase(
+            @RequestParam(name = "search", defaultValue = "") String keyword, Pageable pageable) {
+        return new ResponseEntity<>(dictionaryService.searchPhrase(keyword, pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/dictionary", params = "sentence")
-    public ResponseEntity<Page<SentenceDto>> searchSentence(@RequestParam("search") String keyword, Pageable pageable) {
+    @GetMapping(value = "/dictionary/sentence")
+    public ResponseEntity<Page<SentenceDto>> searchSentence(
+            @RequestParam(name = "search", defaultValue = "") String keyword, Pageable pageable) {
         return new ResponseEntity<>(dictionaryService.searchSentence(keyword, pageable), HttpStatus.OK);
     }
 

@@ -1,12 +1,12 @@
 package com.selflearning.englishcourses.service.impl;
 
 import com.selflearning.englishcourses.service.DictionaryService;
+import com.selflearning.englishcourses.service.PhraseService;
 import com.selflearning.englishcourses.service.SentenceService;
-import com.selflearning.englishcourses.service.VerbPhraseService;
 import com.selflearning.englishcourses.service.VocabularyService;
 import com.selflearning.englishcourses.service.dto.DictionaryDto;
+import com.selflearning.englishcourses.service.dto.PhraseDto;
 import com.selflearning.englishcourses.service.dto.SentenceDto;
-import com.selflearning.englishcourses.service.dto.VerbPhraseDto;
 import com.selflearning.englishcourses.service.dto.VocabularyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     private SentenceService sentenceService;
 
-    private VerbPhraseService verbPhraseService;
+    private PhraseService phraseService;
 
     private VocabularyService vocabularyService;
 
@@ -34,8 +34,8 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Autowired
-    public void setVerbPhraseService(VerbPhraseService verbPhraseService) {
-        this.verbPhraseService = verbPhraseService;
+    public void setPhraseService(PhraseService phraseService) {
+        this.phraseService = phraseService;
     }
 
     @Override
@@ -43,11 +43,11 @@ public class DictionaryServiceImpl implements DictionaryService {
         Pageable pageable = PageRequest.of(0, 20);
         Page<SentenceDto> sentenceDtoPage = this.searchSentence(keyword, pageable);
         Page<VocabularyDto> vocabularyDtos = this.searchVocabulary(keyword, pageable);
-        Page<VerbPhraseDto> verbPhraseDtos = this.searchVerbPhrase(keyword, pageable);
+        Page<PhraseDto> phraseDtos = this.searchPhrase(keyword, pageable);
         DictionaryDto dictionaryDto = new DictionaryDto();
         dictionaryDto.setSentenceDtoPage(sentenceDtoPage);
         dictionaryDto.setVocabularyDtoPage(vocabularyDtos);
-        dictionaryDto.setVerbPhraseDtoPage(verbPhraseDtos);
+        dictionaryDto.setPhraseDtoPage(phraseDtos);
         return dictionaryDto;
     }
 
@@ -62,8 +62,8 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public Page<VerbPhraseDto> searchVerbPhrase(String keyword, Pageable pageable) {
-        return verbPhraseService.convertEntityPageToDtoPage(verbPhraseService.search(keyword, pageable));
+    public Page<PhraseDto> searchPhrase(String keyword, Pageable pageable) {
+        return phraseService.convertEntityPageToDtoPage(phraseService.search(keyword, pageable));
     }
 
 

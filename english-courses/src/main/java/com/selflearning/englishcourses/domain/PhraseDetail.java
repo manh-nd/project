@@ -22,31 +22,31 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name="verb_phrase_details")
-@Document(indexName = "verb_phrase_details", shards = 2)
-public class VerbPhraseDetail {
+@Table(name="phrase_details")
+@Document(indexName = "phrase_details", shards = 2)
+public class PhraseDetail {
 
     @Id
     @GenericGenerator(name="uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
-    @Column(name = "VERB_PHRASE_DETAIL_ID", length = 16)
+    @Column(name = "PHRASE_DETAIL_ID", length = 16)
     private UUID id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JoinColumn(name="VERB_PHRASE_ID", nullable = false)
-    private VerbPhrase verbPhrase;
+    @JoinColumn(name="PHRASE_ID", nullable = false)
+    private Phrase phrase;
 
-    @Column(name="VERB_PHRASE_DESCRIPTION")
+    @Column(name="PHRASE_DESCRIPTION")
     private String description;
 
-    @Column(name="VERB_PHRASE_MEANING")
+    @Column(name="PHRASE_MEANING")
     private String meaning;
 
-    @Column(name="VERB_PHRASE_SYNONYMS", length = 500)
+    @Column(name="PHRASE_SYNONYMS", length = 500)
     private String synonyms;
 
-    @Column(name="VERB_PHRASE_NOTE", length = 1000)
+    @Column(name="PHRASE_NOTE", length = 1000)
     private String note;
 
     @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

@@ -1,18 +1,18 @@
 package com.selflearning.englishcourses.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.Date;
 
 @Getter
 @Setter
-@ToString
-public class VerbPhraseDetailDto {
+public class PhraseDetailDto {
 
     private String id;
-    private VerbPhraseDto verbPhrase;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private PhraseDto phrase;
     private String meaning;
     private String description;
     private String synonyms;

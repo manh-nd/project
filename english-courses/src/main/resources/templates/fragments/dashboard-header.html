@@ -18,16 +18,6 @@
                     <i class="ti-menu"></i>
                 </a>
             </li>
-            <li>
-                <form class="navbar-search" action="javascript:;">
-                    <div class="rel">
-						<span class="search-icon">
-							<i class="ti-search"></i>
-						</span>
-                        <input class="form-control" placeholder="Search here...">
-                    </div>
-                </form>
-            </li>
         </ul>
         <!-- END TOP-LEFT TOOLBAR-->
         <!-- START TOP-RIGHT TOOLBAR-->
@@ -183,7 +173,7 @@
                 <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
                     <img th:src="@{/resources/images/admin.png}"/>
                     <span></span>
-                    <span sec:authentication="name">Bob</span>
+                    <span sec:authentication="name">User name</span>
                     <i class="fa fa-angle-down m-l-5"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">

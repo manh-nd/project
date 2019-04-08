@@ -1,11 +1,12 @@
 $(document).ready(function () {
-    var tbody = document.querySelector("#verb-phrases-table > tbody");
-    var pagination = document.querySelector("#verb-phrases-pagination");
+    var tbody = document.querySelector("#phrases-table > tbody");
+    var pagination = document.querySelector("#phrases-pagination");
     var searchButton = document.querySelector("#search-button");
     var searchInput = document.querySelector("#search-input");
-    var apiUrl = "/api/v1/verb-phrases";
-    var path = '/admin/verb-phrases/page/';
+    var apiUrl = "/api/v1/phrases";
+    var path = '/admin/phrases/page/';
     var page = 0;
+    var size = 20;
     var isSaveHistory = true;
 
     init();
@@ -42,9 +43,8 @@ $(document).ready(function () {
             searchInput.value = searchParamsValue;
             search(page, searchInput.value);
         } else {
-            getVerbPhrasePage(page);
+            getPhrasePage(page);
         }
-        get(apiUrl, {page: 0, size: 10}, onSuccess, onError);
     }
 
     function onSuccess(response) {
@@ -56,13 +56,13 @@ $(document).ready(function () {
             if (searchValue) {
                 saveHistory({
                     data: {page: currentPage},
-                    title: 'Quản lý cụm động từ tìm kiếm',
+                    title: 'Quản lý cụm từ tìm kiếm',
                     url: path + (currentPage + 1) + '/?search=' + searchValue
                 });
             } else {
                 saveHistory({
                     data: {page: currentPage},
-                    title: 'Quản lý cụm động từ',
+                    title: 'Quản lý cụm từ',
                     url: path + (currentPage + 1) + '/'
                 });
             }
@@ -81,7 +81,7 @@ $(document).ready(function () {
             if (text) {
                 search(page, text);
             } else {
-                getVerbPhrasePage(page);
+                getPhrasePage(page);
             }
         }
     }
@@ -89,11 +89,11 @@ $(document).ready(function () {
     function search(page, text) {
         if (!text)
             return;
-        get(apiUrl, {search: text, page: page, size: 10}, onSuccess, onError);
+        get(apiUrl, {search: text, page: page, size: size}, onSuccess, onError);
     }
 
-    function getVerbPhrasePage(page) {
-        get(apiUrl, {page: page, size: 10}, onSuccess, onError);
+    function getPhrasePage(page) {
+        get(apiUrl, {page: page, size: size}, onSuccess, onError);
     }
 
     function renderTableContent(page) {
@@ -113,11 +113,11 @@ $(document).ready(function () {
                         td.textContent = content[i].ipa
                     }),
                     createColumn(function (td) {
-                        var verbPhraseDetails = content[i].verbPhraseDetails;
+                        var phraseDetails = content[i].phraseDetails;
                         var meanings = [];
-                        if (verbPhraseDetails.length) {
-                            for (var j = 0; j < verbPhraseDetails.length; j++) {
-                                meanings.push(verbPhraseDetails[j].meaning);
+                        if (phraseDetails.length) {
+                            for (var j = 0; j < phraseDetails.length; j++) {
+                                meanings.push(phraseDetails[j].meaning);
                             }
                         } else {
                             td.textContent = "Không có nghĩa";

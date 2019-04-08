@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 public class DictionaryDto {
 
     private Page<VocabularyDto> vocabularyDtoPage;
-    private Page<VerbPhraseDto> verbPhraseDtoPage;
+    private Page<PhraseDto> phraseDtoPage;
     private Page<SentenceDto> sentenceDtoPage;
 
 }

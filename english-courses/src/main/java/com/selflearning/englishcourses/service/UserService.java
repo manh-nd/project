@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.UUID;
 
-public interface UserService extends BaseCurdService<User, UUID>, ModelMapperService<User, UserDto>, UserDetailsService {
+public interface UserService extends BaseService, BaseCurdService<User, UUID>, ModelMapperService<User, UserDto>, UserDetailsService {
 
     void register(RegistrationToken registrationToken);
 

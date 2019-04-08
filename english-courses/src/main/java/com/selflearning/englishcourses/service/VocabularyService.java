@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 
-public interface VocabularyService extends BaseCurdService<Vocabulary, UUID>, ModelMapperService<Vocabulary, VocabularyDto> {
+public interface VocabularyService extends BaseService, BaseCurdService<Vocabulary, UUID>, ModelMapperService<Vocabulary, VocabularyDto> {
 
     Page<Vocabulary> search(String value, Pageable pageable);
 

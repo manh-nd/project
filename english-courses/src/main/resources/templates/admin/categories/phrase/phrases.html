@@ -3,14 +3,14 @@
       xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
       layout:decorate="~{layouts/dashboard-layout}">
 <head>
-    <title>Danh sách cụm động từ</title>
+    <title>Danh sách cụm từ</title>
 </head>
 
 <body>
 <div layout:fragment="content" class="page-content fade-in-up">
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Danh sách cụm động từ</div>
+            <div class="ibox-title">Danh sách cụm từ</div>
             <div class="ibox-tools">
                 <a class="ibox-collapse">
                     <i class="fa fa-minus"></i>
@@ -23,11 +23,11 @@
             </div>
             <div class="my-3"></div>
 
-            <table id="verb-phrases-table" class="table table-sm table-hover table-bordered table-striped">
+            <table id="phrases-table" class="table table-sm table-hover table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Cụm động từ</th>
+                    <th>Cụm từ</th>
                     <th>Ipa</th>
                     <th>Nghĩa</th>
                     <th>Thao tác</th>
@@ -36,14 +36,14 @@
                 <tbody>
                 </tbody>
             </table>
-            <nav id="verb-phrases-pagination"></nav>
+            <nav id="phrases-pagination"></nav>
         </div>
     </div>
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
     <script th:src="@{/resources/js/service/service.js}"></script>
-    <script th:src="@{/resources/js/pages/verb-phrase.js}"></script>
+    <script th:src="@{/resources/js/pages/phrase.js}"></script>
 </th:block>
 </body>
 </html>

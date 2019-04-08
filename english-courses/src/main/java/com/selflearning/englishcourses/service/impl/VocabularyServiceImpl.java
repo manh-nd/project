@@ -174,4 +174,9 @@ public class VocabularyServiceImpl implements VocabularyService {
                 .build();
         return vocabularyElasticsearchRepository.search(searchQuery);
     }
+
+    @Override
+    public long count() {
+        return vocabularyJpaRepository.count();
+    }
 }

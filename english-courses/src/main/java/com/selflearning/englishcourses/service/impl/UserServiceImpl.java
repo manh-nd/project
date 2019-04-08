@@ -194,4 +194,8 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(false);
     }
 
+    @Override
+    public long count() {
+        return userJpaRepository.count();
+    }
 }

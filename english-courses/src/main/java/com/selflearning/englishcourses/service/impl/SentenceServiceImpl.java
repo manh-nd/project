@@ -127,4 +127,10 @@ public class SentenceServiceImpl implements SentenceService {
                 .build();
         return sentenceElasticsearchRepository.search(searchQuery);
     }
+
+    @Override
+    public long count() {
+        return sentenceJpaRepository.count();
+    }
+
 }

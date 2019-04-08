@@ -67,4 +67,9 @@ public class VocabularyRestController {
                 .body(bytes);
     }
 
+    @GetMapping("/vocabularies/count")
+    public ResponseEntity<Long> getTotalVocabularies(){
+        return new ResponseEntity<>(vocabularyService.count(), HttpStatus.OK);
+    }
+
 }

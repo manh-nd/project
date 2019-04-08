@@ -41,15 +41,15 @@ public class CategoryController {
         return vocabularyPage(model);
     }
 
-    @GetMapping("/verb-phrases")
-    public String verbPhrasePage(Model model) {
-        model.addAttribute("verbPhrases", true);
-        return "admin/categories/verb-phrase/verb-phrases";
+    @GetMapping("/phrases")
+    public String phrasePage(Model model) {
+        model.addAttribute("phrases", true);
+        return "admin/categories/phrase/phrases";
     }
 
-    @GetMapping("/verb-phrases/page/{page}/")
-    public String verbPhrasePage(Model model, @PathVariable("page") Integer page) {
-        return verbPhrasePage(model);
+    @GetMapping("/phrases/page/{page}/")
+    public String phrasePage(Model model, @PathVariable("page") Integer page) {
+        return phrasePage(model);
     }
 
     @ModelAttribute("categories")
