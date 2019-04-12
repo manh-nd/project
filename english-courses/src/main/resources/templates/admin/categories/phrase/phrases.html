@@ -4,6 +4,13 @@
       layout:decorate="~{layouts/dashboard-layout}">
 <head>
     <title>Danh sách cụm từ</title>
+    <!-- PLUGINS STYLES-->
+
+    <!-- THEME STYLES-->
+    <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
+
+    <!-- PAGE LEVEL STYLES-->
+
 </head>
 
 <body>
@@ -42,8 +49,8 @@
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
-    <script th:src="@{/resources/js/service/service.js}"></script>
-    <script th:src="@{/resources/js/pages/phrase.js}"></script>
+    <script th:src="@{/js/service/service.js}"></script>
+    <script th:src="@{/js/pages/phrase.js}"></script>
 </th:block>
 </body>
 </html>

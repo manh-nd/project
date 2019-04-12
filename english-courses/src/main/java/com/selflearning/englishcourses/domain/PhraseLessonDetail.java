@@ -10,41 +10,33 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
-/**
- * @author manhnd
- * @version 1.0
- */
+
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name="vocabularies")
-@Document(indexName = "vocabularies", shards = 2)
-public class Vocabulary {
+@Table(name="phrase_lesson_details")
+@Document(indexName="phrase_lesson_details", shards = 2)
+public class PhraseLessonDetail {
 
     @Id
     @GenericGenerator(name="uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
-    @Column(name = "VOCABULARY_ID", length = 16)
+    @Column(name = "PHRASE_LESSON_DETAIL_ID", length = 16)
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name="WORD_ID", nullable = false)
-    private Word word;
+    @JoinColumn(name = "PHRASE_LESSON_ID", nullable = false)
+    private PhraseLesson phraseLesson;
 
     @ManyToOne
-    @JoinColumn(name="WORD_CLASS_ID", nullable = false)
-    private WordClass wordClass;
+    @JoinColumn(name="PHRASE_DETAIL_ID")
+    private PhraseDetail phraseDetail;
 
-    @Column(name="VOCABULARY_DESCRIPTION", length = 500)
-    private String description;
-
-    @Column(name="VOCABULARY_MEANING")
-    private String meaning;
-
-    @Column(name="VOCABULARY_IMAGE_PATH")
-    private String imagePath;
+    @ManyToOne
+    @JoinColumn(name="SENTENCE_ID")
+    private Sentence sentence;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;

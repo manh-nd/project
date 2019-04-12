@@ -4,13 +4,20 @@
       layout:decorate="~{layouts/dashboard-layout}">
 <head>
     <title>Danh sách khoá học</title>
+    <!-- PLUGINS STYLES-->
+
+    <!-- THEME STYLES-->
+    <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
+
+    <!-- PAGE LEVEL STYLES-->
+
 </head>
 
 <body>
 <div layout:fragment="content" class="page-content fade-in-up">
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Danh sách khoá học</div>
+            <div class="ibox-title">Khóa học</div>
             <div class="ibox-tools">
                 <a class="ibox-collapse">
                     <i class="fa fa-minus"></i>
@@ -19,7 +26,9 @@
         </div>
         <div class="ibox-body">
 
-            <table>
+            <div></div>
+            <button class="btn btn-primary">Tạo khóa học</button>
+            <table class="table table-sm table-striped table-bordered" ng-show="{{courses}}">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -28,7 +37,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <td></td>
+                    <tr ng-repeat="course in courses">
+                        <td>{{$index}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -36,8 +47,7 @@
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
-    <script>
-    </script>
+    <script th:src="@{/js/pages/course.js}"></script>
 </th:block>
 </body>
 </html>

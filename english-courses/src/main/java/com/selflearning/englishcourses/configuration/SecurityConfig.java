@@ -4,7 +4,6 @@ import com.selflearning.englishcourses.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -21,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/", "/auth/login", "/register", "/dictionary", "/api/**", "/favicon.ico"
+            "/", "/login*", "/register*", "/dictionary", "/api/**", "/favicon.ico", "https://fonts.gstatic.com/**"
     };
 
     @Autowired
@@ -40,11 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
@@ -54,12 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .failureForwardUrl("/auth/login?error=true")
+                .loginPage("/login")
                 .defaultSuccessUrl("/default")
+                .failureUrl("/login?errors")
+                .permitAll()
 
                 .and()
                 .rememberMe()
@@ -69,10 +60,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login?logout")
-                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/login?logout")
+                .deleteCookies("remember-me")
 
                 .and()
+                .exceptionHandling()
+                .accessDeniedPage("/403")
+
+                .and()
+                .cors().disable()
                 .csrf().disable();
     }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/fonts/**");
+    }
+
 }

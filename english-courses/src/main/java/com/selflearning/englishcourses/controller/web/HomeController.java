@@ -25,10 +25,4 @@ public class HomeController {
         return "redirect:/";
     }
 
-
-    @GetMapping("/403")
-    public String accessDenyPage(){
-        return "error/403";
-    }
-
 }

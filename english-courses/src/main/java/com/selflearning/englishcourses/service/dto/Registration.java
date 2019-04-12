@@ -14,32 +14,32 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class Registration {
 
-    @NotEmpty(message = "registration.error.username.empty")
-    @Length(min = 5, max = 45, message = "registration.error.username.length")
+    @NotEmpty(message = "registration.errors.username.empty")
+    @Length(min = 5, max = 45, message = "registration.errors.username.length")
     private String username;
 
-    @NotEmpty(message = "registration.error.email.empty")
-    @Length(min = 6, max = 80, message = "registration.error.email.length")
-    @Email(message = "registration.error.email.email")
+    @NotEmpty(message = "registration.errors.email.empty")
+    @Length(min = 6, max = 80, message = "registration.errors.email.length")
+    @Email(message = "registration.errors.email.email")
     private String email;
 
-    @NotEmpty(message = "registration.error.password.empty")
-    @Length(min = 6, max = 32, message = "registration.error.password.length")
+    @NotEmpty(message = "registration.errors.password.empty")
+    @Length(min = 6, max = 32, message = "registration.errors.password.length")
     private String password;
 
-    @NotEmpty(message = "registration.error.confirmPassword.empty")
-    @Length(min = 6, max = 32, message = "registration.error.confirmPassword.length")
+    @NotEmpty(message = "registration.errors.confirmPassword.empty")
+    @Length(min = 6, max = 32, message = "registration.errors.confirmPassword.length")
     private String confirmPassword;
 
-    @NotEmpty(message = "registration.error.firstName.empty")
-    @Length(max = 45, message = "registration.error.firstName.length")
+    @NotEmpty(message = "registration.errors.firstName.empty")
+    @Length(max = 45, message = "registration.errors.firstName.length")
     private String firstName;
 
-    @NotEmpty(message = "registration.error.lastName.empty")
-    @Length(max = 45, message = "registration.error.lastName.length")
+    @NotEmpty(message = "registration.errors.lastName.empty")
+    @Length(max = 45, message = "registration.errors.lastName.length")
     private String lastName;
 
-    @NotNull(message = "registration.error.gender.null")
+    @NotNull(message = "registration.errors.gender.null")
     private Boolean gender;
 
 }

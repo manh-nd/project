@@ -18,8 +18,8 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@ToString(exclude = {"vocabularyLessons", "lessonModuleMarks"})
-@EqualsAndHashCode(exclude = {"vocabularyLessons", "lessonModuleMarks"})
+@ToString(exclude = {"vocabularyLessons", "lessonModuleMarks", "phraseLessons", "grammarLessons"})
+@EqualsAndHashCode(exclude = {"vocabularyLessons", "lessonModuleMarks", "phraseLessons", "grammarLessons"})
 @Entity
 @Table(name = "lesson_modules")
 @Document(indexName = "lesson_modules", shards = 2)
@@ -45,10 +45,16 @@ public class LessonModule {
     @OneToMany(mappedBy = "lessonModule")
     private List<LessonModuleMark> lessonModuleMarks;
 
-    @Column(name="CREATED_TIME", updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @OneToMany(mappedBy = "lessonModule")
+    private List<PhraseLesson> phraseLessons;
+
+    @OneToMany(mappedBy = "lessonModule")
+    private List<GrammarLesson> grammarLessons;
+
+    @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;
 
-    @Column(name="UPDATED_TIME", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name="UPDATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Date updatedTime;
 
 }

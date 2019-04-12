@@ -172,7 +172,7 @@ function showErrorMessage(message, parent, input) {
     var label = document.createElement('label');
     label.classList.add('help-block', 'error');
     label.textContent = message;
-    parent.classList.add('has-error');
+    parent.classList.add('has-errors');
     if (input.nextElementSibling) {
         parent.insertBefore(label, input.nextElementSibling);
     } else {

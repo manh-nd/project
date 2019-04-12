@@ -54,7 +54,7 @@ public class RestValidationHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    // method to process field error
+    // method to process field errors
     private FieldValidationError processFieldError(final FieldError error) {
         FieldValidationError fieldValidationError = new FieldValidationError();
         if (error != null) {

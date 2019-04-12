@@ -43,10 +43,7 @@ public class CourseRestController {
     @GetMapping("/courses")
     public ResponseEntity<Page<CourseDto>> findAll(Pageable pageable){
         Page<Course> coursePage = courseService.findAll(pageable);
-        List<Course> content = coursePage.getContent();
-        int totalPages = coursePage.getTotalPages();
-        Page<CourseDto> courseDtoPage = new PageImpl<>(courseService.convertEntityToDto(content), pageable, totalPages);
-        return new ResponseEntity<>(courseDtoPage, HttpStatus.OK);
+        return new ResponseEntity<>(courseService.convertEntityPageToDtoPage(coursePage), HttpStatus.OK);
     }
 
 }
