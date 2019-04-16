@@ -18,10 +18,10 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
+@ToString(exclude = {"lessonModules"})
+@EqualsAndHashCode(exclude = {"lessonModules"})
 @Entity
-@Table(name="lessons")
+@Table(name="lessons", uniqueConstraints = @UniqueConstraint(columnNames = {"COURSE_ID", "LESSON_ORDER_NUMBER"}))
 @Document(indexName = "lessons", shards = 2)
 public class Lesson {
 
@@ -34,11 +34,11 @@ public class Lesson {
     @Column(name="LESSON_ORDER_NUMBER", nullable = false)
     private Integer orderNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="COURSE_ID", nullable = false)
     private Course course;
 
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<LessonModule> lessonModules;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

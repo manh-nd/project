@@ -44,11 +44,6 @@ public class SentenceServiceImpl implements SentenceService {
     }
 
     @Override
-    public Sentence get(String id) {
-        return sentenceJpaRepository.findById(UUID.fromString(id)).orElse(null);
-    }
-
-    @Override
     public Sentence get(UUID id) {
         return sentenceJpaRepository.findById(id).orElse(null);
     }
@@ -62,9 +57,9 @@ public class SentenceServiceImpl implements SentenceService {
 
     @Transactional
     @Override
-    public void saveAll(Iterable<Sentence> iterable) {
-        sentenceJpaRepository.saveAll(iterable);
-        sentenceElasticsearchRepository.saveAll(iterable);
+    public void saveAll(List<Sentence> sentences) {
+        sentenceJpaRepository.saveAll(sentences);
+        sentenceElasticsearchRepository.saveAll(sentences);
     }
 
     @Transactional
@@ -76,9 +71,9 @@ public class SentenceServiceImpl implements SentenceService {
 
     @Transactional
     @Override
-    public void deleteAll(Iterable<Sentence> iterable) {
-        sentenceJpaRepository.deleteAll(iterable);
-        sentenceElasticsearchRepository.deleteAll(iterable);
+    public void deleteAll(List<Sentence> sentences) {
+        sentenceJpaRepository.deleteAll(sentences);
+        sentenceElasticsearchRepository.deleteAll(sentences);
     }
 
     @Override
@@ -88,30 +83,22 @@ public class SentenceServiceImpl implements SentenceService {
 
     @Override
     public Sentence convertDtoToEntity(SentenceDto sentenceDto) {
-        Sentence sentence = modelMapper.map(sentenceDto, Sentence.class);
-        String id = sentenceDto.getId();
-        if (id != null)
-            sentence.setId(UUID.fromString(id));
-        return sentence;
+        return modelMapper.map(sentenceDto, Sentence.class);
     }
 
     @Override
     public List<Sentence> convertDtoToEntity(List<SentenceDto> sentenceDtos) {
-        return sentenceDtos.stream().map(sentenceDto -> convertDtoToEntity(sentenceDto)).collect(Collectors.toList());
+        return sentenceDtos.stream().map(this::convertDtoToEntity).collect(Collectors.toList());
     }
 
     @Override
     public SentenceDto convertEntityToDto(Sentence sentence) {
-        SentenceDto sentenceDto = modelMapper.map(sentence, SentenceDto.class);
-        UUID id = sentence.getId();
-        if (id != null)
-            sentenceDto.setId(id.toString());
-        return sentenceDto;
+        return modelMapper.map(sentence, SentenceDto.class);
     }
 
     @Override
     public List<SentenceDto> convertEntityToDto(List<Sentence> sentences) {
-        return sentences.stream().map(sentence -> convertEntityToDto(sentence)).collect(Collectors.toList());
+        return sentences.stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
     @Override

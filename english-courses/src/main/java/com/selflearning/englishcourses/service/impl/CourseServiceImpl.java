@@ -8,8 +8,10 @@ import com.selflearning.englishcourses.service.dto.CourseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,31 +48,22 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course get(String id) {
-        return null;
+    public void save(Course course) {
+        courseJpaRepository.save(course);
+        courseElasticsearchRepository.save(course);
+    }
+
+    @Transactional
+    @Override
+    public void saveAll(List<Course> courses) {
+        courseJpaRepository.saveAll(courses);
+        courseElasticsearchRepository.saveAll(courses);
     }
 
     @Override
-    public void save(Course obj) {
-        courseJpaRepository.save(obj);
-        courseElasticsearchRepository.save(obj);
-    }
-
-    @Override
-    public void saveAll(Iterable<Course> iterable) {
-        courseJpaRepository.saveAll(iterable);
-        courseElasticsearchRepository.saveAll(iterable);
-    }
-
-    @Override
-    public void delete(Course obj) {
-        courseJpaRepository.delete(obj);
-        courseElasticsearchRepository.delete(obj);
-    }
-
-    @Override
-    public void deleteAll(Iterable<Course> iterable) {
-        courseJpaRepository.deleteAll(iterable);
+    public void delete(Course course) {
+        courseJpaRepository.delete(course);
+        courseElasticsearchRepository.delete(course);
     }
 
     @Override
@@ -81,9 +74,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course convertDtoToEntity(CourseDto courseDto) {
         Course course = modelMapper.map(courseDto, Course.class);
-        String id = courseDto.getId();
-        if (Objects.nonNull(id))
-            course.setId(UUID.fromString(id));
         return course;
     }
 
@@ -95,8 +85,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseDto convertEntityToDto(Course entity) {
         CourseDto courseDto = modelMapper.map(entity, CourseDto.class);
-        if (entity.getId() != null)
-            courseDto.setId(entity.getId().toString());
         return courseDto;
     }
 
@@ -107,7 +95,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseDto> convertEntityPageToDtoPage(Page<Course> page) {
-        return null;
+        return new PageImpl<>(convertEntityToDto(page.getContent()), page.getPageable(), page.getNumberOfElements());
     }
 
 

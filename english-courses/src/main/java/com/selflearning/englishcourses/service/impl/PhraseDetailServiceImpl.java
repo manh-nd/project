@@ -26,12 +26,7 @@ public class PhraseDetailServiceImpl implements PhraseDetailService {
 
     @Override
     public PhraseDetail convertDtoToEntity(PhraseDetailDto phraseDetailDto) {
-        PhraseDetail phraseDetail = modelMapper.map(phraseDetailDto, PhraseDetail.class);
-        String id = phraseDetailDto.getId();
-        if (Objects.nonNull(id)) {
-            phraseDetail.setId(UUID.fromString(id));
-        }
-        return phraseDetail;
+        return modelMapper.map(phraseDetailDto, PhraseDetail.class);
     }
 
     @Override
@@ -41,12 +36,7 @@ public class PhraseDetailServiceImpl implements PhraseDetailService {
 
     @Override
     public PhraseDetailDto convertEntityToDto(PhraseDetail phraseDetail) {
-        PhraseDetailDto phraseDetailDto = modelMapper.map(phraseDetail, PhraseDetailDto.class);
-        UUID id = phraseDetail.getId();
-        if (Objects.nonNull(id)) {
-            phraseDetailDto.setId(id.toString());
-        }
-        return phraseDetailDto;
+        return modelMapper.map(phraseDetail, PhraseDetailDto.class);
     }
 
     @Override

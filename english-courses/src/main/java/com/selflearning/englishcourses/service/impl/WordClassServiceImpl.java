@@ -31,12 +31,6 @@ public class WordClassServiceImpl implements WordClassService {
     public void setWordClassElasticsearchRepository(WordClassElasticsearchRepository wordClassElasticsearchRepository) {
         this.wordClassElasticsearchRepository = wordClassElasticsearchRepository;
     }
-
-    @Override
-    public WordClass get(String id) {
-        return null;
-    }
-
     @Override
     public WordClass get(UUID id) {
         return wordClassJpaRepository.getOne(id);
@@ -50,20 +44,8 @@ public class WordClassServiceImpl implements WordClassService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void saveAll(Iterable<WordClass> iterable) {
-        wordClassJpaRepository.saveAll(iterable);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
     public void delete(WordClass obj) {
         wordClassJpaRepository.delete(obj);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public void deleteAll(Iterable<WordClass> iterable) {
-        wordClassJpaRepository.deleteAll(iterable);
     }
 
     @Override

@@ -57,12 +57,6 @@ public class PhraseServiceImpl implements PhraseService {
         this.modelMapper = modelMapper;
     }
 
-
-    @Override
-    public Phrase get(String id) {
-        return phraseJpaRepository.findById(UUID.fromString(id)).orElse(null);
-    }
-
     @Override
     public Phrase get(UUID id) {
         return phraseJpaRepository.findById(id).orElse(null);
@@ -76,9 +70,9 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     @Override
-    public void saveAll(Iterable<Phrase> iterable) {
-        phraseJpaRepository.saveAll(iterable);
-        phraseElasticsearchRepository.saveAll(iterable);
+    public void saveAll(List<Phrase> phrases) {
+        phraseJpaRepository.saveAll(phrases);
+        phraseElasticsearchRepository.saveAll(phrases);
     }
 
     @Override
@@ -88,9 +82,9 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     @Override
-    public void deleteAll(Iterable<Phrase> iterable) {
-        phraseJpaRepository.deleteAll(iterable);
-        phraseElasticsearchRepository.deleteAll(iterable);
+    public void deleteAll(List<Phrase> phrases) {
+        phraseJpaRepository.deleteAll(phrases);
+        phraseElasticsearchRepository.deleteAll(phrases);
     }
 
     @Override
@@ -101,7 +95,7 @@ public class PhraseServiceImpl implements PhraseService {
     @Override
     public Page<Phrase> search(String value, Pageable pageable) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(multiMatchQuery(value,"text", "phraseDetails.meaning", "phraseDetails.description"))
+                .withQuery(multiMatchQuery(value, "text", "phraseDetails.meaning", "phraseDetails.description"))
                 .withPageable(pageable)
                 .build();
         return phraseElasticsearchRepository.search(searchQuery);
@@ -110,13 +104,9 @@ public class PhraseServiceImpl implements PhraseService {
     @Override
     public Phrase convertDtoToEntity(PhraseDto phraseDto) {
         Phrase phrase = modelMapper.map(phraseDto, Phrase.class);
-        String id = phraseDto.getId();
-        if (Objects.nonNull(id)) {
-            phrase.setId(UUID.fromString(id));
-        }
         List<PhraseDetailDto> phraseDetails = phraseDto.getPhraseDetails();
-        if(Objects.nonNull(phraseDetails) && !phraseDetails.isEmpty()){
-           phrase.setPhraseDetails(phraseDetailService.convertDtoToEntity(phraseDetails));
+        if (Objects.nonNull(phraseDetails) && !phraseDetails.isEmpty()) {
+            phrase.setPhraseDetails(phraseDetailService.convertDtoToEntity(phraseDetails));
         }
         return phrase;
     }
@@ -128,12 +118,7 @@ public class PhraseServiceImpl implements PhraseService {
 
     @Override
     public PhraseDto convertEntityToDto(Phrase phrase) {
-        PhraseDto phraseDto = modelMapper.map(phrase, PhraseDto.class);
-        UUID id = phrase.getId();
-        if (Objects.nonNull(id)) {
-            phraseDto.setId(id.toString());
-        }
-        return phraseDto;
+        return modelMapper.map(phrase, PhraseDto.class);
 
     }
 

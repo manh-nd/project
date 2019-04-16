@@ -7,14 +7,11 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class WordDto {
+public class WordDto extends BaseDto {
 
-    private String id;
     private String text;
     private String ipa;
     private String normalAudioPath;
     private String specialAudioPath;
-    private Date createdTime;
-    private Date updatedTime;
 
 }

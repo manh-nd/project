@@ -10,5 +10,4 @@ public interface DashboardService {
 
     long getTotalUsers();
 
-
 }

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -56,7 +57,7 @@ public class VocabularyRestController {
     }
 
     @GetMapping("/vocabularies/{id}/audio")
-    public ResponseEntity<byte[]> getVocabularyAudios(@PathVariable("id") String id) throws IOException {
+    public ResponseEntity<byte[]> getVocabularyAudios(@PathVariable("id") UUID id) throws IOException {
         Vocabulary vocabulary = vocabularyService.get(id);
         String audioPath = vocabulary.getWord().getSpecialAudioPath();
         File file = new File(this.path + audioPath);

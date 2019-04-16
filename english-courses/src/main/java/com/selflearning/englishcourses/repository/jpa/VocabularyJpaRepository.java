@@ -25,4 +25,7 @@ public interface VocabularyJpaRepository extends JpaRepository<Vocabulary, UUID>
     @Query("UPDATE Vocabulary v SET v.imagePath = :imagePath WHERE v.id = :id")
     void updateVocabularyImagePath(@Param("imagePath") String imagePath, UUID id);
 
+    @Query("SELECT v FROM Vocabulary v WHERE v.word.text = :text")
+    Vocabulary findByWordText(String text);
+
 }

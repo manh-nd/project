@@ -84,7 +84,7 @@ public class SentenceRestController {
     }
 
     @GetMapping("/sentences/{id}")
-    public ResponseEntity<SentenceDto> getSentence(@PathVariable String id) {
+    public ResponseEntity<SentenceDto> getSentence(@PathVariable UUID id) {
         Sentence sentence = sentenceService.get(id);
         return new ResponseEntity<>(sentenceService.convertEntityToDto(sentence), HttpStatus.OK);
     }
@@ -96,7 +96,7 @@ public class SentenceRestController {
     }
 
     @GetMapping("/sentences/{id}/audio")
-    public ResponseEntity<byte[]> getAudio(@PathVariable String id) throws IOException {
+    public ResponseEntity<byte[]> getAudio(@PathVariable UUID id) throws IOException {
         Sentence sentence = sentenceService.get(id);
         String audioPath = sentence.getAudioPath();
         File file = new File(this.path + audioPath);

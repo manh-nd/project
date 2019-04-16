@@ -3,19 +3,17 @@ package com.selflearning.englishcourses.service.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
-public class VocabularyDto {
+public class VocabularyDto extends BaseDto {
 
-    private String id;
+    private UUID id;
     private WordDto word;
     private WordClassDto wordClass;
     private String description;
     private String meaning;
     private String imagePath;
-    private Date createdTime;
-    private Date updatedTime;
 
 }

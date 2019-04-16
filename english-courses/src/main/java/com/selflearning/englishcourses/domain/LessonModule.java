@@ -21,7 +21,7 @@ import java.util.UUID;
 @ToString(exclude = {"vocabularyLessons", "lessonModuleMarks", "phraseLessons", "grammarLessons"})
 @EqualsAndHashCode(exclude = {"vocabularyLessons", "lessonModuleMarks", "phraseLessons", "grammarLessons"})
 @Entity
-@Table(name = "lesson_modules")
+@Table(name = "lesson_modules", uniqueConstraints = @UniqueConstraint(columnNames = {"LESSON_ID", "MODULE_ID"}))
 @Document(indexName = "lesson_modules", shards = 2)
 public class LessonModule {
 
@@ -39,16 +39,16 @@ public class LessonModule {
     @JoinColumn(name = "MODULE_ID", nullable = false)
     private Module module;
 
-    @OneToMany(mappedBy = "lessonModule")
+    @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private List<VocabularyLesson> vocabularyLessons;
 
-    @OneToMany(mappedBy = "lessonModule")
+    @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private List<LessonModuleMark> lessonModuleMarks;
 
-    @OneToMany(mappedBy = "lessonModule")
+    @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private List<PhraseLesson> phraseLessons;
 
-    @OneToMany(mappedBy = "lessonModule")
+    @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private List<GrammarLesson> grammarLessons;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

@@ -83,12 +83,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 
-
-    @Override
-    public User get(String id) {
-        return null;
-    }
-
     @Override
     public User get(UUID id) {
         return null;
@@ -101,17 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveAll(Iterable<User> iterable) {
-
-    }
-
-    @Override
     public void delete(User obj) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable<User> iterable) {
 
     }
 
@@ -179,12 +163,12 @@ public class UserServiceImpl implements UserService {
     private void setDefaultUserProperty(User user) {
         Optional<Role> optionalRole = roleJpaRepository.findByName(USER_ROLE);
         if (optionalRole.isPresent()) {
-            user.setRoles(Arrays.asList(optionalRole.get()));
+            user.setRoles(Collections.singletonList(optionalRole.get()));
         } else {
             Role role = new Role(USER_ROLE);
             roleJpaRepository.save(role);
             if (Objects.nonNull(role.getId())) {
-                user.setRoles(Arrays.asList(role));
+                user.setRoles(Collections.singletonList(role));
             } else {
                 throw new RuntimeException("Cannot create Role!");
             }

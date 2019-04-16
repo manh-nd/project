@@ -1,6 +1,6 @@
 package com.selflearning.englishcourses.controller.web.admin;
 
-import com.selflearning.englishcourses.controller.rest.v1.SentenceRestController;
+import com.selflearning.englishcourses.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/management")
 public class CategoryController {
 
+
+
     @GetMapping("/sentences")
     public String sentencePage(Model model) {
         model.addAttribute("sentenceManagement", true);
-        return "admin/categories/sentence/sentences";
+        return "admin/categories/sentences";
     }
 
     @GetMapping("/sentences/page/{number}")
@@ -27,24 +29,25 @@ public class CategoryController {
     @GetMapping("/vocabularies")
     public String vocabularyPage(Model model) {
         model.addAttribute("vocabularyManagement", true);
-        return "admin/categories/vocabulary/vocabularies";
+        return "admin/categories/vocabularies";
     }
 
-    @GetMapping("/vocabularies/page/{page}")
-    public String vocabularyPage(Model model, @PathVariable("page") Integer page) {
+    @GetMapping("/vocabularies/page/{number}")
+    public String vocabularyPage(Model model, @PathVariable("number") Integer page) {
         return vocabularyPage(model);
     }
 
     @GetMapping("/phrases")
     public String phrasePage(Model model) {
         model.addAttribute("phraseManagement", true);
-        return "admin/categories/phrase/phrases";
+        return "admin/categories/phrases";
     }
 
-    @GetMapping("/phrases/page/{page}/")
-    public String phrasePage(Model model, @PathVariable("page") Integer page) {
+    @GetMapping("/phrases/page/{number}/")
+    public String phrasePage(Model model, @PathVariable("number") Integer page) {
         return phrasePage(model);
     }
+
 
     @ModelAttribute("categories")
     public Boolean setActive() {

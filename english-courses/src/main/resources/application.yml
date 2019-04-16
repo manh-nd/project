@@ -22,7 +22,7 @@ spring:
     password: ${sql.password}
   data:
     elasticsearch:
-      cluster-name: elasticsearch_english_project
+      cluster-name: self_learning
       cluster-nodes: ${nosql.elastichsearch.cluster-nodes}
   jpa:
     show-sql: true
@@ -31,6 +31,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        enable_lazy_load_no_trans: true
   mail:
     protocol: smtp
     host: smtp.gmail.com

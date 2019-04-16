@@ -15,9 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class SentenceDto {
-
-    private String id;
+public class SentenceDto  extends BaseDto{
 
     @NotEmpty(message = "errors.sentence.text.empty")
     @Length(max = 255, message = "errors.sentence.text.length")
@@ -32,7 +30,5 @@ public class SentenceDto {
 
     @Length(max = 255, message = "errors.sentence.audioPath.length")
     private String audioPath;
-    private Date createdTime;
-    private Date updatedTime;
 
 }

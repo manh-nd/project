@@ -77,10 +77,6 @@ public class VocabularyServiceImpl implements VocabularyService {
         this.vocabularyElasticsearchRepository = vocabularyElasticsearchRepository;
     }
 
-    @Override
-    public Vocabulary get(String id) {
-        return vocabularyJpaRepository.findById(UUID.fromString(id)).orElse(null);
-    }
 
     @Override
     public Vocabulary get(UUID id) {
@@ -88,17 +84,15 @@ public class VocabularyServiceImpl implements VocabularyService {
     }
 
     @Override
-    public void save(Vocabulary obj) {
-        vocabularyJpaRepository.save(obj);
-        vocabularyElasticsearchRepository.save(obj);
+    public void save(Vocabulary vocabulary) {
+        vocabularyJpaRepository.save(vocabulary);
+        vocabularyElasticsearchRepository.save(vocabulary);
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void saveAll(Iterable<Vocabulary> iterable) {
-        Iterator<Vocabulary> iterator = iterable.iterator();
-        while (iterator.hasNext()) {
-            Vocabulary vocabulary = iterator.next();
+    public void saveAll(List<Vocabulary> vocabularies) {
+        for (Vocabulary vocabulary : vocabularies) {
             Word word = vocabulary.getWord();
             Word wordInDb = wordJpaRepository.findByTextAndIpa(word.getText(), word.getIpa());
             if (Objects.nonNull(wordInDb)) {
@@ -111,19 +105,14 @@ public class VocabularyServiceImpl implements VocabularyService {
             }
             vocabularyJpaRepository.save(vocabulary);
         }
-        vocabularyElasticsearchRepository.saveAll(iterable);
+        vocabularyElasticsearchRepository.saveAll(vocabularies);
     }
 
     @Transactional
     @Override
-    public void delete(Vocabulary obj) {
-        vocabularyJpaRepository.delete(obj);
-        vocabularyElasticsearchRepository.delete(obj);
-    }
-
-    @Override
-    public void deleteAll(Iterable<Vocabulary> iterable) {
-        throw new RuntimeException("Not support yet.");
+    public void delete(Vocabulary vocabulary) {
+        vocabularyJpaRepository.delete(vocabulary);
+        vocabularyElasticsearchRepository.delete(vocabulary);
     }
 
     @Override
@@ -133,32 +122,22 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     @Override
     public Vocabulary convertDtoToEntity(VocabularyDto vocabularyDto) {
-        Vocabulary vocabulary = modelMapper.map(vocabularyDto, Vocabulary.class);
-        String id = vocabularyDto.getId();
-        if (id != null) {
-            vocabulary.setId(UUID.fromString(id));
-        }
-        return vocabulary;
+        return modelMapper.map(vocabularyDto, Vocabulary.class);
     }
 
     @Override
     public List<Vocabulary> convertDtoToEntity(List<VocabularyDto> vocabularyDtos) {
-        return vocabularyDtos.stream().map(vocabularyDto -> convertDtoToEntity(vocabularyDto)).collect(Collectors.toList());
+        return vocabularyDtos.stream().map(this::convertDtoToEntity).collect(Collectors.toList());
     }
 
     @Override
     public VocabularyDto convertEntityToDto(Vocabulary vocabulary) {
-        VocabularyDto vocabularyDto = modelMapper.map(vocabulary, VocabularyDto.class);
-        UUID id = vocabulary.getId();
-        if (id != null) {
-            vocabularyDto.setId(id.toString());
-        }
-        return vocabularyDto;
+        return modelMapper.map(vocabulary, VocabularyDto.class);
     }
 
     @Override
     public List<VocabularyDto> convertEntityToDto(List<Vocabulary> vocabularies) {
-        return vocabularies.stream().map(vocabulary -> convertEntityToDto(vocabulary)).collect(Collectors.toList());
+        return vocabularies.stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
     @Override

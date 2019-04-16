@@ -34,10 +34,10 @@ public class VocabularyLesson {
     @JoinColumn(name = "LESSON_MODULE_ID", nullable = false)
     private LessonModule lessonModule;
 
-    @OneToMany(mappedBy = "vocabularyLesson", targetEntity = VocabularyLessonDetail.class)
+    @OneToMany(mappedBy = "vocabularyLesson", cascade = CascadeType.ALL)
     private List<VocabularyLessonDetail> vocabularyLessonDetails;
 
-    @OneToMany(mappedBy = "vocabularyLesson", targetEntity = VocabularyQuizChoice.class)
+    @OneToMany(mappedBy = "vocabularyLesson", cascade = CascadeType.ALL)
     private List<VocabularyQuizChoice> vocabularyQuizChoices;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

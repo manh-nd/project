@@ -19,7 +19,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/", "/login*", "/register*", "/dictionary", "/api/**", "/favicon.ico", "https://fonts.gstatic.com/**"
+            "/", "/login*", "/register*", "/dictionary", "/api/**", "/favicon.ico",
+            "https://fonts.gstatic.com/**, https://fonts.googleapis.com/**"
     };
 
     @Autowired

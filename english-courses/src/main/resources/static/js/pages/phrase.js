@@ -1,14 +1,14 @@
 $(document).ready(function () {
-    const tbody = document.querySelector("#phrases-table > tbody");
-    const pagination = document.querySelector("#phrases-pagination");
-    const searchButton = document.querySelector("#search-button");
-    const searchInput = document.querySelector("#search-input");
-    const apiUrl = "/api/v1/phrases";
-    const title = 'Quản lý cụm từ';
-    const path = '/admin/management/phrases/page/';
-    let page = 0;
-    let size = 20;
-    let isSaveHistory = true;
+    var tbody = document.querySelector("#phrases-table > tbody");
+    var pagination = document.querySelector("#phrases-pagination");
+    var searchButton = document.querySelector("#search-button");
+    var searchInput = document.querySelector("#search-input");
+    var apiUrl = "/api/v1/phrases";
+    var title = 'Quản lý cụm từ';
+    var path = '/admin/management/phrases/page/';
+    var page = 0;
+    var size = 20;
+    var isSaveHistory = true;
 
     init();
 
@@ -33,13 +33,13 @@ $(document).ready(function () {
 
     function init() {
         page = 0;
-        let pathname = window.location.pathname;
-        let pathElements = pathname.split('/');
+        var pathname = window.location.pathname;
+        var pathElements = pathname.split('/');
         if (pathElements.length && pathElements[4]) {
             page = pathElements[4] - 1;
         }
-        let searchParams = new URLSearchParams(window.location.search);
-        let searchParamsValue = searchParams.get('search');
+        var searchParams = new URLSearchParams(window.location.search);
+        var searchParamsValue = searchParams.get('search');
         if (searchParamsValue) {
             searchInput.value = searchParamsValue;
             search(page, searchInput.value);
@@ -52,8 +52,8 @@ $(document).ready(function () {
         renderTableContent(response);
         paginate(pagination, response, setPage);
         if (isSaveHistory) {
-            let currentPage = response.pageable.pageNumber;
-            let searchValue = getSearchInputValue();
+            var currentPage = response.pageable.pageNumber;
+            var searchValue = getSearchInputValue();
             if (searchValue) {
                 saveHistory({
                     data: {page: currentPage},
@@ -78,7 +78,7 @@ $(document).ready(function () {
         if (this.page != page) {
             this.page = page;
             isSaveHistory = true;
-            let text = getSearchInputValue();
+            var text = getSearchInputValue();
             if (text) {
                 search(page, text);
             } else {
@@ -99,11 +99,11 @@ $(document).ready(function () {
 
     function renderTableContent(page) {
         removeAllChildren(tbody);
-        let content = page.content;
-        let pageable = page.pageable;
+        var content = page.content;
+        var pageable = page.pageable;
         if (content) {
-            for (let i = 0; i < content.length; i++) {
-                let columns = [
+            for (var i = 0; i < content.length; i++) {
+                var columns = [
                     createColumn(function (td) {
                         td.textContent = pageable.offset + 1 + i;
                     }),
@@ -114,10 +114,10 @@ $(document).ready(function () {
                         td.textContent = content[i].ipa
                     }),
                     createColumn(function (td) {
-                        let phraseDetails = content[i].phraseDetails;
-                        let meanings = [];
+                        var phraseDetails = content[i].phraseDetails;
+                        var meanings = [];
                         if (phraseDetails.length) {
-                            for (let j = 0; j < phraseDetails.length; j++) {
+                            for (var j = 0; j < phraseDetails.length; j++) {
                                 meanings.push(phraseDetails[j].meaning);
                             }
                         } else {
@@ -126,15 +126,45 @@ $(document).ready(function () {
                         td.textContent = meanings.join(', ');
                     }),
                     createColumn(function (td) {
-                        let icon = createIcon(['fa', 'fa-pencil']);
-                        let button = document.createElement('button');
-                        button.classList.add('btn', 'btn-warning');
-                        button.appendChild(icon);
-                        td.appendChild(button);
+                        var updateButton = createButton(function (button) {
+                            button.dataset.id = content[i].id;
+                            button.dataset.text = content[i].text;
+                            button.dataset.ipa = content[i].ipa;
+                            button.classList.add('btn', 'btn-sm', 'btn-warning', 'update-button', 'mr-1');
+                            button.appendChild(createIcon(['fa', 'fa-pencil']));
+                            button.dataset.toggle = 'tooltip';
+                            button.setAttribute('title', 'Sửa cụm từ');
+                            button.addEventListener('click', function () {
+                                var element = $(this);
+                                var $modal = $('#phrase-modal').modal('show');
+                                $modal.find('.modal-title').text('Sửa cụm từ');
+                                $modal.find('#id').val(element.data('id'));
+                                $modal.find('#text').val(element.data('text'));
+                                $modal.find('#ipa').val(element.data('ipa'));
+                            });
+                        });
+                        td.appendChild(updateButton);
+                        var deleteButton = createButton(function (button) {
+                            button.dataset.id = content[i].id;
+                            button.dataset.text = content[i].text;
+                            button.classList.add('btn', 'btn-sm', 'btn-danger', 'delete-button');
+                            button.appendChild(createIcon(['fa', 'fa-close']));
+                            button.dataset.toggle = 'tooltip';
+                            button.setAttribute('title', 'Xóa cụm từ');
+                            button.addEventListener('click', function (event) {
+                                var element = $(this);
+                                var $modal = $('#delete-modal').modal('show');
+                                $modal.find('.modal-title').text('Thông báo hệ thống');
+                                $modal.find('.modal-body').html('Bạn có muốn xóa cụm từ ' + '<strong>[' + element.data('text') + ']</strong> không?');
+                                $('#delete-button').val(element.data('id'));
+                            });
+                        });
+                        td.appendChild(deleteButton);
                     })
                 ];
                 createRow(tbody, columns);
             }
+            $('[data-toggle="tooltip"]').tooltip();
         } else {
             createRow(tbody, [createColumn(function (td) {
                 td.setAttribute('colspan', 5);

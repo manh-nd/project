@@ -127,6 +127,18 @@ function createIcon(classList) {
     return icon;
 }
 
+function createSpan(handler) {
+    var span = document.createElement('span');
+    handler(span);
+    return span;
+}
+
+function createButton(handler) {
+    var button = document.createElement('button');
+    handler(button);
+    return button;
+}
+
 function saveHistory(page) {
     window.history.pushState(
         page.data,
@@ -140,8 +152,16 @@ function get(url, data, onSuccess, onError) {
         method: 'GET',
         url: url,
         data: data,
-        dataType: 'json'
-    }).done(onSuccess).fail(onError);
+        dataType: 'json',
+        success: onSuccess,
+        error: onError,
+        beforeSend: function () {
+            $(".preloader-backdrop").show();
+        },
+        complete: function () {
+            $(".preloader-backdrop").fadeOut(200);
+        }
+    });
 }
 
 function post(url, data, onSuccess, onError) {
@@ -149,33 +169,163 @@ function post(url, data, onSuccess, onError) {
         method: 'POST',
         url: url,
         data: data,
-        dataType: 'json'
-    }).done(onSuccess).fail(onError);
+        dataType: 'json',
+        success: onSuccess,
+        error: onError,
+        beforeSend: function () {
+            $(".preloader-backdrop").show();
+        },
+        complete: function () {
+            $(".preloader-backdrop").fadeOut(200);
+        }
+    });
 }
 
-function createColumn(createContent) {
+/**
+ * Create table
+ * @param handler
+ * @returns {HTMLTableElement}
+ */
+function createTable(handler) {
+    var table = document.createElement('table');
+    handler(table);
+    return table;
+}
+
+function createTableHeader(handler) {
+    var thead = document.createElement('thead');
+    handler(thead);
+    return thead;
+}
+
+function createTableBody(handler) {
+    var tbody = document.createElement('tbody');
+    handler(tbody);
+    return tbody;
+}
+
+function createHeaderColumn(handler) {
+    var th = document.createElement('th');
+    th.classList.add('align-middle');
+    handler(th);
+    return th;
+}
+
+/***
+ *
+ * @param handler
+ * @returns {HTMLTableDataCellElement}
+ */
+function createColumn(handler) {
     var td = document.createElement('td');
     td.classList.add('align-middle');
-    createContent(td);
+    handler(td);
     return td;
 }
 
-function createRow(tbody, columns) {
+/***
+ * Create multiple table rows
+ * @param parent thead, tbody, tfoot tag
+ * @param columns array tds tag
+ */
+function createRow(parent, columns) {
     var row = document.createElement('tr');
     for (var i = 0; i < columns.length; i++) {
         row.appendChild(columns[i]);
     }
-    tbody.appendChild(row);
+    parent.appendChild(row);
 }
 
-function showErrorMessage(message, parent, input) {
-    var label = document.createElement('label');
-    label.classList.add('help-block', 'error');
-    label.textContent = message;
-    parent.classList.add('has-errors');
-    if (input.nextElementSibling) {
-        parent.insertBefore(label, input.nextElementSibling);
-    } else {
-        parent.appendChild(label);
+function appendNavTabs(tabContainer, tabs, handler) {
+    var navTabs = document.createElement('div');
+    navTabs.classList.add('nav', 'nav-tabs');
+    navTabs.setAttribute('id', 'nav-tab');
+
+    var navContent = document.createElement('div');
+    navContent.classList.add('tab-content');
+    navContent.setAttribute('id', 'nav-tab-content')
+
+    for (var i = 0; i < tabs.length; i++) {
+        var tab = document.createElement('a');
+        tab.classList.add('nav-item', 'nav-link');
+        tab.style.color = 'initial';
+        tab.dataset.toggle = 'tab';
+        tab.dataset.id = tabs[i].id;
+        tab.addEventListener('click', function (event) {
+            event.preventDefault();
+        });
+        tab.setAttribute('id', tabs[i].id + '-tab');
+        tab.href = '#' + tabs[i].id;
+        tab.textContent = tabs[i].name;
+        navTabs.appendChild(tab);
+
+        var tabPane = document.createElement('div');
+        tabPane.classList.add('tab-pane', 'fade');
+        tabPane.setAttribute('id', tabs[i].id);
+        navContent.appendChild(tabPane);
     }
+    var nav = document.createElement('nav');
+    nav.appendChild(navTabs);
+    tabContainer.appendChild(nav);
+    tabContainer.appendChild(navContent);
+    handler();
+}
+
+
+function createAlert(alertType, text) {
+    var classes = ['alert', 'alert-dismissible', 'fade', 'show'];
+    switch (alertType) {
+        case 'success':
+            classes.push('alert-success');
+            break;
+        case 'warning':
+            classes.push('alert-warning');
+            break;
+        case 'danger':
+            classes.push('alert-danger');
+            break;
+        case 'info':
+            classes.push('alert-info');
+            break;
+        default:
+            classes.push('alert-primary');
+    }
+    var div = document.createElement('div');
+    for (var i = 0; i < classes.length; i++) {
+        div.classList.add(classes[i]);
+    }
+    div.textContent = text;
+    div.setAttribute('role', 'alert');
+    var button = createButton(function (button) {
+        button.dataset.dismiss = 'alert';
+        button.setAttribute('type', 'button');
+        button.classList.add('close');
+        var span = createSpan(function (span) {
+            span.setAttribute('aria-hidden', 'true');
+            span.textContent = '×';
+        });
+        button.appendChild(span);
+    });
+    div.appendChild(button);
+    return div;
+}
+
+function showAlert(element, type, text) {
+    var alert = createAlert(type, text);
+    element.appendChild(alert);
+    element.style.display = 'block';
+    setTimeout(function () {
+        element.style.display = 'none';
+        alert.remove();
+    }, 3000);
+}
+
+function parseHttpHeaders(httpHeaders) {
+    var arr = httpHeaders.split('\r\n');
+    var headers = arr.reduce(function (acc, current, i) {
+        var parts = current.split(': ');
+        acc[parts[0]] = parts[1];
+        return acc;
+    }, {});
+    return headers;
 }

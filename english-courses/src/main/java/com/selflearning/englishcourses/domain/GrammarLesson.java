@@ -1,9 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -37,10 +34,6 @@ public class GrammarLesson {
     @Column(name = "GRAMMAR_CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private Date createdTime;
 
-    @Column(name="UPDATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private Date updatedTime;
 
 }

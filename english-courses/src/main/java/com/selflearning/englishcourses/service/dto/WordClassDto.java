@@ -7,13 +7,10 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class WordClassDto {
+public class WordClassDto extends BaseDto{
 
-    private String id;
     private String name;
     private String meaning;
     private String description;
-    private Date createdTime;
-    private Date updatedTime;
 
 }

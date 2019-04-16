@@ -19,4 +19,7 @@ public interface SentenceJpaRepository extends JpaRepository<Sentence, UUID> {
 
     @Query("select s from Sentence s where length(trim(s.audioPath)) > 0")
     List<Sentence> findAllSentencesWhereAudioPathIsNotEmpty();
+
+    Sentence findByText(String text);
+
 }

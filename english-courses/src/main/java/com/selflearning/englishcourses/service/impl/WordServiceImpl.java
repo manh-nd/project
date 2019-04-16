@@ -38,11 +38,6 @@ public class WordServiceImpl implements WordService {
     }
 
     @Override
-    public Word get(String id) {
-        return null;
-    }
-
-    @Override
     public Word get(UUID id) {
         return null;
     }
@@ -55,20 +50,8 @@ public class WordServiceImpl implements WordService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void saveAll(Iterable<Word> iterable) {
-        wordJpaRepository.saveAll(iterable);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
     public void delete(Word obj) {
         wordJpaRepository.delete(obj);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public void deleteAll(Iterable<Word> iterable) {
-        wordJpaRepository.deleteAll(iterable);
     }
 
     @Override

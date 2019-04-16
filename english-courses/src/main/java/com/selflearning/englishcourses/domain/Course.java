@@ -1,9 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -34,7 +31,10 @@ public class Course {
     @Column(name = "COURSE_NAME", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "course")
+    @Column(name="COURSE_DESCRIPTION")
+    private String description;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Lesson> lessons;
 
     @OneToMany(mappedBy = "course")
@@ -45,5 +45,12 @@ public class Course {
 
     @Column(name="UPDATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Date updatedTime;
+
+    public Course() {
+    }
+
+    public Course(String name) {
+        this.name = name;
+    }
 
 }
