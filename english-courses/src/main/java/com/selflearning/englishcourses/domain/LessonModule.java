@@ -18,8 +18,8 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@ToString(exclude = {"vocabularyLessons", "lessonModuleMarks", "phraseLessons", "grammarLessons"})
-@EqualsAndHashCode(exclude = {"vocabularyLessons", "lessonModuleMarks", "phraseLessons", "grammarLessons"})
+@ToString(exclude = {"vocabularyLesson", "phraseLesson", "grammarLesson", "lessonModuleMarks"})
+@EqualsAndHashCode(exclude = {"vocabularyLesson", "phraseLesson", "grammarLesson", "lessonModuleMarks"})
 @Entity
 @Table(name = "lesson_modules", uniqueConstraints = @UniqueConstraint(columnNames = {"LESSON_ID", "MODULE_ID"}))
 @Document(indexName = "lesson_modules", shards = 2)
@@ -39,22 +39,22 @@ public class LessonModule {
     @JoinColumn(name = "MODULE_ID", nullable = false)
     private Module module;
 
-    @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
-    private List<VocabularyLesson> vocabularyLessons;
+    @OneToOne(mappedBy = "lessonModule", cascade = CascadeType.ALL)
+    private VocabularyLesson vocabularyLesson;
+
+    @OneToOne(mappedBy = "lessonModule", cascade = CascadeType.ALL)
+    private PhraseLesson phraseLesson;
+
+    @OneToOne(mappedBy = "lessonModule", cascade = CascadeType.ALL)
+    private GrammarLesson grammarLesson;
 
     @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private List<LessonModuleMark> lessonModuleMarks;
 
-    @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
-    private List<PhraseLesson> phraseLessons;
-
-    @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
-    private List<GrammarLesson> grammarLessons;
-
-    @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;
 
-    @Column(name="UPDATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "UPDATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Date updatedTime;
 
 }

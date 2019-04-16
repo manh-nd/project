@@ -1,7 +1,6 @@
 package com.selflearning.englishcourses.service.impl;
 
 import com.selflearning.englishcourses.domain.Course;
-import com.selflearning.englishcourses.repository.elasticsearch.CourseElasticsearchRepository;
 import com.selflearning.englishcourses.repository.jpa.CourseJpaRepository;
 import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.dto.CourseDto;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,14 +21,7 @@ public class CourseServiceImpl implements CourseService {
 
     private CourseJpaRepository courseJpaRepository;
 
-    private CourseElasticsearchRepository courseElasticsearchRepository;
-
     private ModelMapper modelMapper;
-
-    @Autowired
-    public void setCourseElasticsearchRepository(CourseElasticsearchRepository courseElasticsearchRepository) {
-        this.courseElasticsearchRepository = courseElasticsearchRepository;
-    }
 
     @Autowired
     public void setCourseJpaRepository(CourseJpaRepository courseJpaRepository) {
@@ -50,31 +41,27 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void save(Course course) {
         courseJpaRepository.save(course);
-        courseElasticsearchRepository.save(course);
     }
 
     @Transactional
     @Override
     public void saveAll(List<Course> courses) {
         courseJpaRepository.saveAll(courses);
-        courseElasticsearchRepository.saveAll(courses);
     }
 
     @Override
     public void delete(Course course) {
         courseJpaRepository.delete(course);
-        courseElasticsearchRepository.delete(course);
     }
 
     @Override
     public Page<Course> findAll(Pageable pageable) {
-        return courseElasticsearchRepository.findAll(pageable);
+        return courseJpaRepository.findAll(pageable);
     }
 
     @Override
     public Course convertDtoToEntity(CourseDto courseDto) {
-        Course course = modelMapper.map(courseDto, Course.class);
-        return course;
+        return modelMapper.map(courseDto, Course.class);
     }
 
     @Override
@@ -84,8 +71,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDto convertEntityToDto(Course entity) {
-        CourseDto courseDto = modelMapper.map(entity, CourseDto.class);
-        return courseDto;
+        return modelMapper.map(entity, CourseDto.class);
     }
 
     @Override

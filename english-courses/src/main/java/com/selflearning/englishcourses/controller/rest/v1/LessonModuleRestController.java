@@ -1,6 +1,7 @@
 package com.selflearning.englishcourses.controller.rest.v1;
 
 import com.selflearning.englishcourses.domain.LessonModule;
+import com.selflearning.englishcourses.domain.VocabularyLesson;
 import com.selflearning.englishcourses.service.LessonModuleService;
 import com.selflearning.englishcourses.service.dto.LessonModuleDto;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -31,11 +31,11 @@ public class PhraseLessonDetail {
     private PhraseLesson phraseLesson;
 
     @ManyToOne
-    @JoinColumn(name="PHRASE_DETAIL_ID")
+    @JoinColumn(name="PHRASE_DETAIL_ID", nullable = false)
     private PhraseDetail phraseDetail;
 
     @ManyToOne
-    @JoinColumn(name="SENTENCE_ID")
+    @JoinColumn(name="SENTENCE_ID", nullable = false)
     private Sentence sentence;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

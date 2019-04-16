@@ -30,7 +30,7 @@ public class VocabularyLesson {
     @Column(name = "VOCABULARY_LESSON_ID", length = 16)
     private UUID id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "LESSON_MODULE_ID", nullable = false)
     private LessonModule lessonModule;
 

@@ -34,7 +34,7 @@ public class Lesson {
     @Column(name="LESSON_ORDER_NUMBER", nullable = false)
     private Integer orderNumber;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name="COURSE_ID", nullable = false)
     private Course course;
 

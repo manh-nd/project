@@ -68,6 +68,18 @@ public class VocabularyRestController {
                 .body(bytes);
     }
 
+    @GetMapping("/vocabularies/{id}/image")
+    public ResponseEntity<byte[]> getVocabularyImage(@PathVariable("id") UUID id) throws IOException {
+        Vocabulary vocabulary = vocabularyService.get(id);
+        String imagePath = vocabulary.getImagePath();
+        File file = new File(this.path + imagePath);
+        Resource resource = new FileSystemResource(file);
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.IMAGE_JPEG))
+                .body(bytes);
+    }
+
     @GetMapping("/vocabularies/count")
     public ResponseEntity<Long> getTotalVocabularies(){
         return new ResponseEntity<>(vocabularyService.count(), HttpStatus.OK);

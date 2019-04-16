@@ -240,9 +240,6 @@ $(document).ready(function () {
             var element = $(this);
             var lessonName = element.data('lessonName');
             var moduleName = element.data('moduleName');
-            var $modal = $('#lesson-module-detail-modal');
-            $modal.find('.modal-title').text(lessonName + " - " + moduleName);
-            $modal.modal('show');
         }
 
         function onClickCreateLessonModuleButton() {

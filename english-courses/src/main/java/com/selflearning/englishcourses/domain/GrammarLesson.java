@@ -24,7 +24,7 @@ public class GrammarLesson {
     @Column(name = "GRAMMAR_LESSON_ID", length = 16)
     private UUID id;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "LESSON_MODULE_ID", nullable = false)
     private LessonModule lessonModule;
 

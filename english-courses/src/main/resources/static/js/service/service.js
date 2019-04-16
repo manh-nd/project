@@ -313,9 +313,7 @@ function createAlert(alertType, text) {
 function showAlert(element, type, text) {
     var alert = createAlert(type, text);
     element.appendChild(alert);
-    element.style.display = 'block';
     setTimeout(function () {
-        element.style.display = 'none';
         alert.remove();
     }, 3000);
 }
