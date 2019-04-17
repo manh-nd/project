@@ -4,15 +4,15 @@ sql:
   name: self_learning
   username: project2
   password: 123
-  params: useSSL=false
+  params: allowPublicKeyRetrieval=true&useSSL=false
   url: jdbc:mysql://${sql.host}:${sql.port}/${sql.name}?${sql.params}
 nosql:
   elastichsearch:
     cluster-nodes: localhost:9300
 mail:
-  username: manhnd.yoshi@gmail.com
-  password: Manh1234
-base-path: /Users/manhnd/Data/English/TAGT360
+  username: linhpvph05279@fpt.edu.vn
+  password: linh123456
+base-path: /Users/linh/Data/English/TAGT360
 
 spring:
   datasource:
