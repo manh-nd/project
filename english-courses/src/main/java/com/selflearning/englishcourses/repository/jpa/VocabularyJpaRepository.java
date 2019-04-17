@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.awt.print.Pageable;
 import java.util.List;
@@ -28,4 +29,6 @@ public interface VocabularyJpaRepository extends JpaRepository<Vocabulary, UUID>
     @Query("SELECT v FROM Vocabulary v WHERE v.word.text = :text")
     Vocabulary findByWordText(String text);
 
+    @Query("SELECT v FROM Vocabulary v WHERE v.word.text = :text AND v.meaning = :meaning")
+    Vocabulary findByWordTextAndMeaning(@Param("text") String text, @Param("meaning") String meaning);
 }

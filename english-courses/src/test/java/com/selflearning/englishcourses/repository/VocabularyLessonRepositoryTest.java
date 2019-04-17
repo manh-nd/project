@@ -42,6 +42,11 @@ public class VocabularyLessonRepositoryTest {
     private VocabularyLessonJpaRepository vocabularyLessonJpaRepository;
 
     @Test
+    public void testFindVocabularyByTextAndIpa(){
+        vocabularyJpaRepository.findByWordTextAndMeaning("mouse", "con chuột máy vi tính");
+    }
+
+    @Test
     public void getVocabularyLesson(){
         Optional<Lesson> lesson = lessonJpaRepository.findByCourseAndOrderNumber(courseJpaRepository.findByName("Tiếng Anh giao tiếp 360").get(), 1);
         Optional<Module> module = moduleJpaRepository.findByName("Luyện từ vựng");
@@ -54,12 +59,12 @@ public class VocabularyLessonRepositoryTest {
     @Test
     public void testCreateVocabularyLesson(){
         VocabularyLesson vocabularyLesson = new VocabularyLesson();
-        Optional<Lesson> lesson = lessonJpaRepository.findByCourseAndOrderNumber(courseJpaRepository.findByName("Tiếng Anh giao tiếp 360").get(), 5);
+        Optional<Lesson> lesson = lessonJpaRepository.findByCourseAndOrderNumber(courseJpaRepository.findByName("Tiếng Anh giao tiếp 360").get(), 7);
         Optional<Module> module = moduleJpaRepository.findByName("Luyện từ vựng");
         LessonModule lessonModule = lessonModuleJpaRepository.findByLessonAndModule(lesson.get(), module.get()).get();
         lessonModule.setVocabularyLesson(vocabularyLesson);
         vocabularyLesson.setLessonModule(lessonModule);
-        List<VocabularyLessonDetail> vocabularyLessonDetails = createVocabularyLessonDetails5(vocabularyLesson);
+        List<VocabularyLessonDetail> vocabularyLessonDetails = createVocabularyLessonDetails7(vocabularyLesson);
         vocabularyLesson.setVocabularyLessonDetails(vocabularyLessonDetails);
         lessonModuleJpaRepository.save(lessonModule);
     }
@@ -234,6 +239,76 @@ public class VocabularyLessonRepositoryTest {
         VocabularyLessonDetail vocabularyLessonDetail5 = new VocabularyLessonDetail();
         vocabularyLessonDetail5.setSentence(sentenceJpaRepository.findByText("Let's go swimming!"));
         vocabularyLessonDetail5.setVocabulary(vocabularyJpaRepository.findByWordText("swimming"));
+        vocabularyLessonDetail5.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail5);
+        return vocabularyLessonDetails;
+    }
+
+    private List<VocabularyLessonDetail> createVocabularyLessonDetails6(VocabularyLesson vocabularyLesson){
+        List<VocabularyLessonDetail> vocabularyLessonDetails = new ArrayList<>();
+        VocabularyLessonDetail vocabularyLessonDetail1 = new VocabularyLessonDetail();
+
+        vocabularyLessonDetail1.setSentence(sentenceJpaRepository.findByText("She always knows how to comfort people."));
+        vocabularyLessonDetail1.setVocabulary(vocabularyJpaRepository.findByWordText("comfort"));
+        vocabularyLessonDetail1.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail1);
+
+        VocabularyLessonDetail vocabularyLessonDetail2 = new VocabularyLessonDetail();
+        vocabularyLessonDetail2.setSentence(sentenceJpaRepository.findByText("He looked very angry."));
+        vocabularyLessonDetail2.setVocabulary(vocabularyJpaRepository.findByWordText("angry"));
+        vocabularyLessonDetail2.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail2);
+
+        VocabularyLessonDetail vocabularyLessonDetail3 = new VocabularyLessonDetail();
+        vocabularyLessonDetail3.setSentence(sentenceJpaRepository.findByText("We should encourage him."));
+        vocabularyLessonDetail3.setVocabulary(vocabularyJpaRepository.findByWordText("encourage"));
+        vocabularyLessonDetail3.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail3);
+
+        VocabularyLessonDetail vocabularyLessonDetail4 = new VocabularyLessonDetail();
+        vocabularyLessonDetail4.setSentence(sentenceJpaRepository.findByText("I congratulated him on his recent promotion."));
+        vocabularyLessonDetail4.setVocabulary(vocabularyJpaRepository.findByWordText("congratulate"));
+        vocabularyLessonDetail4.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail4);
+
+        VocabularyLessonDetail vocabularyLessonDetail5 = new VocabularyLessonDetail();
+        vocabularyLessonDetail5.setSentence(sentenceJpaRepository.findByText("Help me!"));
+        vocabularyLessonDetail5.setVocabulary(vocabularyJpaRepository.findByWordText("help"));
+        vocabularyLessonDetail5.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail5);
+        return vocabularyLessonDetails;
+    }
+
+    private List<VocabularyLessonDetail> createVocabularyLessonDetails7(VocabularyLesson vocabularyLesson){
+        List<VocabularyLessonDetail> vocabularyLessonDetails = new ArrayList<>();
+        VocabularyLessonDetail vocabularyLessonDetail1 = new VocabularyLessonDetail();
+
+        vocabularyLessonDetail1.setSentence(sentenceJpaRepository.findByText("My computer is out of order!"));
+        vocabularyLessonDetail1.setVocabulary(vocabularyJpaRepository.findByWordTextAndMeaning("computer", "máy vi tính"));
+        vocabularyLessonDetail1.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail1);
+
+        VocabularyLessonDetail vocabularyLessonDetail2 = new VocabularyLessonDetail();
+        vocabularyLessonDetail2.setSentence(sentenceJpaRepository.findByText("The sound buttons on the keyboard are not working."));
+        vocabularyLessonDetail2.setVocabulary(vocabularyJpaRepository.findByWordTextAndMeaning("keyboard", "bàn phím (máy vi tính)"));
+        vocabularyLessonDetail2.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail2);
+
+        VocabularyLessonDetail vocabularyLessonDetail3 = new VocabularyLessonDetail();
+        vocabularyLessonDetail3.setSentence(sentenceJpaRepository.findByText("People now prefer a tablet rather than a laptop."));
+        vocabularyLessonDetail3.setVocabulary(vocabularyJpaRepository.findByWordTextAndMeaning("laptop", "máy tính xách tay"));
+        vocabularyLessonDetail3.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail3);
+
+        VocabularyLessonDetail vocabularyLessonDetail4 = new VocabularyLessonDetail();
+        vocabularyLessonDetail4.setSentence(sentenceJpaRepository.findByText("The mouse is broken. I move it and nothing happens."));
+        vocabularyLessonDetail4.setVocabulary(vocabularyJpaRepository.findByWordTextAndMeaning("mouse", "con chuột máy vi tính"));
+        vocabularyLessonDetail4.setVocabularyLesson(vocabularyLesson);
+        vocabularyLessonDetails.add(vocabularyLessonDetail4);
+
+        VocabularyLessonDetail vocabularyLessonDetail5 = new VocabularyLessonDetail();
+        vocabularyLessonDetail5.setSentence(sentenceJpaRepository.findByText("There's no sound coming out of the right-hand speaker."));
+        vocabularyLessonDetail5.setVocabulary(vocabularyJpaRepository.findByWordTextAndMeaning("speaker", "loa"));
         vocabularyLessonDetail5.setVocabularyLesson(vocabularyLesson);
         vocabularyLessonDetails.add(vocabularyLessonDetail5);
         return vocabularyLessonDetails;
