@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,8 @@ public class Lesson {
     @JoinColumn(name="COURSE_ID", nullable = false)
     private Course course;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LessonModule> lessonModules;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

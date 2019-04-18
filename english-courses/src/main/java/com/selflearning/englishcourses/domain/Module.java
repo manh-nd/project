@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -31,6 +32,7 @@ public class Module {
     @Column(name = "MODULE_NAME", nullable = false, unique = true)
     private String name;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "module")
     private List<LessonModule> lessonModules;
 

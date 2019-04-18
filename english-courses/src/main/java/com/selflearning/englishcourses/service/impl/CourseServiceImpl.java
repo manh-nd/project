@@ -50,8 +50,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void delete(Course course) {
-        courseJpaRepository.delete(course);
+    public void delete(UUID id) {
+        courseJpaRepository.deleteById(id);
     }
 
     @Override

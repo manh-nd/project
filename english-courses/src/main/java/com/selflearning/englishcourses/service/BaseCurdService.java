@@ -21,6 +21,10 @@ public interface BaseCurdService<T, ID extends Serializable> {
         throw new RuntimeException("Not support yet.");
     }
 
+    default void delete(UUID id) {
+        throw new RuntimeException("Not support yet.");
+    }
+
     default void deleteAll(List<T> list) {
         throw new RuntimeException("Not support yet.");
     }

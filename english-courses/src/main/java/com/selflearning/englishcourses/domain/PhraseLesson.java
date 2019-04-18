@@ -27,7 +27,7 @@ public class PhraseLesson {
     @Column(name = "PHRASE_LESSON_ID", length = 16)
     private UUID id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "LESSON_MODULE_ID", nullable = false)
     private LessonModule lessonModule;
 

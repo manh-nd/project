@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,8 +45,9 @@ public class Word {
     @Column(name="WORD_SPECIAL_AUDIO_PATH", length = 1000)
     private String specialAudioPath;
 
-//    @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
-//    private List<Vocabulary> vocabularies;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
+    private List<Vocabulary> vocabularies;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;

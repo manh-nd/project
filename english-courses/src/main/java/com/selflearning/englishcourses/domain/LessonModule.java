@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,15 +40,19 @@ public class LessonModule {
     @JoinColumn(name = "MODULE_ID", nullable = false)
     private Module module;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private VocabularyLesson vocabularyLesson;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private PhraseLesson phraseLesson;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private GrammarLesson grammarLesson;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "lessonModule", cascade = CascadeType.ALL)
     private List<LessonModuleMark> lessonModuleMarks;
 

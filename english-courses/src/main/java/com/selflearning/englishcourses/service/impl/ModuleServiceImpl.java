@@ -44,8 +44,8 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public void delete(Module module) {
-        moduleJpaRepository.delete(module);
+    public void delete(UUID id) {
+        moduleJpaRepository.deleteById(id);
     }
 
     @Override

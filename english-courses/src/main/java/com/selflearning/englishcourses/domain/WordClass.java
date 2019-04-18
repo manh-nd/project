@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -7,6 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,8 +39,9 @@ public class WordClass {
     @Column(name="WORD_CLASS_DESCRIPTION", length = 1000)
     private String description;
 
-//    @OneToMany(mappedBy = "wordClass", cascade = CascadeType.ALL)
-//    private List<Vocabulary> vocabularies;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "wordClass", cascade = CascadeType.ALL)
+    private List<Vocabulary> vocabularies;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;

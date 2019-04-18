@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface VocabularyLessonService extends BaseCurdService<VocabularyLesson, UUID>,
         ModelMapperService<VocabularyLesson, VocabularyLessonDto> {
 
+    void deleteVocabularyLessonDetailById(UUID id);
+
 }

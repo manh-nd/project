@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +38,7 @@ public class VocabularyLesson {
     @OneToMany(mappedBy = "vocabularyLesson", cascade = CascadeType.ALL)
     private List<VocabularyLessonDetail> vocabularyLessonDetails;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "vocabularyLesson", cascade = CascadeType.ALL)
     private List<VocabularyQuizChoice> vocabularyQuizChoices;
 

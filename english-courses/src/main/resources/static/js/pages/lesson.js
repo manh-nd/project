@@ -161,15 +161,10 @@ $(document).ready(function () {
                                 for (var j = 0; j < lessonModules.length; j++) {
                                     moduleIds.push(lessonModules[j].moduleId);
                                     var div = document.createElement('div');
-                                    var code = document.createElement('code');
-                                    code.dataset.id = lessonModules[j].id;
-                                    code.dataset.lessonName = lessonName;
-                                    code.dataset.moduleName = lessonModules[j].moduleName;
-                                    code.textContent = lessonModules[j].moduleName;
-                                    code.dataset.toggle = 'tooltip';
-                                    code.setAttribute('title', 'Xem chi tiết');
-                                    code.addEventListener('click', onClickLessonModuleContent);
-                                    div.appendChild(code);
+                                    var a = document.createElement('a');
+                                    a.href = "/admin/management/lesson-module/" + lessonModules[j].id;
+                                    a.textContent = lessonModules[j].moduleName;
+                                    div.appendChild(a);
                                     td.appendChild(div);
                                 }
                             }
@@ -252,12 +247,14 @@ $(document).ready(function () {
             $modal.modal('show');
         }
 
-        function onClickDeleteButton() {
+        function onClickDeleteButton(event) {
             var element = $(this);
-            var $modal = $('#delete-modal').modal('show');
+            var $modal = $('#delete-modal');
             $modal.find('.modal-title').text('Thông báo hệ thống');
-            $modal.find('.modal-body').html('Bạn có muốn xóa ' + '<strong>[' + element.data('name') + ']</strong> không?');
-            $('#delete-button').val(element.data('id'));
+            var $modalBody = $modal.find('.modal-body');
+            $modalBody.html('Bạn có muốn xóa ' + '<strong>[' + element.data('name') + ']</strong> không?');
+            $('#delete-button').val($(this).data('id'));
+            $modal.modal('show');
         }
 
     }
@@ -301,9 +298,8 @@ $(document).ready(function () {
                 getCourses();
                 showAlert(tabPane.firstChild, 'success', 'Xóa bài thành công.');
             },
-            error: function (res) {
+            error: function () {
                 $('#delete-modal').modal('hide');
-                getCourses();
                 showAlert(tabPane.firstChild, 'danger', 'Xóa bài học thất bại.');
             }
         });

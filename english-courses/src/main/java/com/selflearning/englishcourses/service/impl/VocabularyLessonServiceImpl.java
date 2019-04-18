@@ -1,9 +1,11 @@
 package com.selflearning.englishcourses.service.impl;
 
 import com.selflearning.englishcourses.domain.VocabularyLesson;
+import com.selflearning.englishcourses.repository.jpa.VocabularyLessonDetailJpaRepository;
 import com.selflearning.englishcourses.repository.jpa.VocbularyLessonJpaRepository;
 import com.selflearning.englishcourses.service.VocabularyLessonService;
 import com.selflearning.englishcourses.service.dto.VocabularyLessonDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,15 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Service
 public class VocabularyLessonServiceImpl implements VocabularyLessonService {
 
-    private VocbularyLessonJpaRepository vocbularyLessonJpaRepository;
-
-    @Autowired
-    public void setVocbularyLessonJpaRepository(VocbularyLessonJpaRepository vocbularyLessonJpaRepository) {
-        this.vocbularyLessonJpaRepository = vocbularyLessonJpaRepository;
-    }
+    private final VocbularyLessonJpaRepository vocbularyLessonJpaRepository;
+    private final VocabularyLessonDetailJpaRepository vocabularyLessonDetailJpaRepository;
 
     @Override
     public VocabularyLesson get(UUID id) {
@@ -60,5 +59,10 @@ public class VocabularyLessonServiceImpl implements VocabularyLessonService {
     @Override
     public Page<VocabularyLessonDto> convertEntityPageToDtoPage(Page<VocabularyLesson> page) {
         return null;
+    }
+
+    @Override
+    public void deleteVocabularyLessonDetailById(UUID id) {
+        vocabularyLessonDetailJpaRepository.deleteById(id);
     }
 }

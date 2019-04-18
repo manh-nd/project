@@ -24,7 +24,7 @@ public class GrammarLesson {
     @Column(name = "GRAMMAR_LESSON_ID", length = 16)
     private UUID id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "LESSON_MODULE_ID", nullable = false)
     private LessonModule lessonModule;
 
@@ -33,7 +33,5 @@ public class GrammarLesson {
 
     @Column(name = "GRAMMAR_CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
-
-
 
 }

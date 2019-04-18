@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,7 @@ public class PhraseLessonDetail {
     @Column(name = "PHRASE_LESSON_DETAIL_ID", length = 16)
     private UUID id;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
     @JoinColumn(name = "PHRASE_LESSON_ID", nullable = false)
     private PhraseLesson phraseLesson;

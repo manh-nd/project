@@ -10,6 +10,8 @@ import com.selflearning.englishcourses.service.LessonService;
 import com.selflearning.englishcourses.service.ModuleService;
 import com.selflearning.englishcourses.service.dto.LessonDto;
 import com.selflearning.englishcourses.service.dto.LessonModuleDto;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,33 +25,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Service
 public class LessonServiceImpl implements LessonService {
 
-    private LessonJpaRepository lessonJpaRepository;
-    private CourseJpaRepository courseJpaRepository;
-    private ModelMapper modelMapper;
-    private LessonModuleService lessonModuleService;
-
-    @Autowired
-    public void setLessonJpaRepository(LessonJpaRepository lessonJpaRepository) {
-        this.lessonJpaRepository = lessonJpaRepository;
-    }
-
-    @Autowired
-    public void setCourseJpaRepository(CourseJpaRepository courseJpaRepository) {
-        this.courseJpaRepository = courseJpaRepository;
-    }
-
-    @Autowired
-    public void setModelMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
-
-    @Autowired
-    public void setLessonModuleService(LessonModuleService lessonModuleService) {
-        this.lessonModuleService = lessonModuleService;
-    }
+    private final LessonJpaRepository lessonJpaRepository;
+    private final CourseJpaRepository courseJpaRepository;
+    private final ModelMapper modelMapper;
+    private final LessonModuleService lessonModuleService;
 
     @Override
     public Lesson get(UUID id) {
@@ -62,8 +45,8 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void delete(Lesson lesson) {
-        lessonJpaRepository.delete(lesson);
+    public void delete(UUID id) {
+        lessonJpaRepository.deleteById(id);
     }
 
     @Override

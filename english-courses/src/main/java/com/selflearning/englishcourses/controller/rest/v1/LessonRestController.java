@@ -77,8 +77,7 @@ public class LessonRestController {
 
     @DeleteMapping("/lessons/{id}")
     public ResponseEntity<LessonDto> deleteLesson(@PathVariable("id") UUID id){
-        Lesson lesson = lessonService.get(id);
-        lessonService.delete(lesson);
+        lessonService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

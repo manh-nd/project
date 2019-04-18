@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.UUID;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class LessonJpaRepositoryTest {
@@ -26,4 +28,11 @@ public class LessonJpaRepositoryTest {
         lesson.setOrderNumber(7);
         lessonJpaRepository.save(lesson);
     }
+
+    @Test
+    public void testDeleteLesson(){
+        Lesson lesson = lessonJpaRepository.getOne(UUID.fromString("b62ba88f-971e-4e25-97bf-4ce354d61326"));
+        lessonJpaRepository.delete(lesson);
+    }
+
 }

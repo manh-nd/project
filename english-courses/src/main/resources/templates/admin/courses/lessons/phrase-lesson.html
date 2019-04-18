@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+      xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
+      layout:decorate="~{layouts/dashboard-layout}">
+<head>
+    <title th:text="#{course-management}">Danh sách khoá học</title>
+    <!-- PLUGINS STYLES-->
+    <!-- THEME STYLES-->
+    <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
+    <!-- PAGE LEVEL STYLES-->
+</head>
+
+<body>
+<div layout:fragment="content" class="page-content fade-in-up">
+    <div class="ibox">
+        <div class="ibox-head">
+            <div class="ibox-title">Ngữ giao tiếp thông dụng</div>
+            <div class="ibox-tools">
+                <a class="ibox-collapse">
+                    <i class="fa fa-minus"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-body">
+            <div id="alert-container"></div>
+            <div class="my-2">
+                <button class="btn btn-primary" id="create-button">Tạo khóa học</button>
+            </div>
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên khoá học</th>
+                    <th>Mô tả</th>
+                    <th style="width: 100px">Hành động</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+            <nav id="pagination-navigator">
+            </nav>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="page-level-scripts">
+    <!-- PAGE LEVEL SCRIPTS-->
+</th:block>
+</body>
+</html>
