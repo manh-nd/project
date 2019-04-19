@@ -64,10 +64,11 @@ public class CourseController {
     }
 
     @GetMapping("/{id}/lessons/{lessonId}/modules/{lessonModule}")
-    public String getLessonDetail(@PathVariable("id") UUID courseId,
-                                  @PathVariable("lessonId") UUID lessonId,
-                                  @PathVariable("lessonModule") UUID lessonModuleId,
-                                  Model model) {
+    public String getLessonDetail(
+            @PathVariable("id") UUID courseId,
+            @PathVariable("lessonId") UUID lessonId,
+            @PathVariable("lessonModule") UUID lessonModuleId,
+            Model model) {
         LessonModule lessonModule = lessonModuleService.get(lessonModuleId);
         Module module = lessonModule.getModule();
         model.addAttribute("courseId", courseId);
@@ -81,8 +82,6 @@ public class CourseController {
                 GrammarLesson grammarLesson = lessonModule.getGrammarLesson();
                 model.addAttribute("grammarLesson", grammarLesson);
                 return "courses/lessons/grammar";
-            case "Luyện hội thoại":
-                return "courses/lessons/conversation";
             default:
                 return "errors/404";
         }

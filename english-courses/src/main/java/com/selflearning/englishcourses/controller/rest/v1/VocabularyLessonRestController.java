@@ -1,9 +1,6 @@
 package com.selflearning.englishcourses.controller.rest.v1;
 
-import com.selflearning.englishcourses.domain.Sentence;
-import com.selflearning.englishcourses.domain.Vocabulary;
-import com.selflearning.englishcourses.domain.VocabularyLesson;
-import com.selflearning.englishcourses.domain.VocabularyLessonDetail;
+import com.selflearning.englishcourses.domain.*;
 import com.selflearning.englishcourses.service.SentenceService;
 import com.selflearning.englishcourses.service.VocabularyLessonService;
 import com.selflearning.englishcourses.service.VocabularyService;
@@ -25,10 +22,6 @@ import java.util.UUID;
 public class VocabularyLessonRestController {
 
     private final VocabularyLessonService vocabularyLessonService;
-
-    private final VocabularyService vocabularyService;
-
-    private final SentenceService sentenceService;
 
     @GetMapping("/vocabulary-lessons/{vocabularyLessonId}")
     public ResponseEntity<VocabularyLesson> getVocabularyLesson(@PathVariable UUID vocabularyLessonId) {
@@ -73,5 +66,7 @@ public class VocabularyLessonRestController {
 
         return new ResponseEntity<>(vocabularyLessonService.get(vocabularyLessonId), HttpStatus.OK);
     }
+
+
 
 }

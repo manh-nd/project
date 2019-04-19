@@ -4,6 +4,7 @@ import com.selflearning.englishcourses.domain.GrammarLesson;
 import com.selflearning.englishcourses.domain.LessonModule;
 import com.selflearning.englishcourses.domain.VocabularyLesson;
 import com.selflearning.englishcourses.service.LessonModuleService;
+import com.selflearning.englishcourses.service.VocabularyLessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,9 @@ public class CourseManagementController {
 
     @Autowired
     private LessonModuleService lessonModuleService;
+
+    @Autowired
+    private VocabularyLessonService vocabularyLessonService;
 
     @GetMapping("/courses")
     public String coursePage(Model model) {
@@ -44,31 +48,25 @@ public class CourseManagementController {
     public String lessonModuleDetail(@PathVariable("lessonModuleId") UUID lessonModuleId, Model model) {
         LessonModule lessonModule = lessonModuleService.get(lessonModuleId);
         String name = lessonModule.getModule().getName();
+        model.addAttribute("lessonModule", lessonModule);
         switch (name) {
             case "Luyện từ vựng":
-                if(Objects.isNull(lessonModule.getVocabularyLesson())){
-                    VocabularyLesson vocabularyLesson = new VocabularyLesson();
-                    vocabularyLesson.setLessonModule(lessonModule);
-                    lessonModule.setVocabularyLesson(vocabularyLesson);
-                    lessonModuleService.save(lessonModule);
-                    vocabularyLesson.getId();
-                }
-                model.addAttribute("lessonModule", lessonModule);
-                return "admin/courses/lessons/vocabulary-lesson";
+                return "redirect:/admin/management/vocabulary-lessons/" + lessonModule.getVocabularyLesson().getId();
             case "Luyện ngữ pháp":
-                if(Objects.isNull(lessonModule.getGrammarLesson())){
-                    GrammarLesson grammarLesson = new GrammarLesson();
-                    grammarLesson.setLessonModule(lessonModule);
-                    lessonModuleService.save(lessonModule);
-                }
-                model.addAttribute("lessonModule", lessonModule);
                 return "admin/courses/lessons/grammar-lesson";
             case "Ngữ giao tiếp thông dụng":
-                model.addAttribute("lessonModule", lessonModule);
                 return "admin/courses/lessons/phrase-lesson";
             default:
                 return "errors/404";
         }
+    }
+
+    @GetMapping("/vocabulary-lessons/{vocabularyLessonId}")
+    public String vocabularyLesson(@PathVariable("vocabularyLessonId") UUID vocabularyLessonId, Model model){
+        VocabularyLesson vocabularyLesson = vocabularyLessonService.get(vocabularyLessonId);
+        model.addAttribute("lessonManagement", true);
+        model.addAttribute("vocabularyLesson", vocabularyLesson);
+        return "admin/courses/lessons/vocabulary-lesson";
     }
 
     @ModelAttribute("courses")

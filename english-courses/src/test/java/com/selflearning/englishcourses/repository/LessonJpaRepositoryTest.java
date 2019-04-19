@@ -31,7 +31,7 @@ public class LessonJpaRepositoryTest {
 
     @Test
     public void testDeleteLesson(){
-        Lesson lesson = lessonJpaRepository.getOne(UUID.fromString("b62ba88f-971e-4e25-97bf-4ce354d61326"));
+        Lesson lesson = lessonJpaRepository.getOne(UUID.fromString("46467da6-a8b4-468d-ab5c-b74757335f62"));
         lessonJpaRepository.delete(lesson);
     }
 

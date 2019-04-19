@@ -17,4 +17,8 @@ public class WordServiceTest {
         this.wordService = wordService;
     }
 
+    @Test
+    public void synchronizeWords(){
+    }
+
 }

@@ -4,9 +4,50 @@
       layout:decorate="~{layouts/common-layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Từ điển Self Learning</title>
+    <title>Từ điển SelfLearning</title>
+    <style>
+        .form-group > select.select-search {
+            border-radius: initial !important;
+        }
+
+        .form-group > button.btn-search {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;;
+        }
+    </style>
 </head>
 <body>
-
+<main layout:fragment="main-container">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm..." id="searchInput"/>
+                    <div class="input-group-append">
+                        <button id="searchDropdownButton" type="button"
+                                data-toggle="dropdown"
+                                class="btn btn-outline-secondary dropdown-toggle">Tất cả
+                        </button>
+                        <div class="dropdown-menu">
+                            <div id="all" class="dropdown-item">Tất cả</div>
+                            <div class="dropdown-divider"></div>
+                            <div id="vocabulary" class="dropdown-item">Từ vựng</div>
+                            <div id="sentence" class="dropdown-item">Câu</div>
+                            <div id="phrase" class="dropdown-item">Cụm từ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="search-result"></div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block layout:fragment="page-scripts">
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script th:src="@{/js/service/service.js}"></script>
+    <script th:src="@{/js/pages/dictionary.js}"></script>
+</th:block>
 </body>
 </html>

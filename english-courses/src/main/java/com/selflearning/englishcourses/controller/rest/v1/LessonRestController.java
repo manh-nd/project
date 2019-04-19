@@ -3,6 +3,7 @@ package com.selflearning.englishcourses.controller.rest.v1;
 import com.selflearning.englishcourses.domain.Lesson;
 import com.selflearning.englishcourses.service.LessonService;
 import com.selflearning.englishcourses.service.dto.LessonDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,16 +21,12 @@ import java.util.UUID;
  * @author manhnd
  * @since 15/4/2019
  */
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @RestController
 @RequestMapping("/api/v1")
 public class LessonRestController {
 
-    private LessonService lessonService;
-
-    @Autowired
-    public void setLessonService(LessonService lessonService) {
-        this.lessonService = lessonService;
-    }
+    private final LessonService lessonService;
 
     @GetMapping("/lessons")
     public ResponseEntity<Page<LessonDto>> getLessonPage(Pageable pageable){
@@ -41,6 +38,11 @@ public class LessonRestController {
     public ResponseEntity<LessonDto> getLessonPage(@PathVariable("id") UUID id){
         Lesson lesson = lessonService.get(id);
         return new ResponseEntity<>(lessonService.convertEntityToDto(lesson), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/courses/{courseId}/lessons/order-number", params = "next")
+    public ResponseEntity<Integer> getNextLessonOfCourse(@PathVariable("courseId") UUID courseId){
+        return new ResponseEntity<>(lessonService.getNextOrderNumber(courseId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/lessons", params = "courseId")

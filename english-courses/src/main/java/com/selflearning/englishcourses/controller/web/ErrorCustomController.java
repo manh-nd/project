@@ -22,12 +22,15 @@ public class ErrorCustomController implements ErrorController {
             if(statusCode == HttpStatus.FORBIDDEN.value()){
                 return "errors/403";
             }
+
             if(statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "errors/404";
             }
+
             else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 return "errors/500";
             }
+
         }
         return "error";
     }

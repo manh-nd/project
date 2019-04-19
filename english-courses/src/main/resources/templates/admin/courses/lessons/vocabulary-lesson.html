@@ -3,45 +3,12 @@
       xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
       layout:decorate="~{layouts/dashboard-layout}">
 <head>
-    <title th:text="#{course-management}">Danh sách khoá học</title>
+    <title th:text="#{vocabulary-lesson-management}">Quản lý bài học</title>
     <!-- PLUGINS STYLES-->
     <!-- THEME STYLES-->
     <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
     <!-- PAGE LEVEL STYLES-->
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        .autocomplete {
-            position: relative;
-        }
-
-        span::before, span::after, i::before, i::after {
-            content: "  ";
-            display: inline;
-        }
-
-        .autocomplete-items {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            z-index: 99;
-            border-style: solid;
-            border-color: #d4d4d4;
-            border-top: none;
-            border-right: 1px;
-            border-bottom: 1px;
-            border-left: 1px;
-            background-color: #e7f3fb;
-        }
-
-        .autocomplete-items > div:hover {
-            background-color: #0a568c;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/pages/vocabulary-lesson.css}"/>
 </head>
 
 <body>
@@ -49,12 +16,13 @@
     <div class="ibox">
         <div class="ibox-head">
             <div class="ibox-title">
-                <i class="fa fa-book"></i>
-                <span id="vocabularyLesson"
-                      th:text="|Bài ${lessonModule.lesson.orderNumber}|"
-                      th:data-id="${lessonModule.vocabularyLesson.id}">Bài 1</span>
+                <a class="text-dark" th:href="@{/admin/management/lessons}"><i class="fa fa-home"></i> <span>Bài học</span></a>
                 <i class="fa fa-caret-right"></i>
-                <span th:text="${lessonModule.module.name}">Luyện từ vựng</span>
+                <span id="vocabularyLesson"
+                      th:text="|Bài ${vocabularyLesson.lessonModule.lesson.orderNumber}|"
+                      th:data-id="${vocabularyLesson.id}">Bài 1</span>
+                <i class="fa fa-caret-right"></i>
+                <span th:text="${vocabularyLesson.lessonModule.module.name}">Luyện từ vựng</span>
             </div>
             <div class="ibox-tools">
                 <a class="ibox-collapse">
@@ -66,11 +34,11 @@
             <div id="alert-container"></div>
             <div class="form-group autocomplete">
                 <label for="vocabularyInput">Từ vựng</label>
-                <input id="vocabularyInput" type="text" class="form-control"/>
+                <input id="vocabularyInput" type="text" class="form-control" placeholder="Nhập từ vựng"/>
             </div>
             <div class="form-group autocomplete">
                 <label for="sentenceInput">Câu</label>
-                <input id="sentenceInput" type="text" class="form-control"/>
+                <input id="sentenceInput" type="text" class="form-control" placeholder="Nhập câu"/>
             </div>
             <div class="form-group">
                 <button id="add-button" class="btn btn-primary">Thêm vào nội dung bài học</button>
@@ -92,296 +60,35 @@
     </div>
 
     <audio id="audioPlayer" src=""></audio>
+
+    <div class="modal fade" id="delete-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Bạn có muốn xóa bài học từ vựng này không?
+                    </h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">
+                        <i class="fa fa-close"></i> <span>Đóng</span>
+                    </button>
+                    <button id="delete-button" type="button" class="btn btn-danger">
+                        <i class="fa fa-remove"></i> <span>Đồng ý</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
     <script th:src="@{/js/service/service.js}"></script>
-    <script>
-        $(document).ready(function () {
-            var suggestionHandler;
-            var alertContainer = document.getElementById('alert-container');
-            var vocabularyLesson = document.getElementById('vocabularyLesson');
-            var vocabularyInput = document.getElementById('vocabularyInput');
-            var sentenceInput = document.getElementById('sentenceInput');
-            var addButton = document.getElementById('add-button');
-            var vocabularyDetailItemsContainer = document.getElementById('vocabularyDetailItemsContainer');
-
-            init();
-
-            function init() {
-                var vocabularyLessonId = vocabularyLesson.dataset.id;
-                $.ajax({
-                    url: '/api/v1/vocabulary-lessons/' + vocabularyLessonId,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (vocabularyLesson) {
-                        renderVocabulariesLessonDetails(vocabularyDetailItemsContainer, vocabularyLesson);
-                    },
-                    error: function (res) {
-                        console.log(res);
-                    }
-                })
-            }
-
-            vocabularyInput.addEventListener('input', function () {
-                var input = this;
-                var value = this.value;
-                delete input.dataset.id;
-                clearItems(input);
-                clearTimeout(suggestionHandler);
-                suggestionHandler = setTimeout(search, 300, value, '/api/v1/vocabularies', function (data) {
-                    var content = data.content;
-                    if (content && content.length) {
-                        var items = document.createElement('div');
-                        items.classList.add('autocomplete-items');
-                        for (var i = 0; i < content.length; i++) {
-                            var item = document.createElement('div');
-                            item.dataset.id = content[i].id;
-                            item.classList.add('px-2', 'py-1');
-                            item.dataset.text = content[i].word.text;
-                            item.addEventListener('click', function (event) {
-                                input.dataset.id = this.dataset.id;
-                                input.value = this.dataset.text;
-                            });
-
-                            var text = document.createElement('div');
-                            text.textContent = content[i].word.text;
-                            item.appendChild(text);
-
-                            var meaning = document.createElement('div');
-                            meaning.textContent = content[i].meaning;
-                            item.appendChild(meaning);
-
-                            items.appendChild(item);
-                        }
-                        input.parentNode.appendChild(items);
-                    }
-                }, function (error) {
-                    console.log(error);
-                });
-            });
-
-            sentenceInput.addEventListener('input', function () {
-                var input = this;
-                var value = this.value;
-                delete input.dataset.id;
-                clearItems(input);
-                clearTimeout(suggestionHandler);
-                suggestionHandler = setTimeout(search, 300, value, '/api/v1/sentences', function (data) {
-                    var content = data.content;
-                    if (content && content.length) {
-                        var items = document.createElement('div');
-                        items.classList.add('autocomplete-items');
-                        for (var i = 0; i < content.length; i++) {
-                            var item = document.createElement('div');
-                            item.dataset.id = content[i].id;
-                            item.classList.add('px-2', 'py-1');
-                            item.dataset.text = content[i].text;
-                            item.addEventListener('click', function (event) {
-                                input.dataset.id = this.dataset.id;
-                                input.value = this.dataset.text;
-                            });
-
-                            var text = document.createElement('div');
-                            text.textContent = content[i].text;
-                            item.appendChild(text);
-
-                            var meaning = document.createElement('div');
-                            meaning.textContent = content[i].meaning;
-                            item.appendChild(meaning);
-
-                            items.appendChild(item);
-                        }
-                        input.parentNode.appendChild(items);
-                    }
-                }, function (error) {
-                    console.log(error);
-                });
-            });
-
-            sentenceInput.addEventListener('keydown', function (event) {
-
-            });
-
-            addButton.addEventListener('click', function (event) {
-                var vocabularyLessonId = vocabularyLesson.dataset.id;
-                var vocabularyId = vocabularyInput.dataset.id;
-                var sentenceId = sentenceInput.dataset.id;
-                if (!vocabularyId) {
-                    showAlert(alertContainer, 'danger', 'Vui lòng chọn từ vựng.');
-                    vocabularyInput.focus();
-                    return;
-                }
-                if (!sentenceId) {
-                    showAlert(alertContainer, 'danger', 'Vui lòng chọn câu.');
-                    sentenceInput.focus();
-                }
-                $.ajax({
-                    url: '/api/v1/vocabulary-lessons/' + vocabularyLessonId,
-                    method: 'PUT',
-                    data: JSON.stringify({
-                        vocabularyId: vocabularyId,
-                        sentenceId: sentenceId
-                    }),
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    success: function (vocabularyLesson) {
-                        renderVocabulariesLessonDetails(vocabularyDetailItemsContainer, vocabularyLesson);
-                    },
-                    error: function (res) {
-                        console.log(res);
-                    }
-                });
-            });
-
-            document.addEventListener('click', function (event) {
-                clearItems(vocabularyInput);
-                clearItems(sentenceInput);
-            });
-
-            function search(value, url, onSuccess, onError) {
-                value = value.trim();
-                if (value) {
-                    $.ajax({
-                        url: url,
-                        method: 'GET',
-                        data: {
-                            page: 0,
-                            size: 10,
-                            search: value
-                        },
-                        success: onSuccess,
-                        error: onError
-                    });
-                }
-            }
-
-            function deleteVocabularyLessonDetail(container, vocabularyLessonDetailId) {
-                var vocabularyLessonId = vocabularyLesson.dataset.id;
-                $.ajax({
-                    url: '/api/v1/vocabulary-lessons/' + vocabularyLessonId + '/' + vocabularyLessonDetailId,
-                    method: 'DELETE',
-                    success: function (vocabularyLesson) {
-                        renderVocabulariesLessonDetails(container, vocabularyLesson);
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    }
-                });
-            }
-
-            function clearItems(input) {
-                while (input.nextSibling) {
-                    input.nextSibling.remove();
-                }
-            }
-
-            function renderVocabulariesLessonDetails(container, vocabularyLesson) {
-                removeAllChildren(container);
-                var vocabularyLessonDetails = vocabularyLesson.vocabularyLessonDetails;
-                if (vocabularyLessonDetails && vocabularyLessonDetails.length) {
-                    container.parentElement.style.display = 'block';
-                    for (var i = 0; i < vocabularyLessonDetails.length; i++) {
-                        var sentence = vocabularyLessonDetails[i].sentence;
-                        var vocabulary = vocabularyLessonDetails[i].vocabulary;
-
-                        var row = document.createElement('div');
-                        row.classList.add('row', 'm-2');
-                        row.style.position = 'relative';
-
-                        // Column
-                        var imageColumn = document.createElement('div');
-                        imageColumn.classList.add('col-md-3');
-                        var imageElement = document.createElement('img');
-                        imageElement.classList.add('img-fluid');
-                        imageElement.src = '/api/v1/vocabularies/' + vocabulary.id + '/image';
-                        imageElement.alt = 'Image not available';
-                        imageColumn.appendChild(imageElement);
-                        row.appendChild(imageColumn);
-
-                        var textColumn = document.createElement('div');
-                        textColumn.classList.add('col-md-9');
-                        var wordContainer = document.createElement('div');
-                        var wordAudio = document.createElement('a');
-                        wordAudio.href = '/api/v1/vocabularies/' + vocabulary.id + '/audio';
-                        wordAudio.addEventListener('click', function (event) {
-                            event.preventDefault();
-                            playAudio(event);
-                        });
-                        wordAudio.appendChild(createIcon(['fa', 'fa-volume-up']));
-                        var word = document.createElement('strong');
-                        word.style.fontSize = '1.8rem';
-                        word.classList.add('text-warning');
-                        word.textContent = vocabulary.word.text;
-                        var ipa = document.createElement('span');
-                        ipa.textContent = vocabulary.word.ipa;
-                        wordContainer.appendChild(wordAudio);
-                        wordContainer.appendChild(word);
-                        wordContainer.appendChild(ipa);
-                        textColumn.appendChild(wordContainer);
-
-                        var meaning = document.createElement('div');
-                        meaning.textContent = vocabulary.meaning;
-                        textColumn.appendChild(meaning);
-
-                        var descriptionContainer = document.createElement('div');
-                        var wordClass = document.createElement('strong');
-                        wordClass.textContent = vocabulary.wordClass.name;
-                        descriptionContainer.appendChild(wordClass);
-                        var description = document.createElement('span');
-                        description.textContent = vocabulary.description;
-                        descriptionContainer.appendChild(description);
-                        textColumn.appendChild(descriptionContainer);
-
-                        var sentenceContainer = document.createElement('div');
-                        var sentenceText = document.createElement('div');
-                        var sentenceAudio = document.createElement('a');
-                        sentenceAudio.href = '/api/v1/sentences/' + sentence.id + '/audio';
-                        sentenceAudio.addEventListener('click', function (event) {
-                            event.preventDefault();
-                            playAudio(event);
-                        });
-                        sentenceAudio.appendChild(createIcon(['fa', 'fa-volume-up']));
-                        sentenceText.appendChild(sentenceAudio);
-                        sentenceText.appendChild(createSpan(function (span) {
-                            span.textContent = sentence.text;
-                        }));
-                        sentenceContainer.appendChild(sentenceText);
-
-                        var hr = document.createElement('hr');
-                        textColumn.appendChild(hr);
-
-                        var sentenceMeaning = document.createElement('div');
-                        sentenceMeaning.appendChild(createSpan(function (span) {
-                            span.textContent = sentence.meaning;
-                        }));
-                        sentenceContainer.appendChild(sentenceMeaning);
-                        textColumn.appendChild(sentenceContainer);
-                        row.appendChild(textColumn);
-
-                        var deleteButton = createButton(function (button) {
-                            button.appendChild(createIcon(['fa', 'fa-remove']));
-                            button.style.position = 'absolute';
-                            button.style.top = 0;
-                            button.style.right = 0;
-                            button.classList.add('btn', 'btn-danger');
-                            button.dataset.vocabularyDetailId = vocabularyLessonDetails[i].id;
-                            button.addEventListener('click', function () {
-                                deleteVocabularyLessonDetail(container, this.dataset.vocabularyDetailId);
-                            });
-                        });
-
-                        row.appendChild(deleteButton);
-
-                        container.appendChild(row);
-                    }
-                } else {
-                    container.parentElement.style.display = 'none';
-                }
-            }
-        });
-    </script>
+    <script th:src="@{/js/pages/vocabulary-lesson.js}"></script>
 </th:block>
 </body>
 </html>

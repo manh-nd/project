@@ -18,7 +18,7 @@ public class LessonServiceTest {
 
     @Test
     public void testDeleteLesson(){
-        Lesson lesson = lessonService.get(UUID.fromString("571b1677-794d-4a8d-86b7-f6d98f70dd7e"));
+        Lesson lesson = lessonService.get(UUID.fromString("46467da6-a8b4-468d-ab5c-b74757335f62"));
         lessonService.delete(lesson);
     }
 }

@@ -2,15 +2,12 @@ package com.selflearning.englishcourses.service.impl;
 
 import com.selflearning.englishcourses.domain.Lesson;
 import com.selflearning.englishcourses.domain.LessonModule;
-import com.selflearning.englishcourses.domain.Module;
 import com.selflearning.englishcourses.repository.jpa.CourseJpaRepository;
 import com.selflearning.englishcourses.repository.jpa.LessonJpaRepository;
 import com.selflearning.englishcourses.service.LessonModuleService;
 import com.selflearning.englishcourses.service.LessonService;
-import com.selflearning.englishcourses.service.ModuleService;
 import com.selflearning.englishcourses.service.dto.LessonDto;
 import com.selflearning.englishcourses.service.dto.LessonModuleDto;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 @Service
 public class LessonServiceImpl implements LessonService {
 
@@ -47,6 +44,11 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void delete(UUID id) {
         lessonJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public void delete(Lesson obj) {
+        lessonJpaRepository.delete(obj);
     }
 
     @Override
@@ -105,5 +107,10 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public Page<Lesson> findByCourseId(UUID courseId, Pageable pageable) {
         return lessonJpaRepository.findByCourseId(courseId, pageable);
+    }
+
+    @Override
+    public Integer getNextOrderNumber(UUID courseId) {
+        return lessonJpaRepository.getNextOrderNumber(courseId);
     }
 }

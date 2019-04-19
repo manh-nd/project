@@ -60,8 +60,7 @@ $(document).ready(function () {
             text: text,
             ipa: ipa,
             meaning: meaning,
-            audioPath: audioPath,
-            audioFile: audioFile[0].files[0]
+            audioPath: audioPath
         };
         if (sentence) {
             save(sentence);
@@ -143,7 +142,7 @@ $(document).ready(function () {
             method: method,
             url: url,
             data: JSON.stringify(sentence),
-            contentType: 'multipart/form-data',
+            contentType: 'application/json',
             dataType: 'json'
         }).done(function (response) {
             $('#sentence-modal').modal('hide');

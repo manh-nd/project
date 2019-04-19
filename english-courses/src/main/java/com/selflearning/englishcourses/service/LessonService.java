@@ -14,4 +14,6 @@ public interface LessonService extends BaseCurdService<Lesson, UUID>, ModelMappe
 
     Page<Lesson> findByCourseId(UUID courseId, Pageable pageable);
 
+    Integer getNextOrderNumber(UUID courseId);
+
 }

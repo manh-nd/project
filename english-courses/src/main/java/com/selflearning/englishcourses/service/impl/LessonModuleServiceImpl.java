@@ -11,6 +11,7 @@ import com.selflearning.englishcourses.service.LessonModuleService;
 import com.selflearning.englishcourses.service.LessonService;
 import com.selflearning.englishcourses.service.ModuleService;
 import com.selflearning.englishcourses.service.dto.LessonModuleDto;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,36 +24,18 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 @Service
 public class LessonModuleServiceImpl implements LessonModuleService {
 
-    private LessonModuleJpaRepository lessonModuleJpaRepository;
+    private final LessonModuleJpaRepository lessonModuleJpaRepository;
 
+    @Autowired
     private LessonService lessonService;
 
-    private ModuleService moduleService;
+    private final ModuleService moduleService;
 
-    private ModelMapper modelMapper;
-
-    @Autowired
-    public void setLessonModuleJpaRepository(LessonModuleJpaRepository lessonModuleJpaRepository) {
-        this.lessonModuleJpaRepository = lessonModuleJpaRepository;
-    }
-
-    @Autowired
-    public void setModelMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
-
-    @Autowired
-    public void setLessonService(LessonService lessonService) {
-        this.lessonService = lessonService;
-    }
-
-    @Autowired
-    public void setModuleService(ModuleService moduleService) {
-        this.moduleService = moduleService;
-    }
+    private final ModelMapper modelMapper;
 
     @Override
     public LessonModule get(UUID id) {
@@ -62,6 +45,11 @@ public class LessonModuleServiceImpl implements LessonModuleService {
     @Override
     public void save(LessonModule lessonModule) {
         lessonModuleJpaRepository.save(lessonModule);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        lessonModuleJpaRepository.deleteById(id);
     }
 
     @Override

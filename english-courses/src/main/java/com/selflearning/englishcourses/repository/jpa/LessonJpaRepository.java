@@ -20,4 +20,7 @@ public interface LessonJpaRepository extends JpaRepository<Lesson, UUID> {
 
     @Query("SELECT l FROM Lesson l WHERE l.course.id = :courseId")
     Page<Lesson> findByCourseId(@Param("courseId") UUID courseId, Pageable pageable);
+
+    @Query("SELECT (max(l.orderNumber) + 1) FROM Lesson l WHERE l.course.id = :courseId")
+    Integer getNextOrderNumber(UUID courseId);
 }

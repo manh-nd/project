@@ -9,6 +9,11 @@
     <!-- THEME STYLES-->
     <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
     <!-- PAGE LEVEL STYLES-->
+    <style>
+        .delete-module:hover {
+            color: blue;
+        }
+    </style>
 </head>
 
 <body>
@@ -34,7 +39,7 @@
                 <form id="lesson-form">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Title</h4>
+                        <h4 class="modal-title">Thêm mới bài học</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
@@ -64,7 +69,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="delete-modal" tabindex="-1">
+    <div class="modal fade" id="delete-lesson-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,7 +83,29 @@
                     <button type="button" class="btn btn-success" data-dismiss="modal">
                         <i class="fa fa-close"></i> <span>Đóng</span>
                     </button>
-                    <button id="delete-button" type="button" class="btn btn-danger">
+                    <button id="delete-lesson-button" type="button" class="btn btn-danger">
+                        <i class="fa fa-remove"></i> <span>Đồng ý</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete-lesson-module-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Bạn có muốn xóa bài học này không?
+                    </h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">
+                        <i class="fa fa-close"></i> <span>Đóng</span>
+                    </button>
+                    <button id="delete-lesson-module-button" type="button" class="btn btn-danger">
                         <i class="fa fa-remove"></i> <span>Đồng ý</span>
                     </button>
                 </div>

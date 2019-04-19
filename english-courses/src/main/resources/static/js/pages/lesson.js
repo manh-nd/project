@@ -1,18 +1,33 @@
 $(document).ready(function () {
     var courseTab = document.getElementById('course-tab');
     var table = undefined;
+    var pagination = undefined;
     var courseId = undefined;
     var tabPane = undefined;
     var shown = false;
+    var page = 0;
+
+    // jquery object
+    var $deleteLessonModal = $('#delete-lesson-modal');
+    var $lessonModuleModal = $('#lesson-module-modal');
+    var $deleteLessonButton = $('#delete-lesson-button');
+
+    var $deleteLessonModuleModal = $('#delete-lesson-module-modal');
+    var $lessonModuleSaveButton = $('#lesson-module-save-button');
+    var $deleteLessonModuleButton = $('#delete-lesson-module-button');
 
     init();
 
-    $('#delete-button').on('click', function (event) {
+    $deleteLessonButton.on('click', function (event) {
         deleteLesson($(this).val());
     });
 
-    $('#lesson-module-save-button').on('click', function (event) {
-        var $modal = $('#lesson-module-modal');
+    $deleteLessonModuleButton.on('click', function (event) {
+        deleteLessonModule($(this).val());
+    });
+
+    $lessonModuleSaveButton.on('click', function (event) {
+        var $modal = $lessonModuleModal;
         var lessonId = $modal.find("#lesson-id").val();
         var moduleId = $modal.find("#module-id").val();
         var lessonModule = {
@@ -70,6 +85,8 @@ $(document).ready(function () {
                 url: '/api/v1/lessons',
                 data: {
                     courseId: courseId,
+                    page: page,
+                    size: 30,
                     sort: 'orderNumber,ASC'
                 },
                 dataType: 'json',
@@ -98,7 +115,7 @@ $(document).ready(function () {
             contentType: 'application/json',
             dataType: 'json',
             success: function (res) {
-                $('#lesson-module-modal').modal('hide');
+                $lessonModuleModal.modal('hide');
                 getCourses();
                 showAlert(tabPane.firstChild, 'success', 'Thêm học vào bài học thành công.');
             },
@@ -161,10 +178,26 @@ $(document).ready(function () {
                                 for (var j = 0; j < lessonModules.length; j++) {
                                     moduleIds.push(lessonModules[j].moduleId);
                                     var div = document.createElement('div');
+                                    var code = document.createElement('code');
                                     var a = document.createElement('a');
                                     a.href = "/admin/management/lesson-module/" + lessonModules[j].id;
                                     a.textContent = lessonModules[j].moduleName;
-                                    div.appendChild(a);
+                                    code.appendChild(a);
+                                    code.appendChild(createSpan(function (span) {
+                                        span.classList.add('ml-2', 'text-danger', 'delete-module');
+                                        span.appendChild(createIcon(['fa', 'fa-remove']));
+                                        span.dataset.id = lessonModules[j].id;
+                                        span.dataset.name = lessonModules[j].moduleName;
+                                        span.dataset.toggle = 'tooltip';
+                                        span.setAttribute('title', 'Xoá học phần');
+                                        span.addEventListener('click', function (event) {
+                                            $deleteLessonModuleModal.find('.modal-title').text('Thông báo hệ thống');
+                                            $deleteLessonModuleModal.find('.modal-body').html('Bạn có muốn xoá học phần [<strong>' + this.dataset.name + '</strong>] này khỏi bài học không?');
+                                            $deleteLessonModuleButton.val(this.dataset.id);
+                                            $deleteLessonModuleModal.modal('show');
+                                        });
+                                    }));
+                                    div.appendChild(code);
                                     td.appendChild(div);
                                 }
                             }
@@ -200,7 +233,7 @@ $(document).ready(function () {
                             var deleteButton = createButton(function (button) {
                                 button.dataset.id = lessonId;
                                 button.dataset.name = lessonName;
-                                button.classList.add('btn', 'btn-sm', 'btn-danger', 'delete-button');
+                                button.classList.add('btn', 'btn-sm', 'btn-danger', 'delete-lesson-button');
                                 button.appendChild(createIcon(['fa', 'fa-close']));
                                 button.dataset.toggle = 'tooltip';
                                 button.setAttribute('title', 'Xóa bài học');
@@ -227,6 +260,7 @@ $(document).ready(function () {
             table.appendChild(thead);
             table.appendChild(tbody);
         });
+
         tabPane.appendChild(table);
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -239,24 +273,28 @@ $(document).ready(function () {
 
         function onClickCreateLessonModuleButton() {
             var element = $(this);
-            var $modal = $('#lesson-module-modal');
-            $modal.find('.modal-title').text('Thêm học phần cho bài học');
-            $modal.find('input#lesson-id').val(element.data('lessonId'));
-            $modal.find('input#lesson-name').val(element.data('lessonName'));
-            getModules($modal, element);
-            $modal.modal('show');
+            $lessonModuleModal.find('.modal-title').text('Thêm học phần cho bài học');
+            $lessonModuleModal.find('input#lesson-id').val(element.data('lessonId'));
+            $lessonModuleModal.find('input#lesson-name').val(element.data('lessonName'));
+            getModules($lessonModuleModal, element);
+            $lessonModuleModal.modal('show');
         }
 
         function onClickDeleteButton(event) {
             var element = $(this);
-            var $modal = $('#delete-modal');
-            $modal.find('.modal-title').text('Thông báo hệ thống');
-            var $modalBody = $modal.find('.modal-body');
-            $modalBody.html('Bạn có muốn xóa ' + '<strong>[' + element.data('name') + ']</strong> không?');
-            $('#delete-button').val($(this).data('id'));
-            $modal.modal('show');
+            $deleteLessonModal.find('.modal-title').text('Thông báo hệ thống');
+            $deleteLessonModal.find('.modal-body').html('Bạn có muốn xóa ' + '<strong>[' + element.data('name') + ']</strong> không?');
+            $deleteLessonButton.val($(this).data('id'));
+            $deleteLessonModal.modal('show');
         }
 
+    }
+
+    function setPage(page){
+        if(this.page !== page){
+            this.page = page;
+            getCourses();
+        }
     }
 
     function getModules($modal, element) {
@@ -289,18 +327,34 @@ $(document).ready(function () {
         });
     }
 
-    function deleteLesson(lessonId) {
+    function deleteLesson(id) {
         $.ajax({
-            url: '/api/v1/lessons/' + lessonId,
+            url: '/api/v1/lessons/' + id,
             method: 'DELETE',
             success: function () {
-                $('#delete-modal').modal('hide');
+                $deleteLessonModal.modal('hide');
                 getCourses();
-                showAlert(tabPane.firstChild, 'success', 'Xóa bài thành công.');
+                showAlert(tabPane.firstChild, 'success', 'Xóa bài học thành công.');
             },
             error: function () {
-                $('#delete-modal').modal('hide');
+                $deleteLessonModal.modal('hide');
                 showAlert(tabPane.firstChild, 'danger', 'Xóa bài học thất bại.');
+            }
+        });
+    }
+
+    function deleteLessonModule(id) {
+        $.ajax({
+            url: '/api/v1/lesson-modules/' + id,
+            method: 'DELETE',
+            success: function () {
+                $deleteLessonModuleModal.modal('hide');
+                getCourses();
+                showAlert(tabPane.firstChild, 'success', 'Xóa học phần thành công.');
+            },
+            error: function () {
+                $deleteLessonModuleModal.modal('hide');
+                showAlert(tabPane.firstChild, 'danger', 'Xóa học phần thất bại.');
             }
         });
     }

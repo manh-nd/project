@@ -45,7 +45,7 @@ public class Word {
     @Column(name="WORD_SPECIAL_AUDIO_PATH", length = 1000)
     private String specialAudioPath;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
     private List<Vocabulary> vocabularies;
 

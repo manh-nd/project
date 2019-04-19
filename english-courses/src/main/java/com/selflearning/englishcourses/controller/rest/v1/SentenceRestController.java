@@ -41,11 +41,6 @@ public class SentenceRestController {
     @Value("${base-path}")
     private String path;
 
-    /**
-     * Create sentence
-     * @param sentenceDto
-     * @return SentenceDto
-     */
     @PostMapping("/sentences")
     public ResponseEntity<SentenceDto> createSentence(@Valid @RequestBody SentenceDto sentenceDto) {
         Sentence sentence = sentenceService.convertDtoToEntity(sentenceDto);
@@ -53,11 +48,6 @@ public class SentenceRestController {
         return new ResponseEntity<>(sentenceService.convertEntityToDto(sentence), HttpStatus.CREATED);
     }
 
-    /**
-     * Create many sentences
-     * @param sentenceDtos List of SentenceDto
-     * @return List SentenceDto
-     */
     @PostMapping("/sentences/save-all")
     public ResponseEntity<List<SentenceDto>> createSentences(@RequestBody List<SentenceDto> sentenceDtos) {
         List<Sentence> sentences = sentenceService.convertDtoToEntity(sentenceDtos);
@@ -65,12 +55,6 @@ public class SentenceRestController {
         return new ResponseEntity<>(sentenceService.convertEntityToDto(sentences), HttpStatus.CREATED);
     }
 
-    /**
-     * Update sentence
-     * @param id
-     * @param sentenceDto
-     * @return
-     */
     @PutMapping("/sentences/{id}")
     public ResponseEntity<SentenceDto> updateSentence(@PathVariable("id") UUID id, @RequestBody SentenceDto sentenceDto){
         Sentence sentence = sentenceService.convertDtoToEntity(sentenceDto);

@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class SentenceDto  extends BaseDto{
+public class SentenceDto extends BaseDto {
 
     @NotEmpty(message = "errors.sentence.text.empty")
     @Length(max = 255, message = "errors.sentence.text.length")

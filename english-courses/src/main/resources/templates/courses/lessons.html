@@ -7,6 +7,12 @@
 </head>
 <body>
 <main layout:fragment="main-container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4" th:text="${lesson.course.name}"></h1>
+            <p class="lead" th:text="${lesson.course.description}"></p>
+        </div>
+    </div>
     <div class="container mt-5 mb-5">
         <div class="card">
             <h5 class="card-header">

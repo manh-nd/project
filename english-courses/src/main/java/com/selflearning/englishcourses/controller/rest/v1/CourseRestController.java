@@ -3,6 +3,7 @@ package com.selflearning.englishcourses.controller.rest.v1;
 import com.selflearning.englishcourses.domain.Course;
 import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.dto.CourseDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,16 +16,12 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @RestController
 @RequestMapping("/api/v1")
 public class CourseRestController {
 
-    private CourseService courseService;
-
-    @Autowired
-    public void setCourseService(CourseService courseService) {
-        this.courseService = courseService;
-    }
+    private final CourseService courseService;
 
     @GetMapping("/courses")
     public ResponseEntity<Page<CourseDto>> findAll(Pageable pageable) {

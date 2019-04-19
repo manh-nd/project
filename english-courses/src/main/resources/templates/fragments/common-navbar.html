@@ -9,19 +9,11 @@
 
     <div class="collapse navbar-collapse" id="commonNavbar">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{/}">Trang chủ</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                    Khóa học
-                </a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Tiếng Anh Giao Tiếp 360</a>
-                </div>
+            <li class="nav-item" th:classappend="${home}? 'active'">
+                <a class="nav-link" th:href="@{/}" >Trang chủ</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Từ điển</a>
+                <a class="nav-link" th:href="@{/dictionary}" th:classappend="${dictionary}? 'active'">Từ điển</a>
             </li>
         </ul>
         <div sec:authorize="!isAuthenticated()">

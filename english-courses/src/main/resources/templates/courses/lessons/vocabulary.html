@@ -7,19 +7,34 @@
 </head>
 <body>
 <main layout:fragment="main-container">
-    <div class="container mt-5 mb-5">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4" th:text="${vocabularyLesson.lessonModule.lesson.course.name}"></h1>
+            <p class="lead" th:text="${vocabularyLesson.lessonModule.lesson.course.description}"></p>
+        </div>
+    </div>
+    <div class="container mb-5">
         <div class="card">
             <h5 class="card-header">
-                <a style="text-decoration: none" class="text-dark"
-                   th:href="@{/courses/__${vocabularyLesson.lessonModule.lesson.course.id}__}">
-                    <i class="fa fa-home"></i>
-                </a>
-                <i class="fa fa-caret-right"></i>
-                <a style="text-decoration: none" class="text-dark"
-                   th:href="@{/courses/__${vocabularyLesson.lessonModule.lesson.course.id}__/lessons/__${vocabularyLesson.lessonModule.lesson.id}__}"
-                   th:text="|Bài ${vocabularyLesson.lessonModule.lesson.orderNumber}|">Bài 1</a>
-                <i class="fa fa-caret-right"></i>
-                <span>Luyện từ vựng</span>
+                <div class="row">
+                    <div class="col-md-10" style="margin-top: 6px">
+                        <a style="text-decoration: none" class="text-dark"
+                           th:href="@{/courses/__${vocabularyLesson.lessonModule.lesson.course.id}__}">
+                            <i class="fa fa-home"></i>
+                        </a>
+                        <i class="fa fa-caret-right"></i>
+                        <a style="text-decoration: none" class="text-dark"
+                           th:href="@{/courses/__${vocabularyLesson.lessonModule.lesson.course.id}__/lessons/__${vocabularyLesson.lessonModule.lesson.id}__}"
+                           th:text="|Bài ${vocabularyLesson.lessonModule.lesson.orderNumber}|">Bài 1</a>
+                        <i class="fa fa-caret-right"></i>
+                        <span>Luyện từ vựng</span>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-sm btn-success btn-block">
+                            <i class="fa fa-book"></i> <span>Làm bài tập</span>
+                        </button>
+                    </div>
+                </div>
             </h5>
             <div class="card-body">
                 <div th:each="vld : ${vocabularyLesson.vocabularyLessonDetails}">

@@ -157,10 +157,24 @@ $(document).ready(function () {
                                     $('#orderNumber').trigger('focus');
                                 });
                                 $modal.find('.modal-title').text('Tạo bài học');
+                                var courseId = element.data('id');
                                 $modal.find('#courseId').val(element.data('id'));
                                 $modal.find('#courseName').val(element.data('name'));
-                                $modal.find('#orderNumber').val(null);
-                                $modal.modal('show');
+                                $.ajax({
+                                    url: '/api/v1/courses/' + courseId + '/lessons/order-number',
+                                    method: 'GET',
+                                    data: {
+                                        next: true
+                                    },
+                                    dataType: 'json',
+                                    success: function (next) {
+                                        $modal.find('#orderNumber').val(next);
+                                        $modal.modal('show');
+                                    },
+                                    error: function () {
+                                        showAlert(alertContainer, 'danger', 'Lỗi hệ thống.');
+                                    }
+                                });
                             });
                         });
                         td.appendChild(createLessonButton);
