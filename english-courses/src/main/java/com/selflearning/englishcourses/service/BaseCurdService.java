@@ -26,5 +26,4 @@ public interface BaseCurdService<T, ID extends Serializable> {
     }
 
     Page<T> findAll(Pageable pageable);
-
 }

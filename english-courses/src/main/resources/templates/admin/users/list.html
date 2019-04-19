@@ -14,9 +14,10 @@
 
 <body>
 <div layout:fragment="content" class="page-content fade-in-up">
+
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Danh sách học phần</div>
+            <div class="ibox-title">Tài khoản</div>
             <div class="ibox-tools">
                 <a class="ibox-collapse">
                     <i class="fa fa-minus"></i>
@@ -25,18 +26,28 @@
         </div>
         <div class="ibox-body">
             <div id="alert"></div>
-            <div class="my-2">
-                <button class="btn btn-primary" id="create-button">Thêm học phần</button>
-            </div>
-            <table class="table table-sm table-striped table-bordered" >
+            <table class="table table-sm table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Tên học phần</th>
+                    <th>Tên tài khoản</th>
+                    <th>Email</th>
+                    <th>Trạng thái</th>
                     <th style="width: 120px">Hành động</th>
                 </tr>
                 </thead>
-                <tbody id="table-body">
+                <tbody>
+                <tr th:each="user : ${userList}">
+                    <td th:text="${user.username}">Tài khoản</td>
+                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${user.enabled} ? 'Hoạt động' : 'Khóa'">Trạng
+                        thái
+                    </td>
+                    <td>
+                        <button class="btn btn-info"><a href="#"><i class="fa fa-eye"></i></a></button>
+                        </button> <a th:href="@{/admin/management/users/edit/${user.username}}"
+                                     class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></a>
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <nav id="pagination-navigator"></nav>

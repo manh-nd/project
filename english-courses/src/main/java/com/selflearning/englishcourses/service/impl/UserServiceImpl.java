@@ -182,4 +182,15 @@ public class UserServiceImpl implements UserService {
     public long count() {
         return userJpaRepository.count();
     }
+
+
+    @Override
+    public List<User> fillAllnoPageable(){
+        return userJpaRepository.findAll();
+    }
+
+    @Override
+    public User findbyUsername (String username){
+        return userJpaRepository.findByUsername(username);
+    }
 }

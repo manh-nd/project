@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org"
+      xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
+      layout:decorate="~{layouts/dashboard-layout}">
+<head>
+    <title th:text="#{user-management}">Quản lý người dùng</title>
+    <!-- PLUGINS STYLES-->
+
+    <!-- THEME STYLES-->
+    <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
+
+    <!-- PAGE LEVEL STYLES-->
+</head>
+
+<body>
+<div layout:fragment="content" class="page-content fade-in-up">
+
+    <div class="ibox">
+        <div class="ibox-head">
+            <div class="ibox-title">Tài khoản</div>
+            <div class="ibox-tools">
+                <a class="ibox-collapse">
+                    <i class="fa fa-minus"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-body">
+            <div id="alert"></div>
+            <form th:action="@{/admin/management/users/__${user.username}__}" th:object="${user}"
+                  th:method="PUT">
+
+                <div class="form-group">
+                    <div>
+                        <strong>Tài khoản</strong>
+                    </div>
+                    <input class="form-control form-control-sm" readonly="readonly"
+                           th:field="*{username}">
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <strong>Email</strong>
+                    </div>
+                    <input class="form-control form-control-sm" readonly="readonly"
+                           th:field="*{email}">
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <strong>Trạng thái tài khoản</strong>
+                    </div>
+                    <select th:field="*{enabled}" class="form-control form-control-sm"
+                            style="width: 200px">
+                        <option th:value="true">Hoạt động</option>
+                        <option th:value="false">Khóa</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button name="update" class="btn btn-warning"
+                            th:utext="|#{icon.edit} Cập nhật|">Sửa</button>
+                </div>
+            </form>
+            <nav id="pagination-navigator"></nav>
+        </div>
+    </div>
+
+</div>
+<th:block layout:fragment="page-level-scripts">
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script th:src="@{/js/service/service.js}"></script>
+    <script th:src="@{/js/pages/module.js}"></script>
+</th:block>
+</body>
+</html>

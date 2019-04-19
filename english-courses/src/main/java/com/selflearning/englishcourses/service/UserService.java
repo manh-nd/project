@@ -5,6 +5,7 @@ import com.selflearning.englishcourses.domain.User;
 import com.selflearning.englishcourses.service.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService extends BaseService, BaseCurdService<User, UUID>, ModelMapperService<User, UserDto>, UserDetailsService {
@@ -15,4 +16,7 @@ public interface UserService extends BaseService, BaseCurdService<User, UUID>, M
 
     void updatePassword(String password, String username);
 
+    List<User> fillAllnoPageable();
+
+    User findbyUsername(String username);
 }
