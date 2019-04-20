@@ -1,8 +1,10 @@
 package com.selflearning.englishcourses.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -17,8 +19,8 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-//@ToString(exclude = "vocabularies")
-//@EqualsAndHashCode(exclude = "vocabularies")
+@ToString(exclude = "vocabularies")
+@EqualsAndHashCode(exclude = "vocabularies")
 @Entity
 @Table(name="word_classes")
 @Document(indexName = "word_classes", shards = 2)

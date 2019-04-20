@@ -19,8 +19,8 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-//@ToString(exclude = "vocabularies")
-//@EqualsAndHashCode(exclude = "vocabularies")
+@ToString(exclude = "vocabularies")
+@EqualsAndHashCode(exclude = "vocabularies")
 @Entity
 @Table(name="words",
         uniqueConstraints = @UniqueConstraint(name = "WORD_UNIQUE", columnNames = {"WORD_TEXT", "WORD_IPA"}))
@@ -45,7 +45,7 @@ public class Word {
     @Column(name="WORD_SPECIAL_AUDIO_PATH", length = 1000)
     private String specialAudioPath;
 
-    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
     private List<Vocabulary> vocabularies;
 

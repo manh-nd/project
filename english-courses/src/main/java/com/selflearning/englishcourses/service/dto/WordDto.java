@@ -14,6 +14,5 @@ public class WordDto extends BaseDto {
     private String ipa;
     private String normalAudioPath;
     private String specialAudioPath;
-    private List<VocabularyDto> vocabularies;
 
 }
