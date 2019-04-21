@@ -60,8 +60,7 @@ public class CourseRestController {
 
     @DeleteMapping("/courses/{id}")
     public ResponseEntity<Void> deleteCourse(@PathVariable("id") UUID id) {
-        Course currentCourse = courseService.get(id);
-        courseService.delete(currentCourse);
+        courseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

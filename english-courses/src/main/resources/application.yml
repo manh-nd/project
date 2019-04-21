@@ -1,8 +1,10 @@
+project:
+  name: self_learning
 sql:
   host: localhost
   port: 3306
-  name: self_learning
-  username: project2
+  name: ${project.name}
+  username: ${project.name}
   password: 123
   params: useSSL=false
   url: jdbc:mysql://${sql.host}:${sql.port}/${sql.name}?${sql.params}
@@ -22,7 +24,7 @@ spring:
     password: ${sql.password}
   data:
     elasticsearch:
-      cluster-name: self_learning
+      cluster-name: ${project.name}
       cluster-nodes: ${nosql.elastichsearch.cluster-nodes}
   jpa:
     show-sql: true

@@ -9,18 +9,20 @@
     <!-- THEME STYLES-->
     <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
     <!-- PAGE LEVEL STYLES-->
-    <style>
-        .delete-module:hover {
-            color: blue;
-        }
-    </style>
 </head>
 
 <body>
 <div layout:fragment="content" class="page-content fade-in-up">
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title"><i class="fa fa-home"></i> Bài học</div>
+            <div class="ibox-title">
+                <i class="fa fa-home"></i>
+                <span id="course"
+                      th:text="${course.name}"
+                      th:data-id="${course.id}">
+                    Tiếng Anh Giao Tiếp 360
+                </span>
+            </div>
             <div class="ibox-tools">
                 <a class="ibox-collapse">
                     <i class="fa fa-minus"></i>
@@ -28,8 +30,9 @@
             </div>
         </div>
         <div class="ibox-body">
-            <div id="course-tab" style="display: none">
-            </div>
+            <div id="alert-container"></div>
+            <div id="container"></div>
+            <nav id="pagination"></nav>
         </div>
     </div>
 

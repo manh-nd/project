@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,12 +44,14 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public String getCourse(@PathVariable("id") UUID id, Model model) {
+    public String getCourse(@PathVariable("id") UUID id, @RequestParam(name = "week", defaultValue = "1") Integer week, Model model) {
         Course course = courseService.get(id);
-        List<Lesson> lessons = course.getLessons();
-        lessons.sort(Comparator.comparing(Lesson::getOrderNumber));
+        if (--week < 0) {
+            week = 0;
+        }
+        Page<Lesson> lessonPage = lessonService.findByCourseId(id, week);
         model.addAttribute("course", course);
-        model.addAttribute("lessons", lessons);
+        model.addAttribute("lessonPage", lessonPage);
         return "courses/course-detail";
     }
 

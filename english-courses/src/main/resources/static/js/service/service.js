@@ -92,8 +92,8 @@ function removeAllChildren(parentElement) {
     }
 }
 
-function playAudio(event) {
-    var url = event.target.parentElement.getAttribute('href');
+function playAudio(a) {
+    var url = a.getAttribute('href');
     $.ajax({
         method: 'GET',
         url: url,
@@ -101,19 +101,17 @@ function playAudio(event) {
             var xhr = new XMLHttpRequest();
             xhr.responseType = 'blob';
             return xhr;
+        },
+        success: function (res) {
+            var audio = document.querySelector("#audioPlayer");
+            var URL = window.URL || window.webkitURL;
+            audio.src = URL.createObjectURL(res);
+            audio.play();
+        },
+        error: function (res) {
+            console.error(res);
         }
-    }).done(success).fail(error);
-
-    function success(response) {
-        var audio = document.querySelector("#audioPlayer");
-        var URL = window.URL || window.webkitURL;
-        audio.src = URL.createObjectURL(response);
-        audio.play();
-    }
-
-    function error(page) {
-        console.error(page);
-    }
+    });
 }
 
 function createIcon(classList) {
@@ -326,4 +324,27 @@ function parseHttpHeaders(httpHeaders) {
         return acc;
     }, {});
     return headers;
+}
+
+function coverValueWithStrongTag(text, word) {
+    var single = new RegExp('^' + word + '$', 'gi');
+    var start = new RegExp('^' + word + ' ', 'gi');
+    var end = new RegExp(' ' + word + '$', 'gi');
+    var middle = new RegExp(' ' + word + ' ', 'gi');
+    var openBrace = new RegExp('\\(' + word + ' ', 'gi');
+    var closeBrace = new RegExp(' ' + word + '\\)', 'gi');
+    if(single.test(text)){
+        text = text.replace(single, '<strong>' + word + '</strong>');
+    } else if(start.test(text)){
+        text = text.replace(start, '<strong>' + word + ' </strong>');
+    } else if(end.test(text)){
+        text = text.replace(end, '<strong> ' + word + '</strong>');
+    } else if(middle.test(text)){
+        text = text.replace(middle, '<strong> ' + word + ' </strong>');
+    } else if (openBrace.test(text)){
+        text = text.replace(openBrace, '(<strong>' + word + ' </strong>');
+    } else if(closeBrace.test(text)){
+        text = text.replace(closeBrace, '<strong> ' + word + ')</strong>)');
+    }
+    return text;
 }

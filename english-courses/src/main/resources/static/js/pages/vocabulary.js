@@ -1,14 +1,14 @@
 $(document).ready(function () {
-    const tbody = document.querySelector('#vocabulary-table > tbody')
-    const pagination = document.querySelector('#pagination-navigator');
-    const searchButton = document.querySelector('#search-button');
-    const searchInput = document.querySelector('#search-input');
-    const title = 'Quản lý từ vựng';
-    const path = '/admin/management/vocabularies/page/';
+    var tbody = document.querySelector('#vocabulary-table > tbody')
+    var pagination = document.querySelector('#pagination-navigator');
+    var searchButton = document.querySelector('#search-button');
+    var searchInput = document.querySelector('#search-input');
+    var title = 'Quản lý từ vựng';
+    var path = '/admin/management/vocabularies/page/';
 
-    let page = 0;
-    let size = 30;
-    let isSaveHistory = true;
+    var page = 0;
+    var size = 30;
+    var isSaveHistory = true;
 
     init();
 
@@ -33,13 +33,13 @@ $(document).ready(function () {
 
     function init() {
         page = 0;
-        let pathname = window.location.pathname;
-        let pathElements = pathname.split('/');
+        var pathname = window.location.pathname;
+        var pathElements = pathname.split('/');
         if (pathElements.length && pathElements[4]) {
             page = pathElements[4] - 1;
         }
-        let searchParams = new URLSearchParams(window.location.search);
-        let searchParamsValue = searchParams.get('search');
+        var searchParams = new URLSearchParams(window.location.search);
+        var searchParamsValue = searchParams.get('search');
         if (searchParamsValue) {
             setTextInputValue(searchParamsValue);
             search(page, getSearchInputValue());
@@ -69,8 +69,8 @@ $(document).ready(function () {
         renderTableContent(response);
         paginate(pagination, response, setPage);
         if (isSaveHistory) {
-            let currentPage = response.pageable.pageNumber;
-            let searchValue = getSearchInputValue();
+            var currentPage = response.pageable.pageNumber;
+            var searchValue = getSearchInputValue();
             if (searchValue) {
                 saveHistory({
                     data: {page: currentPage},
@@ -110,7 +110,7 @@ $(document).ready(function () {
         if (this.page != page) {
             this.page = page;
             isSaveHistory = true;
-            let text = getSearchInputValue();
+            var text = getSearchInputValue();
             if (text) {
                 search(page, text);
             } else {
@@ -129,11 +129,11 @@ $(document).ready(function () {
 
     function renderTableContent(page) {
         removeAllChildren(tbody);
-        let content = page.content;
-        let pageable = page.pageable;
+        var content = page.content;
+        var pageable = page.pageable;
         if (content.length) {
-            for (let i = 0; i < content.length; i++) {
-                let columns = [
+            for (var i = 0; i < content.length; i++) {
+                var columns = [
                     createColumn(function (td) {
                         td.textContent = pageable.offset + i + 1;
                     }),
@@ -149,19 +149,19 @@ $(document).ready(function () {
                     createColumn(function (td) {
                         td.textContent = content[i].description;
                     }), createColumn(function (td) {
-                        let icon = createIcon(['fa', 'fa-volume-up']);
+                        var icon = createIcon(['fa', 'fa-volume-up']);
                         td.classList.add('text-center');
-                        let link = document.createElement('a');
+                        var link = document.createElement('a');
                         link.href = "/api/v1/vocabularies/" + content[i].id + "/audio";
                         link.appendChild(icon);
                         link.addEventListener('click', function (event) {
                             event.preventDefault();
-                            playAudio(event);
+                            playAudio(this);
                         });
                         td.appendChild(link);
                     }), createColumn(function (td) {
-                        let icon = createIcon(['fa', 'fa-pencil']);
-                        let button = document.createElement('button');
+                        var icon = createIcon(['fa', 'fa-pencil']);
+                        var button = document.createElement('button');
                         button.dataset.id = content[i].id;
                         button.classList.add('btn', 'btn-warning', 'btn-sm');
                         button.appendChild(icon);

@@ -233,7 +233,7 @@ $(document).ready(function () {
                             link.setAttribute('href', apiUrl + '/' + content[i].id + '/audio');
                             link.addEventListener('click', function (event) {
                                 event.preventDefault();
-                                playAudio(event);
+                                playAudio(this);
                             });
                             td.appendChild(link);
                         }

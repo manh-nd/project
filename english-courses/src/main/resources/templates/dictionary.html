@@ -5,46 +5,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Từ điển SelfLearning</title>
-    <style>
-        .form-group > select.select-search {
-            border-radius: initial !important;
-        }
-
-        .form-group > button.btn-search {
-            border-top-left-radius: 0 !important;
-            border-bottom-left-radius: 0 !important;;
-        }
-    </style>
 </head>
 <body>
 <main layout:fragment="main-container">
-    <div class="container mt-5">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Self Learning Dictionary</h1>
+        </div>
+    </div>
+    <div class="container mb-5">
         <div class="card">
             <div class="card-header">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm..." id="searchInput"/>
+                    <input th:value="${search}"
+                           th:placeholder="#{__${currentPlaceHolder}__}"
+                           id="searchInput"
+                           type="text"
+                           class="form-control"
+                           style="border-top-right-radius: 0; border-bottom-right-radius: 0"
+                           placeholder="Nhập từ, câu, cụm từ bạn muốn tìm kiếm"/>
                     <div class="input-group-append">
-                        <button data-id="1"
+                        <button th:data-id="${currentId}"
+                                th:text="#{__${currentText}__}"
                                 id="searchDropdownButton"
                                 type="button"
                                 data-toggle="dropdown"
-                                class="btn btn-outline-secondary dropdown-toggle">Tất cả
+                                style="border-top-left-radius: 0; border-bottom-left-radius: 0"
+                                class="btn btn-success dropdown-toggle">
+                            Tất cả
                         </button>
                         <div class="dropdown-menu">
-                            <div data-id="1" id="all" class="dropdown-item" >Tất cả</div>
-                            <div class="dropdown-divider" data-id="2"></div>
-                            <div data-id="2" id="vocabulary" class="dropdown-item">Từ vựng</div>
-                            <div data-id="3" id="sentence" class="dropdown-item">Câu</div>
-                            <div data-id="4" id="phrase" class="dropdown-item">Cụm từ</div>
+                            <div data-id="1"
+                                 data-placeholder="Nhập từ, câu, cụm từ bạn muốn tìm kiếm"
+                                 id="all"
+                                 class="dropdown-item">Tất cả</div>
+                            <div data-id="2"
+                                 data-placeholder="Nhập từ bạn muốn tìm kiếm"
+                                 id="vocabulary"
+                                 class="dropdown-item">Từ vựng</div>
+                            <div data-id="3"
+                                 data-placeholder="Nhập câu bạn muốn tìm kiếm"
+                                 id="sentence"
+                                 class="dropdown-item">Câu</div>
+                            <div data-id="4"
+                                 data-placeholder="Nhập cụm từ bạn muốn tìm kiếm"
+                                 id="phrase"
+                                 class="dropdown-item">Cụm từ</div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-body">
+                <div id="alert-container"></div>
                 <div id="search-result"></div>
             </div>
         </div>
     </div>
+    <audio id="audioPlayer"></audio>
 </main>
 <th:block layout:fragment="page-scripts">
     <!-- PAGE LEVEL SCRIPTS-->

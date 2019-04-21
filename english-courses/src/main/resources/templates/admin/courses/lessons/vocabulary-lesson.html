@@ -16,7 +16,11 @@
     <div class="ibox">
         <div class="ibox-head">
             <div class="ibox-title">
-                <a class="text-dark" th:href="@{/admin/management/lessons}"><i class="fa fa-home"></i> <span>Bài học</span></a>
+                <a class="text-dark"
+                   th:href="@{/admin/management/courses/__${vocabularyLesson.lessonModule.lesson.course.id}__/lessons}">
+                    <i class="fa fa-home"></i>
+                    <span th:text="${vocabularyLesson.lessonModule.lesson.course.name}"></span>
+                </a>
                 <i class="fa fa-caret-right"></i>
                 <span id="vocabularyLesson"
                       th:text="|Bài ${vocabularyLesson.lessonModule.lesson.orderNumber}|"

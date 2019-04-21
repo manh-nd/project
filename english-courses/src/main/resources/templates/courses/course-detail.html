@@ -3,20 +3,47 @@
       xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
       layout:decorate="~{layouts/common-layout}">
 <head>
-    <title>Chi tiet khoa hoc</title>
+    <title th:text="|${course.name} - Tuần ${lessonPage.number + 1}|">Chi tiet khoa hoc</title>
 </head>
 <body>
 <main layout:fragment="main-container">
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4" th:text="${course.name}">Fluid jumbotron</h1>
-            <p class="lead" th:text="${course.description}">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+            <p class="lead" th:text="${course.description}">This is a modified jumbotron that occupies the entire
+                horizontal space of its parent.</p>
         </div>
     </div>
-    <div class="container">
-        <span th:each="lesson : ${lessons}">
-            <a th:href="@{/courses/__${course.id}__/lessons/__${lesson.id}__}" class="btn btn-primary" th:text="${lesson.orderNumber}"></a>
-        </span>
+
+    <div class="container mt-5 mb-5">
+        <div class="card">
+            <h5 class="card-header">
+                <a th:href="@{/courses/__${course.id}__}" style="text-decoration: none" class="text-dark">
+                    <i class="fa fa-home"></i>
+                </a>
+                <i class="fa fa-caret-right"></i>
+                <a th:href="@{/courses/__${course.id}__(week=__${lessonPage.number + 1}__)}" style="text-decoration: none" class="text-dark">
+                    <span th:text="|Tuần ${lessonPage.number + 1}|">Tuần 1</span>
+                </a>
+            </h5>
+            <div class="card-body">
+                <span th:if="(${(lessonPage.last && (lessonPage.totalPages > 1)) || (!lessonPage.first && !lessonPage.last) })">
+                    <a class="btn btn-primary" th:href="@{/courses/__${course.id}__(week=__${lessonPage.number}__)}">
+                        <i class="fa fa-angle-double-left"></i>
+                    </a>
+                </span>
+                <span th:each="lesson : ${lessonPage.content}">
+                    <a th:href="@{/courses/__${course.id}__/lessons/__${lesson.id}__}" class="btn btn-primary"
+                       th:text="${lesson.orderNumber}"></a>
+                </span>
+                <span th:if="${(lessonPage.first && (lessonPage.totalPages > 1)) || (!lessonPage.first && !lessonPage.last)}">
+                     <a class="btn btn-primary"
+                        th:href="@{/courses/__${course.id}__(week=__${lessonPage.number + 2}__)}">
+                        <i class="fa fa-angle-double-right"></i>
+                     </a>
+                </span>
+            </div>
+        </div>
     </div>
 </main>
 </body>

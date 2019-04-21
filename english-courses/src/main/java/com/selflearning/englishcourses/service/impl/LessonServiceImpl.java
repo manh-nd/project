@@ -11,9 +11,7 @@ import com.selflearning.englishcourses.service.dto.LessonModuleDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -105,6 +103,11 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
+    public Page<Lesson> findByCourseId(UUID courseId, int page) {
+        return lessonJpaRepository.findByCourseId(courseId, PageRequest.of(page, 7, Sort.by("orderNumber").ascending()));
+    }
+
+    @Override
     public Page<Lesson> findByCourseId(UUID courseId, Pageable pageable) {
         return lessonJpaRepository.findByCourseId(courseId, pageable);
     }
@@ -113,4 +116,5 @@ public class LessonServiceImpl implements LessonService {
     public Integer getNextOrderNumber(UUID courseId) {
         return lessonJpaRepository.getNextOrderNumber(courseId);
     }
+
 }

@@ -137,7 +137,10 @@ $(document).ready(function () {
                         td.textContent = pageable.offset + i + 1;
                     }),
                     createColumn(function (td) {
-                        td.textContent = content[i].name;
+                        var a = document.createElement('a');
+                        a.href = '/admin/management/courses/' + content[i].id + '/lessons';
+                        a.textContent = content[i].name;
+                        td.appendChild(a);
                     }),
                     createColumn(function (td) {
                         td.textContent = content[i].description;

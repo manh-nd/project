@@ -55,26 +55,39 @@ $(document).ready(function () {
                 var content = data.content;
                 if (content && content.length) {
                     var items = document.createElement('div');
-                    items.classList.add('autocomplete-items');
+                    items.classList.add('container-fluid', 'autocomplete-items');
                     for (var i = 0; i < content.length; i++) {
                         var item = document.createElement('div');
+                        var leftContainer = document.createElement('div');
+                        var rightContainer = document.createElement('div');
+                        var image = document.createElement('img');
+                        var text = document.createElement('div');
+                        var meaning = document.createElement('div');
+
+                        item.classList.add('row', 'px-2', 'py-1');
+                        leftContainer.classList.add('col-1');
+                        rightContainer.classList.add('col-11');
+                        image.classList.add('img-fluid');
+
+                        image.src = '/api/v1/vocabularies/' + content[i].id + '/image';
+                        image.alt = 'content[i].word.text';
+                        text.textContent = content[i].word.text;
+                        meaning.textContent = content[i].meaning;
+
                         item.dataset.id = content[i].id;
-                        item.classList.add('px-2', 'py-1');
                         item.dataset.text = content[i].word.text;
+
                         item.addEventListener('click', function (event) {
                             isVocabularyChosen = true;
                             input.dataset.id = this.dataset.id;
                             input.value = this.dataset.text;
                         });
 
-                        var text = document.createElement('div');
-                        text.textContent = content[i].word.text;
-                        item.appendChild(text);
-
-                        var meaning = document.createElement('div');
-                        meaning.textContent = content[i].meaning;
-                        item.appendChild(meaning);
-
+                        leftContainer.appendChild(image);
+                        rightContainer.appendChild(text);
+                        rightContainer.appendChild(meaning);
+                        item.appendChild(leftContainer);
+                        item.appendChild(rightContainer);
                         items.appendChild(item);
                     }
                     input.parentNode.appendChild(items);
@@ -129,7 +142,6 @@ $(document).ready(function () {
         });
 
         sentenceInput.addEventListener('blur', function (event) {
-            console.log('sentence blur');
             console.log('Sentence chosen: ' + isSentenceChosen);
         });
 
@@ -245,7 +257,7 @@ $(document).ready(function () {
                 wordAudio.href = '/api/v1/vocabularies/' + vocabulary.id + '/audio';
                 wordAudio.addEventListener('click', function (event) {
                     event.preventDefault();
-                    playAudio(event);
+                    playAudio(this);
                 });
                 wordAudio.appendChild(createIcon(['fa', 'fa-volume-up']));
                 var word = document.createElement('strong');
@@ -282,7 +294,7 @@ $(document).ready(function () {
                     sentenceAudio.href = '/api/v1/sentences/' + sentence.id + '/audio';
                     sentenceAudio.addEventListener('click', function (event) {
                         event.preventDefault();
-                        playAudio(event);
+                        playAudio(this);
                     });
                     sentenceAudio.appendChild(createIcon(['fa', 'fa-volume-up']));
                     sentenceText.appendChild(sentenceAudio);
@@ -294,8 +306,7 @@ $(document).ready(function () {
                 sentenceText.classList.add('text-warning');
                 sentenceText.style.fontSize = '1.2rem';
                 sentenceContainer.appendChild(sentenceText);
-                var hr = document.createElement('hr');
-                textColumn.appendChild(hr);
+                textColumn.appendChild(document.createElement('hr'));
 
                 var sentenceMeaning = document.createElement('div');
                 sentenceMeaning.appendChild(createSpan(function (span) {

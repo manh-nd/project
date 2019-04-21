@@ -95,7 +95,8 @@ public class PhraseServiceImpl implements PhraseService {
     @Override
     public Page<Phrase> search(String value, Pageable pageable) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(multiMatchQuery(value, "text", "phraseDetails.meaning", "phraseDetails.description"))
+                .withQuery(multiMatchQuery(value,
+                        "text", "phraseDetails.meaning", "phraseDetails.description"))
                 .withPageable(pageable)
                 .build();
         return phraseElasticsearchRepository.search(searchQuery);
