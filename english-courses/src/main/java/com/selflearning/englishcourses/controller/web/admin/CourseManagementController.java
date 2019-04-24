@@ -1,10 +1,7 @@
 package com.selflearning.englishcourses.controller.web.admin;
 
 import com.selflearning.englishcourses.domain.*;
-import com.selflearning.englishcourses.service.CourseService;
-import com.selflearning.englishcourses.service.LessonModuleService;
-import com.selflearning.englishcourses.service.LessonService;
-import com.selflearning.englishcourses.service.VocabularyLessonService;
+import com.selflearning.englishcourses.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -31,6 +27,8 @@ public class CourseManagementController {
     private final LessonModuleService lessonModuleService;
 
     private final VocabularyLessonService vocabularyLessonService;
+
+    private final GrammarLessonService grammarLessonService;
 
     @GetMapping("/courses")
     public String coursePage(Model model) {
@@ -63,7 +61,7 @@ public class CourseManagementController {
             case "Luyện từ vựng":
                 return "redirect:/admin/management/vocabulary-lessons/" + lessonModule.getVocabularyLesson().getId();
             case "Luyện ngữ pháp":
-                return "admin/courses/lessons/grammar-lesson";
+                return "redirect:/admin/management/grammar-lessons/" + lessonModule.getGrammarLesson().getId();
             case "Ngữ giao tiếp thông dụng":
                 return "admin/courses/lessons/phrase-lesson";
             default:
@@ -77,6 +75,22 @@ public class CourseManagementController {
         model.addAttribute("lessonManagement", true);
         model.addAttribute("vocabularyLesson", vocabularyLesson);
         return "admin/courses/lessons/vocabulary-lesson";
+    }
+
+    @GetMapping("/grammar-lessons/{grammarLessonId}")
+    public String grammarLesson(@PathVariable("grammarLessonId") UUID grammarLessonId, Model model) {
+        GrammarLesson grammarLesson = grammarLessonService.get(grammarLessonId);
+        model.addAttribute("lessonManagement", true);
+        model.addAttribute("grammarLesson", grammarLesson);
+        return "admin/courses/lessons/grammar-lesson";
+    }
+
+    @GetMapping("/grammar-lessons/{grammarLessonId}/quiz")
+    public String grammarLessonQuiz(@PathVariable("grammarLessonId") UUID grammarLessonId, Model model) {
+        GrammarLesson grammarLesson = grammarLessonService.get(grammarLessonId);
+        model.addAttribute("lessonManagement", true);
+        model.addAttribute("grammarLesson", grammarLesson);
+        return "admin/courses/lessons/grammar-lesson-quiz";
     }
 
     @ModelAttribute("courses")

@@ -35,8 +35,8 @@ $(document).ready(function () {
         page = 0;
         var pathname = window.location.pathname;
         var pathElements = pathname.split('/');
-        if (pathElements.length && pathElements[4]) {
-            page = pathElements[4] - 1;
+        if (pathElements.length && pathElements[5]) {
+            page = pathElements[5] - 1;
         }
         var searchParams = new URLSearchParams(window.location.search);
         var searchParamsValue = searchParams.get('search');
@@ -61,8 +61,10 @@ $(document).ready(function () {
                 page: page,
                 size: size
             },
-            dataType: 'json'
-        }).done(onSuccess).fail(onError);
+            dataType: 'json',
+            success: onSuccess,
+            error: onError
+        });
     }
 
     function onSuccess(response) {
@@ -102,12 +104,14 @@ $(document).ready(function () {
                 page: page,
                 size: size
             },
-            dataType: 'json'
-        }).done(onSuccess).fail(onError);
+            dataType: 'json',
+            success: onSuccess,
+            error: onError
+        });
     }
 
     function setPage(page) {
-        if (this.page != page) {
+        if (this.page !== page) {
             this.page = page;
             isSaveHistory = true;
             var text = getSearchInputValue();
@@ -136,6 +140,13 @@ $(document).ready(function () {
                 var columns = [
                     createColumn(function (td) {
                         td.textContent = pageable.offset + i + 1;
+                    }),
+                    createColumn(function (td) {
+                        var img = document.createElement('img');
+                        img.src = '/api/v1/vocabularies/' + content[i].id + '/image';
+                        img.alt = 'Image not available';
+                        img.width = 100;
+                        td.appendChild(img);
                     }),
                     createColumn(function (td) {
                         td.textContent = content[i].word.text;

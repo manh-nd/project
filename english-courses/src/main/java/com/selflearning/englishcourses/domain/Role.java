@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -33,6 +34,7 @@ public class Role {
     @Column(name="ROLE_NAME", unique = true, nullable = false)
     private String name;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private List<User> users;
 

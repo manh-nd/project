@@ -48,8 +48,13 @@
         <label>
             <input type="checkbox" name="remember-me"> <span th:text="#{label.remember}">Remember me</span>
         </label>
+
     </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{button.login}">Sign in</button>
+    <div class="mt-3">
+        <div><a class="text-right" th:href="@{forgot-password}">Quên mật khẩu</a></div>
+        <span>Chưa có tài khoản?</span> <a th:href="@{/register}">Đăng ký</a>
+    </div>
     <p class="mt-5 mb-3 text-muted text-center"> Copyright &copy; 2019 - Self Learning</p>
 </form>
 <script th:src="@{/js/jquery.min.js}" type="text/javascript"></script>

@@ -18,6 +18,8 @@ $(document).ready(function () {
     window.onpopstate = function (event) {
         if (event.state) {
             isHaveHistory = false;
+            searchInput.value = event.state.value;
+            searchDropdownButton.dataset.id = event.state.id;
             init();
         }
     };
@@ -86,7 +88,7 @@ $(document).ready(function () {
         searchDictionary(allUrl, value, function (data) {
             renderResult(data, value);
             if (isHaveHistory)
-                window.history.pushState(value,
+                window.history.pushState({id: 1, value: value},
                     'Từ điển SelfLearning - Tìm tất cả',
                     '/dictionary/all?search=' + value);
             else
@@ -144,7 +146,7 @@ $(document).ready(function () {
         searchDictionary(sentenceUrl, value, function (page) {
             renderSentenceResult(page, value, searchResult);
             if (isHaveHistory)
-                window.history.pushState(value,
+                window.history.pushState({id: 3, value: value},
                     'Từ điển SelfLearning - Tìm câu',
                     '/dictionary/sentence?search=' + value);
             else
@@ -159,7 +161,7 @@ $(document).ready(function () {
         searchDictionary(vocabularyUrl, value, function (page) {
             renderVocabularyResult(page, value, searchResult);
             if (isHaveHistory)
-                window.history.pushState(value,
+                window.history.pushState({id: 2, value: value},
                     'Từ điển SelfLearning - Tìm từ vựng',
                     '/dictionary/vocabulary?search=' + value);
             else
@@ -174,7 +176,7 @@ $(document).ready(function () {
         searchDictionary(phraseUrl, value, function (page) {
             renderPhraseResult(page, value, searchResult);
             if (isHaveHistory)
-                window.history.pushState(value,
+                window.history.pushState({id: 4, value: value},
                     'Từ điển SelfLearning - Tìm tất cả',
                     '/dictionary/phrase?search=' + value);
             else
@@ -211,7 +213,7 @@ $(document).ready(function () {
                 var row = document.createElement('div');
                 var vocabularyTextContainer = document.createElement('div');
                 var vocabularyText = document.createElement('span');
-                var vocbularyIpaContainer = document.createElement('div');
+                var vocabularyIpaContainer = document.createElement('div');
                 var vocabularyIpa = document.createElement('small');
                 var vocabularyMeaning = document.createElement('div');
                 var vocabularyDescription = document.createElement('div');
@@ -221,7 +223,7 @@ $(document).ready(function () {
                 var wordClass = content[i].wordClass.name;
                 var description = content[i].description;
                 var meaning = content[i].meaning;
-                var words = value.split(' ');
+                var words = value.trim().split(' ');
 
                 var textMatchesLength = 0;
                 var meaningMatchesLength = 0;
@@ -238,7 +240,7 @@ $(document).ready(function () {
                 vocabularyIpa.textContent = " " + ipa + " ";
                 if (audio) {
                     var a = document.createElement('a');
-                    a.href = '/api/v1/vocabularies/' + content[i].id + '/audio';
+                    a.href = '/api/v1/dictionary/vocabularies/' + content[i].id + '/audio';
                     a.classList.add('ml-1');
                     a.appendChild(createIcon(['fa', 'fa-volume-up']));
                     a.addEventListener('click', function (event) {
@@ -250,20 +252,20 @@ $(document).ready(function () {
                 } else {
                     vocabularyTextContainer.appendChild(vocabularyText);
                 }
-                vocbularyIpaContainer.appendChild(vocabularyIpa);
+                vocabularyIpaContainer.appendChild(vocabularyIpa);
                 vocabularyDescription.innerHTML = '<div class="text-secondary"><small>(' + wordClass + ') </small> <small>' + description + '</small></div>';
                 vocabularyMeaning.innerHTML = meaning;
                 if (textMatchesLength >= meaningMatchesLength) {
                     vocabularyTextContainer.classList.add('text-primary');
                     row.appendChild(vocabularyTextContainer);
-                    row.appendChild(vocbularyIpaContainer);
+                    row.appendChild(vocabularyIpaContainer);
                     row.appendChild(vocabularyDescription);
                     row.appendChild(vocabularyMeaning);
                 } else {
                     vocabularyMeaning.classList.add('text-primary');
                     row.appendChild(vocabularyMeaning);
                     row.appendChild(vocabularyTextContainer);
-                    row.appendChild(vocbularyIpaContainer);
+                    row.appendChild(vocabularyIpaContainer);
                     row.appendChild(vocabularyDescription);
                 }
                 row.classList.add('mb-2', 'p-2', 'border');
@@ -288,7 +290,7 @@ $(document).ready(function () {
                 var phraseMeaning = document.createElement('div');
                 var text = content[i].text.trim();
                 var phraseDetails = content[i].phraseDetails;
-                var words = value.split(' ');
+                var words = value.trim().split(' ');
                 var textMatchesLength = 0;
                 var textReplace = getReplaceTextAndMatchesLength(text, words);
 
@@ -354,7 +356,7 @@ $(document).ready(function () {
                 var text = content[i].text.trim();
                 var meaning = content[i].meaning.trim();
 
-                var words = value.split(' ');
+                var words = value.trim().split(' ');
 
                 var textMatchesLength = 0;
                 var meaningMatchesLength = 0;

@@ -67,6 +67,4 @@ public class VocabularyLessonRestController {
         return new ResponseEntity<>(vocabularyLessonService.get(vocabularyLessonId), HttpStatus.OK);
     }
 
-
-
 }

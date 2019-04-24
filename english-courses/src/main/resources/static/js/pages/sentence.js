@@ -79,8 +79,8 @@ $(document).ready(function () {
         page = 0;
         var pathname = window.location.pathname;
         var pathElements = pathname.split('/');
-        if (pathElements.length && pathElements[4]) {
-            page = pathElements[4] - 1;
+        if (pathElements.length && pathElements[5]) {
+            page = pathElements[5] - 1;
         }
         var searchParams = new URLSearchParams(window.location.search);
         var searchParam = searchParams.get('search');

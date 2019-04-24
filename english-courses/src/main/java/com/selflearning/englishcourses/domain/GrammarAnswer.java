@@ -1,8 +1,11 @@
 package com.selflearning.englishcourses.domain;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -12,31 +15,32 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@ToString(exclude = "questions")
-@EqualsAndHashCode(exclude = "questions")
+@ToString
+@EqualsAndHashCode
 @Entity
-@Table(name = "grammar_lessons")
-@Document(indexName="grammar_lessons", shards = 2)
-public class GrammarLesson {
+@Table(name = "grammar_answers")
+@Document(indexName="grammar_answers", shards = 2)
+public class GrammarAnswer {
 
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @GeneratedValue(generator = "uuid")
-    @Column(name = "GRAMMAR_LESSON_ID", length = 16)
+    @Column(name = "GRAMMAR_ANSWER_ID", length = 16)
     private UUID id;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
-    @JoinColumn(name = "LESSON_MODULE_ID", nullable = false)
-    private LessonModule lessonModule;
+    @JoinColumn(name = "GRAMMAR_QUESTION_ID", nullable = false)
+    private GrammarQuestion question;
 
-    @Column(name = "GRAMMAR_TITLE", nullable = false, unique = true)
-    private String title;
+    @Column(name="GRAMMAR_ANSWER_TEXT", nullable = false)
+    private String answer;
 
-    @Column(name = "GRAMMAR_CONTENT", columnDefinition = "LONGTEXT", nullable = false)
-    private String content;
+    @Column(name="GRAMMAR_ANSWER_EXPLAIN")
+    private String explain;
 
-    @OneToMany(mappedBy = "grammarLesson", cascade = CascadeType.ALL)
-    private List<GrammarQuestion> questions;
+    @Column(name="GRAMMAR_RIGHT_ANSWER", nullable = false)
+    private Boolean rightAnswer;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date createdTime;

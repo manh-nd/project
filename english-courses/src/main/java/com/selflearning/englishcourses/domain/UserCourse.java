@@ -1,9 +1,11 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -21,7 +23,7 @@ import java.util.UUID;
 @ToString(exclude = {"lessonModuleMarks"})
 @EqualsAndHashCode(exclude = {"lessonModuleMarks"})
 @Entity
-@Table(name = "users_courses")
+@Table(name = "users_courses", uniqueConstraints = @UniqueConstraint(columnNames = {"USER_ID", "COURSE_ID"}))
 @Document(indexName = "users_courses", shards = 2)
 public class UserCourse {
 
@@ -42,6 +44,7 @@ public class UserCourse {
     @Column(name = "JOINED_TIME", nullable = false)
     private Date joinedTime;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "userCourse")
     private List<LessonModuleMark> lessonModuleMarks;
 

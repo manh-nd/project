@@ -1,9 +1,12 @@
 package com.selflearning.englishcourses.service.impl;
 
 import com.selflearning.englishcourses.domain.Course;
+import com.selflearning.englishcourses.domain.UserCourse;
 import com.selflearning.englishcourses.repository.jpa.CourseJpaRepository;
+import com.selflearning.englishcourses.repository.jpa.UserCourseJpaRepository;
 import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.dto.CourseDto;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,22 +19,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private CourseJpaRepository courseJpaRepository;
+    private final CourseJpaRepository courseJpaRepository;
+    private final UserCourseJpaRepository userCourseJpaRepository;
+    private final ModelMapper modelMapper;
 
-    private ModelMapper modelMapper;
-
-    @Autowired
-    public void setCourseJpaRepository(CourseJpaRepository courseJpaRepository) {
-        this.courseJpaRepository = courseJpaRepository;
-    }
-
-    @Autowired
-    public void setModelMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public Course get(UUID id) {
@@ -84,5 +79,19 @@ public class CourseServiceImpl implements CourseService {
         return new PageImpl<>(convertEntityToDto(page.getContent()), page.getPageable(), page.getNumberOfElements());
     }
 
+    @Override
+    public UserCourse getUserCourseByUserId(UUID userId) {
+        return userCourseJpaRepository.findByUserId(userId);
+    }
+
+    @Override
+    public void createUserCourse(UserCourse userCourse) {
+        userCourseJpaRepository.save(userCourse);
+    }
+
+    @Override
+    public List<Course> getCoursesByUserId(UUID userId) {
+        return courseJpaRepository.findAllByUser(userId);
+    }
 
 }

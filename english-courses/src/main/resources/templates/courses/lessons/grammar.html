@@ -1,13 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://wwww.thymeleaf.org"
-      xmlns:layout="https://github.com/ultraq/thymeleaf-layout-dialect"
-      layout:decorate="~{layouts/common-layout}">
+<html xmlns:th="" xmlns:layout="" layout:decorate="~{layouts/common-layout}">
 <head>
-    <title>Chi tiet khoa hoc</title>
+    <title>Bài học ngữ pháp</title>
 </head>
 <body>
 <main layout:fragment="main-container">
-    <div>Luyện ngữ pháp</div>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4" th:text="${grammarLesson.lessonModule.lesson.course.name}"></h1>
+            <p class="lead" th:text="${grammarLesson.lessonModule.lesson.course.description}"></p>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <div class="card">
+            <h5 class="card-header">
+                <div class="row">
+                    <div class="col-md-9" style="margin-top: 6px">
+                        <a style="text-decoration: none" class="text-dark"
+                           th:href="@{/courses/__${grammarLesson.lessonModule.lesson.course.id}__}">
+                            <i class="fa fa-home"></i>
+                        </a>
+                        <i class="fa fa-caret-right"></i>
+                        <a th:href="@{/courses/__${courseId}__(week=__${#numbers.formatInteger(grammarLesson.lessonModule.lesson.orderNumber / 7 + 1, 1)}__)}"
+                           style="text-decoration: none" class="text-dark">
+                            <span th:text="|Tuần ${#numbers.formatInteger(grammarLesson.lessonModule.lesson.orderNumber / 7 + 1, 1)}|">Tuần 1</span>
+                        </a>
+                        <i class="fa fa-caret-right"></i>
+                        <a style="text-decoration: none" class="text-dark"
+                           th:href="@{/courses/__${grammarLesson.lessonModule.lesson.course.id}__/lessons/__${grammarLesson.lessonModule.lesson.id}__}"
+                           th:text="|Bài ${grammarLesson.lessonModule.lesson.orderNumber}|">Bài 1</a>
+                        <i class="fa fa-caret-right"></i>
+                        <span th:text="${grammarLesson.title}">Luyện ngữ pháp</span>
+                    </div>
+                    <div class="col-md-3 mt-sm-1 mt-md-0">
+                        <a class="btn btn-sm btn-success btn-block" th:href="@{/courses/__${courseId}__/lessons/__${lessonId}__/modules/__${lessonModuleId}__/quiz}">
+                            <i class="fa fa-book"></i> <span>Làm bài tập</span>
+                        </a>
+                    </div>
+                </div>
+            </h5>
+            <div class="card-body">
+                <div th:if="${grammarLesson.content} != null" th:utext="${grammarLesson.content}"></div>
+                <div th:if="${grammarLesson.content} == null" th:text="|Không có nội dung|"></div>
+            </div>
+        </div>
+    </div>
 </main>
 </body>
 </html>

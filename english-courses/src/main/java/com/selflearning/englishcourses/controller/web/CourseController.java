@@ -4,44 +4,28 @@ import com.selflearning.englishcourses.domain.*;
 import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.LessonModuleService;
 import com.selflearning.englishcourses.service.LessonService;
+import com.selflearning.englishcourses.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Controller
 @RequestMapping("/courses")
 public class CourseController {
 
-    private CourseService courseService;
+    private final CourseService courseService;
 
-    private LessonService lessonService;
+    private final LessonService lessonService;
 
-    private LessonModuleService lessonModuleService;
-
-    @Autowired
-    public void setCourseService(CourseService courseService) {
-        this.courseService = courseService;
-    }
-
-    @Autowired
-    public void setLessonService(LessonService lessonService) {
-        this.lessonService = lessonService;
-    }
-
-    @Autowired
-    public void setLessonModuleService(LessonModuleService lessonModuleService) {
-        this.lessonModuleService = lessonModuleService;
-    }
+    private final LessonModuleService lessonModuleService;
 
     @GetMapping("/{id}")
     public String getCourse(@PathVariable("id") UUID id, @RequestParam(name = "week", defaultValue = "1") Integer week, Model model) {
@@ -55,6 +39,23 @@ public class CourseController {
         return "courses/course-detail";
     }
 
+    @PostMapping("/{id}")
+    public String joinUserCourse(@PathVariable("id") UUID id, Authentication authentication, Model model) {
+        User user = (User) authentication.getPrincipal();
+        UserCourse userCourse = courseService.getUserCourseByUserId(user.getId());
+        if (Objects.isNull(userCourse)) {
+            userCourse = new UserCourse();
+            Course course = courseService.get(id);
+            userCourse.setCourse(course);
+            userCourse.setUser(user);
+            userCourse.setJoinedTime(new Date());
+            courseService.createUserCourse(userCourse);
+            return "redirect:/courses/" + id;
+        } else {
+            return "redirect:/";
+        }
+    }
+
     @GetMapping("/{id}/lessons/{lessonId}")
     public String getLesson(@PathVariable("id") UUID courseId, @PathVariable("lessonId") UUID lessonId, Model model) {
         Lesson lesson = lessonService.get(lessonId);
@@ -63,19 +64,26 @@ public class CourseController {
         model.addAttribute("lessonId", lessonId);
         model.addAttribute("lesson", lesson);
         model.addAttribute("lessonModules", lessonModules);
+        Integer orderNumber = lesson.getOrderNumber();
+        int week = (int) Math.floor((double) orderNumber / 7 + 0.9);
+        model.addAttribute("week", week);
         return "courses/lessons";
     }
 
-    @GetMapping("/{id}/lessons/{lessonId}/modules/{lessonModule}")
+    @GetMapping("/{id}/lessons/{lessonId}/modules/{lessonModuleId}")
     public String getLessonDetail(
             @PathVariable("id") UUID courseId,
             @PathVariable("lessonId") UUID lessonId,
-            @PathVariable("lessonModule") UUID lessonModuleId,
+            @PathVariable("lessonModuleId") UUID lessonModuleId,
             Model model) {
         LessonModule lessonModule = lessonModuleService.get(lessonModuleId);
         Module module = lessonModule.getModule();
+        Integer orderNumber = lessonModule.getLesson().getOrderNumber();
+        int week = (int) Math.floor((double) orderNumber / 7 + 0.9);
         model.addAttribute("courseId", courseId);
         model.addAttribute("lessonId", lessonId);
+        model.addAttribute("lessonModuleId", lessonModuleId);
+        model.addAttribute("week", week);
         switch (module.getName()) {
             case "Luyện từ vựng":
                 VocabularyLesson vocabularyLesson = lessonModule.getVocabularyLesson();
@@ -88,6 +96,24 @@ public class CourseController {
             default:
                 return "errors/404";
         }
+    }
+
+    @GetMapping("/{id}/lessons/{lessonId}/modules/{lessonModuleId}/quiz")
+    public String grammarQuiz(
+            @PathVariable("id") UUID courseId,
+            @PathVariable("lessonId") UUID lessonId,
+            @PathVariable("lessonModuleId") UUID lessonModuleId,
+            Model model) {
+        LessonModule lessonModule = lessonModuleService.get(lessonModuleId);
+        GrammarLesson grammarLesson = lessonModule.getGrammarLesson();
+        Integer orderNumber = lessonModule.getLesson().getOrderNumber();
+        int week = (int) Math.floor((double) orderNumber / 7 + 0.9);
+        model.addAttribute("courseId", courseId);
+        model.addAttribute("lessonId", lessonId);
+        model.addAttribute("lessonModuleId", lessonModuleId);
+        model.addAttribute("grammarLesson", grammarLesson);
+        model.addAttribute("week", week);
+        return "/courses/lessons/grammar-quiz";
     }
 
 

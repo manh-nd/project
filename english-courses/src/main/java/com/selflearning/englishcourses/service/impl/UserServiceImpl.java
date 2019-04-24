@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User get(UUID id) {
-        return null;
+        return userJpaRepository.getOne(id);
     }
 
     @Override
@@ -95,9 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(User obj) {
-
-    }
+    public void delete(User obj) {}
 
     @Override
     public Page<User> findAll(Pageable pageable) {

@@ -1,5 +1,6 @@
 package com.selflearning.englishcourses.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,10 +32,12 @@ public class LessonModuleMark {
     @Column(name = "LESSON_MODULE_MARK_ID", length = 16)
     private UUID id;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
     @JoinColumn(name = "USER_COURSE_ID", nullable = false)
     private UserCourse userCourse;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
     @JoinColumn(name = "LESSON_MODULE_ID", nullable = false)
     private LessonModule lessonModule;

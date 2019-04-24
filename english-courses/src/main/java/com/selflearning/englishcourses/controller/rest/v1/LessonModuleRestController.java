@@ -1,9 +1,7 @@
 package com.selflearning.englishcourses.controller.rest.v1;
 
-import com.selflearning.englishcourses.domain.GrammarLesson;
-import com.selflearning.englishcourses.domain.LessonModule;
-import com.selflearning.englishcourses.domain.Module;
-import com.selflearning.englishcourses.domain.VocabularyLesson;
+import com.selflearning.englishcourses.domain.*;
+import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.LessonModuleService;
 import com.selflearning.englishcourses.service.ModuleService;
 import com.selflearning.englishcourses.service.dto.LessonModuleDto;
@@ -11,10 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -23,6 +24,8 @@ import java.util.UUID;
 public class LessonModuleRestController {
 
     private final LessonModuleService lessonModuleService;
+
+    private final CourseService courseService;
 
     @Transactional
     @PostMapping("/lesson-modules")
@@ -46,6 +49,17 @@ public class LessonModuleRestController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(lessonModuleService.convertEntityToDto(lessonModule), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/lesson-modules/{lessonModuleId}/mark")
+    public ResponseEntity<Float> createLessonModuleMark(
+            @PathVariable("lessonModuleId") UUID lessonModuleId,
+            @RequestBody LessonModuleMark lessonModuleMark, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        UserCourse userCourse = courseService.getUserCourseByUserId(user.getId());
+        lessonModuleMark.setUserCourse(userCourse);
+        lessonModuleService.createLessonModuleMark(lessonModuleMark);
+        return new ResponseEntity<>(lessonModuleMark.getMark(), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/lesson-modules/{id}")

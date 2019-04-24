@@ -5,6 +5,7 @@
 <head>
     <title th:text="#{course-management}">Danh sách khoá học</title>
     <!-- PLUGINS STYLES-->
+    <link th:href="@{/css/plugins/summernote.css}" rel="stylesheet"/>
     <!-- THEME STYLES-->
     <link th:href="@{/css/main.min.css}" rel="stylesheet"/>
     <!-- PAGE LEVEL STYLES-->
@@ -14,38 +15,71 @@
 <div layout:fragment="content" class="page-content fade-in-up">
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Bài học ngữ pháp</div>
-            <div class="ibox-tools">
-                <a class="ibox-collapse">
-                    <i class="fa fa-minus"></i>
+            <div class="ibox-title">
+                <a class="text-dark"
+                   th:href="@{/admin/management/courses/__${grammarLesson.lessonModule.lesson.course.id}__/lessons}">
+                    <i class="fa fa-home"></i>
+                    <span th:text="${grammarLesson.lessonModule.lesson.course.name}"></span>
                 </a>
+                <i class="fa fa-caret-right"></i>
+                <span id="grammar-lesson-id"
+                      th:text="|Bài ${grammarLesson.lessonModule.lesson.orderNumber}|"
+                      th:data-id="${grammarLesson.id}">Bài 1</span>
+                <i class="fa fa-caret-right"></i>
+                <span th:text="${grammarLesson.lessonModule.module.name}">Luyện ngữ pháp</span>
             </div>
         </div>
         <div class="ibox-body">
             <div id="alert-container"></div>
-            <div class="my-2">
-                <button class="btn btn-primary" id="create-button">Tạo khóa học</button>
+            <div class="form-group">
+                <label for="grammar-title"><strong>Tên bài học</strong></label>
+                <input id="grammar-title" class="form-control" type="text" placeholder="Nhập tên bài học"
+                       th:value="${grammarLesson.title}"/>
             </div>
-            <table class="table table-sm table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên khoá học</th>
-                    <th>Mô tả</th>
-                    <th style="width: 100px">Hành động</th>
-                </tr>
-                </thead>
-                <tbody id="table-body">
-                </tbody>
-            </table>
-            <nav id="pagination-navigator">
-            </nav>
+            <div class="form-group">
+                <label for="grammar-content"><strong>Nội dung bài học</strong></label>
+                <textarea id="grammar-content" class="form-control" rows="5" th:text="${grammarLesson.content}">
+                </textarea>
+            </div>
+            <div class="form-group">
+                <button id="save-grammar-lesson-button" class="btn btn-primary">Lưu bài học</button>
+            </div>
         </div>
     </div>
 </div>
-
+<th:block layout:fragment="page-level-plugins">
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script th:src="@{/js/plugins/summernote.min.js}"></script>
+</th:block>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
+    <script>
+        $(function () {
+            $('#grammar-content').summernote();
+            $('#save-grammar-lesson-button').on('click', function (event) {
+                var id = $('#grammar-lesson-id').data('id');
+                var title = $('#grammar-title').val();
+                var content = $('#grammar-content').val();
+                $.ajax({
+                    url: '/api/v1/grammar-lessons/' + id,
+                    method: 'PUT',
+                    data: JSON.stringify({
+                        id: id,
+                        title: title,
+                        content: content
+                    }),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function () {
+                        alert('success');
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+                })
+            });
+        });
+    </script>
 </th:block>
 </body>
 </html>

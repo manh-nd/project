@@ -1,11 +1,9 @@
 package com.selflearning.englishcourses.service.impl;
 
-import com.selflearning.englishcourses.domain.Course;
-import com.selflearning.englishcourses.domain.Lesson;
-import com.selflearning.englishcourses.domain.LessonModule;
-import com.selflearning.englishcourses.domain.Module;
+import com.selflearning.englishcourses.domain.*;
 import com.selflearning.englishcourses.repository.jpa.CourseJpaRepository;
 import com.selflearning.englishcourses.repository.jpa.LessonModuleJpaRepository;
+import com.selflearning.englishcourses.repository.jpa.LessonModuleMarkJpaRepository;
 import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.LessonModuleService;
 import com.selflearning.englishcourses.service.LessonService;
@@ -29,6 +27,8 @@ import java.util.stream.Collectors;
 public class LessonModuleServiceImpl implements LessonModuleService {
 
     private final LessonModuleJpaRepository lessonModuleJpaRepository;
+
+    private final LessonModuleMarkJpaRepository lessonModuleMarkJpaRepository;
 
     @Autowired
     private LessonService lessonService;
@@ -98,5 +98,10 @@ public class LessonModuleServiceImpl implements LessonModuleService {
     public Page<LessonModuleDto> convertEntityPageToDtoPage(Page<LessonModule> lessonModulePage) {
         return new PageImpl<>(convertEntityToDto(lessonModulePage.getContent()),
                 lessonModulePage.getPageable(), lessonModulePage.getTotalElements());
+    }
+
+    @Override
+    public void createLessonModuleMark(LessonModuleMark lessonModuleMark) {
+        lessonModuleMarkJpaRepository.save(lessonModuleMark);
     }
 }

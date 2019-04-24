@@ -27,7 +27,7 @@
                 Xin chào, <span sec:authentication="name">Bob</span>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" th:href="@{/admin/dashboard}">Bảng điều khiển</a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item" th:href="@{/admin/dashboard}">Bảng điều khiển</a>
                 <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>
             </div>
         </div>

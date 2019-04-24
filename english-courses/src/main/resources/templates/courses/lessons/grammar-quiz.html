@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="" xmlns:layout="" layout:decorate="~{layouts/common-layout}">
+<head>
+    <title>Bài tập ngữ pháp</title>
+</head>
+<body>
+<main layout:fragment="main-container">
+    <div class="container mt-5 mb-5">
+        <div class="card">
+            <h5 class="card-header">
+                <a th:href="@{/courses/__${courseId}__}" style="text-decoration: none" class="text-dark">
+                    <i class="fa fa-home"></i>
+                </a>
+                <i class="fa fa-caret-right"></i>
+                <a th:href="@{/courses/__${courseId}__(week=__${week}__)}" style="text-decoration: none" class="text-dark">
+                    <span th:text="|Tuần ${week}|">Tuần 1</span>
+                </a>
+                <i class="fa fa-caret-right"></i>
+                <a th:href="@{/courses/__${courseId}__/lessons/__${lessonId}__}" style="text-decoration: none" class="text-dark">
+                    <span th:text="|Bài ${grammarLesson.lessonModule.lesson.orderNumber}|">Bài 1</span>
+                </a>
+                <i class="fa fa-caret-right"></i>
+                <a id="grammar-lesson"
+                   th:data-lesson-module-id="${grammarLesson.lessonModule.id}"
+                   th:href="@{/courses/__${courseId}__/lessons/__${lessonId}__/modules/__${lessonModuleId}__}"
+                   style="text-decoration: none" class="text-dark">
+                    <span th:text="${grammarLesson.title}">Luyện ngữ pháp</span>
+                </a>
+                <i class="fa fa-caret-right"></i>
+                <span th:text="|Bài tập|">Bài tập</span>
+            </h5>
+            <div class="card-body">
+                <div id="quiz-container"></div>
+                <div id="controls" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block layout:fragment="page-scripts">
+    <!--PAGE SCRIPT HERE-->
+    <script th:src="@{/js/service/service.js}"></script>
+    <script th:src="@{/js/pages/grammar-quiz.js}"></script>
+</th:block>
+</body>
+</html>
