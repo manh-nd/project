@@ -23,14 +23,8 @@ public class HomeController {
     private final CourseService courseService;
 
     @GetMapping("/")
-    public String index(Model model, Authentication authentication) {
-        List<Course> courses;
-        if (authentication != null) {
-            User user = (User) authentication.getPrincipal();
-            courses = courseService.getCoursesByUserId(user.getId());
-        } else {
-            courses = courseService.findAll(PageRequest.of(0, 10)).getContent();
-        }
+    public String index(Model model) {
+        List<Course> courses = courseService.findAll(PageRequest.of(0, 10)).getContent();
         model.addAttribute("home", true);
         model.addAttribute("courses", courses);
         return "index";

@@ -130,30 +130,48 @@ $(document).ready(function () {
     }
 
     function save(sentence) {
-        var method = 'POST';
-        var url = apiUrl;
-        if (sentence.id) {
+        var method;
+        var url;
+        var isUpdate = !!sentence.id;
+        if (isUpdate) {
             url = apiUrl + "/" + sentence.id;
             method = 'PUT';
         } else {
             sentence.id = null;
+            url = apiUrl;
+            method = 'POST';
         }
-        $.ajax({
-            method: method,
-            url: url,
-            data: JSON.stringify(sentence),
-            contentType: 'application/json',
-            dataType: 'json'
-        }).done(function (response) {
-            $('#sentence-modal').modal('hide');
-            if (!sentence.id) {
-                setSearchInputValue(response.text);
-                search(0, response.text);
-            } else {
-                reload();
+        var formData = new FormData();
+        var file = document.getElementById('audioFile').files[0];
+        if (file) {
+            formData.append('audioFile', document.getElementById('audioFile').files[0]);
+        }
+        formData.append('sentence', new Blob([JSON.stringify(sentence)], {type: 'application/json'}));
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            switch (xhr.readyState) {
+                case XMLHttpRequest.OPENED:
+                    break;
+                case XMLHttpRequest.HEADERS_RECEIVED:
+                    break;
+                case XMLHttpRequest.LOADING:
+                    break;
+                case XMLHttpRequest.DONE:
+                    $('#sentence-modal').modal('hide');
+                    if (!sentence.id) {
+                        setSearchInputValue(xhr.response.text);
+                        search(0, xhr.response.text);
+                    } else {
+                        reload();
+                    }
+                    break;
+                default:
+                    break;
             }
-        }).fail(function (response) {
-        });
+        };
+        xhr.responseType = 'json';
+        xhr.open(method, url);
+        xhr.send(formData);
     }
 
 
@@ -197,12 +215,7 @@ $(document).ready(function () {
                         var text = content[i].text;
                         if (getSearchInputValue()) {
                             var words = getSearchInputValue().split(" ");
-                            for (var j = 0; j < words.length; j++) {
-                                if (text.includes(words[j])) {
-                                    text = text.replace(words[j], '<strong>' + words[j] + '</strong>');
-                                }
-                            }
-                            td.innerHTML = text;
+                            td.innerHTML = getReplaceTextAndMatchesLength(text, words).replaceText;
                         } else {
                             td.textContent = text;
                         }
@@ -214,12 +227,7 @@ $(document).ready(function () {
                         var meaning = content[i].meaning;
                         if (getSearchInputValue()) {
                             var words = getSearchInputValue().split(" ");
-                            for (var j = 0; j < words.length; j++) {
-                                if (meaning.includes(words[j])) {
-                                    meaning = meaning.replace(words[j], '<strong>' + words[j] + '</strong>');
-                                }
-                            }
-                            td.innerHTML = meaning;
+                            td.innerHTML = getReplaceTextAndMatchesLength(meaning, words).replaceText;
                         } else {
                             td.textContent = meaning;
                         }

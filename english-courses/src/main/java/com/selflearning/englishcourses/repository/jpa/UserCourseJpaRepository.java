@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public interface UserCourseJpaRepository extends JpaRepository<UserCourse, UUID> {
 
-    @Query("SELECT uc FROM UserCourse uc WHERE uc.user.id = :userId")
-    UserCourse findByUserId(UUID userId);
+    @Query("SELECT uc FROM UserCourse uc WHERE uc.course.id = :courseId AND uc.user.id = :userId")
+    UserCourse findByCourseIdAndUserId(UUID courseId, UUID userId);
 }

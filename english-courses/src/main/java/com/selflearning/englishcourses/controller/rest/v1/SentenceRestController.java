@@ -3,6 +3,7 @@ package com.selflearning.englishcourses.controller.rest.v1;
 import com.selflearning.englishcourses.domain.Sentence;
 import com.selflearning.englishcourses.service.SentenceService;
 import com.selflearning.englishcourses.service.dto.SentenceDto;
+import com.selflearning.englishcourses.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -14,17 +15,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Sentence Rest API
+ *
  * @author manhnd
  */
 @RestController
@@ -42,10 +50,24 @@ public class SentenceRestController {
     private String path;
 
     @PostMapping("/sentences")
-    public ResponseEntity<SentenceDto> createSentence(@Valid @RequestBody SentenceDto sentenceDto) {
+    public ResponseEntity<SentenceDto> createSentence(
+            @RequestPart("audioFile") @Nullable MultipartFile audioFile,
+            @Valid @RequestPart("sentence") SentenceDto sentenceDto) throws IOException {
         Sentence sentence = sentenceService.convertDtoToEntity(sentenceDto);
+        saveAndSetAudioPath(audioFile, sentence);
         sentenceService.save(sentence);
         return new ResponseEntity<>(sentenceService.convertEntityToDto(sentence), HttpStatus.CREATED);
+    }
+
+    private void saveAndSetAudioPath(MultipartFile audioFile, Sentence sentence) throws IOException {
+        if (Objects.nonNull(audioFile) && !audioFile.isEmpty()) {
+            Resource resource = audioFile.getResource();
+            String fileName = StringUtils.formatToFileName(sentence.getText(), "mp3");
+            String audioPath = "/Audios/DictionarySentences/" + fileName;
+            Path path = Paths.get(this.path + audioPath);
+            Files.copy(resource.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            sentence.setAudioPath(audioPath);
+        }
     }
 
     @PostMapping("/sentences/save-all")
@@ -56,8 +78,15 @@ public class SentenceRestController {
     }
 
     @PutMapping("/sentences/{id}")
-    public ResponseEntity<SentenceDto> updateSentence(@PathVariable("id") UUID id, @RequestBody SentenceDto sentenceDto){
-        Sentence sentence = sentenceService.convertDtoToEntity(sentenceDto);
+    public ResponseEntity<SentenceDto> updateSentence(
+            @PathVariable("id") UUID id,
+            @RequestPart("audioFile") @Nullable MultipartFile audioFile,
+            @RequestPart("sentence") @Valid SentenceDto sentenceDto) throws IOException {
+        Sentence sentence = sentenceService.get(id);
+        sentence.setText(sentenceDto.getText());
+        sentence.setIpa(sentenceDto.getIpa());
+        sentence.setMeaning(sentenceDto.getMeaning());
+        saveAndSetAudioPath(audioFile, sentence);
         sentenceService.save(sentence);
         return new ResponseEntity<>(sentenceService.convertEntityToDto(sentence), HttpStatus.OK);
     }
@@ -92,7 +121,7 @@ public class SentenceRestController {
     }
 
     @GetMapping("/sentences/count")
-    public ResponseEntity<Long> getTotalSentences(){
+    public ResponseEntity<Long> getTotalSentences() {
         return new ResponseEntity<>(sentenceService.count(), HttpStatus.OK);
     }
 

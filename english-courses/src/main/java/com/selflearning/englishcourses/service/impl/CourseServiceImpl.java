@@ -80,18 +80,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public UserCourse getUserCourseByUserId(UUID userId) {
-        return userCourseJpaRepository.findByUserId(userId);
+    public UserCourse getUserCourseByCourseIdAndUserId(UUID courseId, UUID userId) {
+        return userCourseJpaRepository.findByCourseIdAndUserId(courseId, userId);
     }
 
     @Override
     public void createUserCourse(UserCourse userCourse) {
         userCourseJpaRepository.save(userCourse);
-    }
-
-    @Override
-    public List<Course> getCoursesByUserId(UUID userId) {
-        return courseJpaRepository.findAllByUser(userId);
     }
 
 }

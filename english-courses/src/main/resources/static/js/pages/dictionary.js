@@ -55,7 +55,12 @@ $(document).ready(function () {
     });
 
     function init() {
-        search();
+        var pathname = window.location.pathname;
+        if (pathname !== '/dictionary') {
+            search();
+        } else {
+            searchInput.focus();
+        }
     }
 
     function setSearchType(element) {
@@ -400,17 +405,6 @@ $(document).ready(function () {
             noResult.classList.add('text-danger');
             noResult.textContent = 'Không có kết quả';
             container.appendChild(noResult);
-        }
-    }
-
-    function getReplaceTextAndMatchesLength(text, words) {
-        var regexp = new RegExp('(\\b)(' + words.join('|') + ')(\\b)', 'gi');
-        var matchesWords = text ? text.match(regexp) : '';
-        var matchesLength = matchesWords ? matchesWords.length : 0;
-        var replaceText = text ? text.replace(regexp, '$1<strong>$2</strong>$3') : '';
-        return {
-            replaceText: replaceText,
-            matchesLength: matchesLength
         }
     }
 

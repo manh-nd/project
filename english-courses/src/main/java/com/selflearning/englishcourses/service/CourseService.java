@@ -10,10 +10,8 @@ import java.util.UUID;
 public interface CourseService extends BaseCurdService<Course, UUID>,
         ModelMapperService<Course, CourseDto> {
 
-    UserCourse getUserCourseByUserId(UUID userId);
+    UserCourse getUserCourseByCourseIdAndUserId(UUID courseId, UUID userId);
 
     void createUserCourse(UserCourse userCourse);
-
-    List<Course> getCoursesByUserId(UUID userId);
 
 }

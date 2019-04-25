@@ -42,7 +42,9 @@ public class LessonRestController {
 
     @GetMapping(value = "/courses/{courseId}/lessons/order-number", params = "next")
     public ResponseEntity<Integer> getNextLessonOfCourse(@PathVariable("courseId") UUID courseId){
-        return new ResponseEntity<>(lessonService.getNextOrderNumber(courseId), HttpStatus.OK);
+        Integer number = lessonService.getNextOrderNumber(courseId);
+        if(Objects.isNull(number) || number.equals(0)) number = 1;
+        return new ResponseEntity<>(number, HttpStatus.OK);
     }
 
     @GetMapping(value = "/lessons", params = "courseId")

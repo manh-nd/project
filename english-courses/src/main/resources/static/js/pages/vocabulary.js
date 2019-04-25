@@ -1,10 +1,15 @@
 $(document).ready(function () {
     var tbody = document.querySelector('#vocabulary-table > tbody')
-    var pagination = document.querySelector('#pagination-navigator');
-    var searchButton = document.querySelector('#search-button');
-    var searchInput = document.querySelector('#search-input');
+    var pagination = document.getElementById('pagination-navigator');
+    var searchButton = document.getElementById('search-button');
+    var searchInput = document.getElementById('search-input');
+    var createVocabularyButton = document.getElementById('create-vocabulary-button');
     var title = 'Quản lý từ vựng';
     var path = '/admin/management/vocabularies/page/';
+
+    // modal
+    var $vocabularyModal = $('#vocabulary-modal');
+    var $vocabularyModalTitle = $('#vocabulary-modal-title');
 
     var page = 0;
     var size = 30;
@@ -18,6 +23,11 @@ $(document).ready(function () {
             init();
         }
     };
+
+    createVocabularyButton.addEventListener('click', function (event) {
+        $vocabularyModalTitle.text('Thêm mới từ vựng');
+        $vocabularyModal.modal('show');
+    });
 
     searchButton.addEventListener('click', function (evt) {
         isSaveHistory = true;

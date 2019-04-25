@@ -74,7 +74,7 @@ $(document).ready(function () {
             },
             error: function (res) {
                 $lessonModuleModal.modal('hide');
-                showAlert(alertContainer, 'danger', 'Không thể thêm bài học.');
+                showAlert(alertContainer, 'danger', 'Học phần này chưa được hỗ trợ.');
             },
             beforeSend: function () {
                 $(".preloader-backdrop").show();

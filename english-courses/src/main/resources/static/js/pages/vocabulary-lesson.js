@@ -8,9 +8,6 @@ $(document).ready(function () {
     var deleteButton = document.getElementById('delete-button');
     var vocabularyDetailItemsContainer = document.getElementById('vocabularyDetailItemsContainer');
 
-    var isSentenceChosen = false;
-    var isVocabularyChosen = false;
-
     init();
 
     deleteButton.addEventListener('click', function () {
@@ -71,14 +68,16 @@ $(document).ready(function () {
 
                         image.src = '/api/v1/vocabularies/' + content[i].id + '/image';
                         image.alt = 'content[i].word.text';
-                        text.textContent = content[i].word.text;
-                        meaning.textContent = content[i].meaning;
+
+                        var words = vocabularyInput.value.trim().split(' ');
+
+                        text.innerHTML = getReplaceTextAndMatchesLength(content[i].word.text, words).replaceText;
+                        meaning.innerHTML = getReplaceTextAndMatchesLength(content[i].meaning, words).replaceText;
 
                         item.dataset.id = content[i].id;
                         item.dataset.text = content[i].word.text;
 
                         item.addEventListener('click', function (event) {
-                            isVocabularyChosen = true;
                             input.dataset.id = this.dataset.id;
                             input.value = this.dataset.text;
                         });
@@ -103,8 +102,6 @@ $(document).ready(function () {
             var input = this;
             var value = this.value;
             delete input.dataset.id;
-            isSentenceChosen = false;
-            console.log('Input: ' + isSentenceChosen);
             clearItems(input);
             clearTimeout(suggestionHandler);
             suggestionHandler = setTimeout(search, 300, value, '/api/v1/sentences', function (data) {
@@ -114,24 +111,24 @@ $(document).ready(function () {
                     items.classList.add('autocomplete-items');
                     for (var i = 0; i < content.length; i++) {
                         var item = document.createElement('div');
-                        item.dataset.id = content[i].id;
+                        var text = document.createElement('div');
+                        var meaning = document.createElement('div');
+
                         item.classList.add('px-2', 'py-1');
+                        item.dataset.id = content[i].id;
                         item.dataset.text = content[i].text;
                         item.addEventListener('click', function (event) {
-                            isSentenceChosen = true;
-                            console.log('click: ' + isSentenceChosen);
                             input.dataset.id = this.dataset.id;
                             input.value = this.dataset.text;
                         });
 
-                        var text = document.createElement('div');
-                        text.textContent = content[i].text;
+                        var words = sentenceInput.value.trim().split(' ');
+
+                        text.innerHTML = getReplaceTextAndMatchesLength(content[i].text, words).replaceText;
+                        meaning.innerHTML = getReplaceTextAndMatchesLength(content[i].meaning, words).replaceText;
+
                         item.appendChild(text);
-
-                        var meaning = document.createElement('div');
-                        meaning.textContent = content[i].meaning;
                         item.appendChild(meaning);
-
                         items.appendChild(item);
                     }
                     input.parentNode.appendChild(items);
@@ -142,7 +139,6 @@ $(document).ready(function () {
         });
 
         sentenceInput.addEventListener('blur', function (event) {
-            console.log('Sentence chosen: ' + isSentenceChosen);
         });
 
         sentenceInput.addEventListener('keydown', function (event) {

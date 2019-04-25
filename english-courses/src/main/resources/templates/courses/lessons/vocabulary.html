@@ -76,6 +76,9 @@
                         </div>
                     </div>
                 </div>
+                <div th:if="${#lists.isEmpty(vocabularyLesson.vocabularyLessonDetails)}">
+                    Không có nội dung
+                </div>
             </div>
         </div>
     </div>

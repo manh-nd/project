@@ -29,7 +29,7 @@
                 <button id="search-button" class="btn btn-success">Tìm kiếm</button>
             </div>
             <div class="mt-3 mb-1">
-                <button class="btn btn-sm btn-primary">
+                <button id="create-vocabulary-button" class="btn btn-sm btn-primary">
                     <i class="fa fa-plus"></i>
                     <span>Thêm mới từ vựng</span>
                 </button>
@@ -54,10 +54,87 @@
         </div>
         <audio id="audioPlayer"></audio>
     </div>
+
+    <div class="modal fade" id="vocabulary-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-ebony text-light">
+                    <h5 class="modal-title" id="vocabulary-modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-light">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" id="id" name="id" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="text">Từ</label>
+                        <input type="text" id="text" name="text" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="text">Từ loại</label>
+                        <select id="wordClass" name="wordClass" class="form-control">
+                            <option value="1">Danh từ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ipa">Ipa</label>
+                        <input type="text" id="ipa" name="ipa" class="form-control"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meaning">Nghĩa</label>
+                        <input type="text" id="meaning" name="meaning" class="form-control"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Mô tả</label>
+                        <input type="text" id="description" name="description" class="form-control"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageFile">Hình ảnh</label>
+                        <div><img id="image" src="" alt="" width="50px"/></div>
+                        <div>
+                            <input type="file" id="imageFile" name="imageFile"/>
+                            <input type="hidden" id="imagePath" name="imagePath"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="normalAudioFile">Âm thanh thông thường</label>
+                        <div>
+                            <input type="file" id="normalAudioFile" name="normalAudioFile"/>
+                            <input type="hidden" id="normalAudioPath" name="normalAudioPath"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialAudioFile">Âm thanh đặc biệt</label>
+                        <div>
+                            <input type="file" id="specialAudioFile" name="specialAudioFile"/>
+                            <input type="hidden" id="specialAudioPath" name="specialAudioPath"/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        <i class="fa fa-close"></i> <span>Đóng</span>
+                    </button>
+                    <button type="button" class="btn btn-danger" id="sentence-save-button">
+                        <i class="fa fa-save"></i> <span>Lưu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
-    <script th:src="@{/js/service/service.js}"></script>
+    <script th:src="@{/js/services/service.js}"></script>
     <script th:src="@{/js/pages/vocabulary.js}"></script>
 </th:block>
 </body>

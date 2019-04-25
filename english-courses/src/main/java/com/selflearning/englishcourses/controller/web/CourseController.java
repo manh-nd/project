@@ -40,9 +40,9 @@ public class CourseController {
     }
 
     @PostMapping("/{id}")
-    public String joinUserCourse(@PathVariable("id") UUID id, Authentication authentication, Model model) {
+    public String joinUserCourse(@PathVariable("id") UUID id, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        UserCourse userCourse = courseService.getUserCourseByUserId(user.getId());
+        UserCourse userCourse = courseService.getUserCourseByCourseIdAndUserId(id, user.getId());
         if (Objects.isNull(userCourse)) {
             userCourse = new UserCourse();
             Course course = courseService.get(id);
@@ -50,10 +50,8 @@ public class CourseController {
             userCourse.setUser(user);
             userCourse.setJoinedTime(new Date());
             courseService.createUserCourse(userCourse);
-            return "redirect:/courses/" + id;
-        } else {
-            return "redirect:/";
         }
+        return "redirect:/courses/" + id;
     }
 
     @GetMapping("/{id}/lessons/{lessonId}")

@@ -56,7 +56,8 @@ public class LessonModuleRestController {
             @PathVariable("lessonModuleId") UUID lessonModuleId,
             @RequestBody LessonModuleMark lessonModuleMark, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        UserCourse userCourse = courseService.getUserCourseByUserId(user.getId());
+        LessonModule lessonModule = lessonModuleService.get(lessonModuleId);
+        UserCourse userCourse = courseService.getUserCourseByCourseIdAndUserId(lessonModule.getLesson().getCourse().getId(), user.getId());
         lessonModuleMark.setUserCourse(userCourse);
         lessonModuleService.createLessonModuleMark(lessonModuleMark);
         return new ResponseEntity<>(lessonModuleMark.getMark(), HttpStatus.CREATED);

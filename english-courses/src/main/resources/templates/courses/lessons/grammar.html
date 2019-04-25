@@ -21,9 +21,9 @@
                             <i class="fa fa-home"></i>
                         </a>
                         <i class="fa fa-caret-right"></i>
-                        <a th:href="@{/courses/__${courseId}__(week=__${#numbers.formatInteger(grammarLesson.lessonModule.lesson.orderNumber / 7 + 1, 1)}__)}"
+                        <a th:href="@{/courses/__${courseId}__(week=__${week}__)}"
                            style="text-decoration: none" class="text-dark">
-                            <span th:text="|Tuần ${#numbers.formatInteger(grammarLesson.lessonModule.lesson.orderNumber / 7 + 1, 1)}|">Tuần 1</span>
+                            <span th:text="|Tuần ${week}|">Tuần 1</span>
                         </a>
                         <i class="fa fa-caret-right"></i>
                         <a style="text-decoration: none" class="text-dark"

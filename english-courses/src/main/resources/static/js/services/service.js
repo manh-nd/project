@@ -326,25 +326,13 @@ function parseHttpHeaders(httpHeaders) {
     return headers;
 }
 
-function coverValueWithStrongTag(text, word) {
-    var single = new RegExp('^' + word + '$', 'gi');
-    var start = new RegExp('^' + word + ' ', 'gi');
-    var end = new RegExp(' ' + word + '$', 'gi');
-    var middle = new RegExp(' ' + word + ' ', 'gi');
-    var openBrace = new RegExp('\\(' + word + ' ', 'gi');
-    var closeBrace = new RegExp(' ' + word + '\\)', 'gi');
-    if(single.test(text)){
-        text = text.replace(single, '<strong>' + word + '</strong>');
-    } else if(start.test(text)){
-        text = text.replace(start, '<strong>' + word + ' </strong>');
-    } else if(end.test(text)){
-        text = text.replace(end, '<strong> ' + word + '</strong>');
-    } else if(middle.test(text)){
-        text = text.replace(middle, '<strong> ' + word + ' </strong>');
-    } else if (openBrace.test(text)){
-        text = text.replace(openBrace, '(<strong>' + word + ' </strong>');
-    } else if(closeBrace.test(text)){
-        text = text.replace(closeBrace, '<strong> ' + word + ')</strong>)');
+function getReplaceTextAndMatchesLength(text, words) {
+    var regexp = new RegExp('(\\b)(' + words.join('|') + ')(\\b)', 'gi');
+    var matchesWords = text ? text.match(regexp) : '';
+    var matchesLength = matchesWords ? matchesWords.length : 0;
+    var replaceText = text ? text.replace(regexp, '$1<strong>$2</strong>$3') : '';
+    return {
+        replaceText: replaceText,
+        matchesLength: matchesLength
     }
-    return text;
 }
