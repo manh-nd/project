@@ -27,6 +27,7 @@
                       th:data-id="${grammarLesson.id}">Bài 1</span>
                 <i class="fa fa-caret-right"></i>
                 <span th:text="${grammarLesson.lessonModule.module.name}">Luyện ngữ pháp</span>
+                <a th:href="@{/admin/management/grammar-lessons/__${grammarLesson.id}__/quiz}" class="badge badge-danger">Bài tập</a>
             </div>
         </div>
         <div class="ibox-body">
@@ -53,33 +54,8 @@
 </th:block>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
-    <script>
-        $(function () {
-            $('#grammar-content').summernote();
-            $('#save-grammar-lesson-button').on('click', function (event) {
-                var id = $('#grammar-lesson-id').data('id');
-                var title = $('#grammar-title').val();
-                var content = $('#grammar-content').val();
-                $.ajax({
-                    url: '/api/v1/grammar-lessons/' + id,
-                    method: 'PUT',
-                    data: JSON.stringify({
-                        id: id,
-                        title: title,
-                        content: content
-                    }),
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    success: function () {
-                        alert('success');
-                    },
-                    error: function () {
-                        alert('error');
-                    }
-                })
-            });
-        });
-    </script>
+    <script th:src="@{/js/services/service.js}"></script>
+    <script th:src="@{/js/pages/grammar-lesson.js}"></script>
 </th:block>
 </body>
 </html>

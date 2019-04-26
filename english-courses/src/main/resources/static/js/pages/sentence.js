@@ -37,12 +37,12 @@ $(document).ready(function () {
     });
 
     audioFileButton.addEventListener('change', function (event) {
-        var file = event.target.files[0];
+        var file = this.files[0];
         if (file) {
             if (file.type !== 'audio/mp3') {
                 alert("File không hợp lệ. Yêu cầu định dạng mp3");
-                event.target.files = undefined;
-                event.target.value = '';
+                file = undefined;
+                file.value = '';
             }
         }
     });

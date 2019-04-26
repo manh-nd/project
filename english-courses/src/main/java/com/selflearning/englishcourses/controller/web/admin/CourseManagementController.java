@@ -42,7 +42,7 @@ public class CourseManagementController {
         Page<Lesson> lessonPage = lessonService.findByCourseId(course.getId(), PageRequest.of(0, 7));
         model.addAttribute("course", course);
         model.addAttribute("lessonPage", lessonPage);
-        model.addAttribute("lessonManagement", true);
+        model.addAttribute("courseManagement", true);
         return "admin/courses/lessons";
     }
 
@@ -57,6 +57,7 @@ public class CourseManagementController {
         LessonModule lessonModule = lessonModuleService.get(lessonModuleId);
         String name = lessonModule.getModule().getName();
         model.addAttribute("lessonModule", lessonModule);
+        model.addAttribute("courseManagement", true);
         switch (name) {
             case "Luyện từ vựng":
                 return "redirect:/admin/management/vocabulary-lessons/" + lessonModule.getVocabularyLesson().getId();
@@ -72,15 +73,15 @@ public class CourseManagementController {
     @GetMapping("/vocabulary-lessons/{vocabularyLessonId}")
     public String vocabularyLesson(@PathVariable("vocabularyLessonId") UUID vocabularyLessonId, Model model) {
         VocabularyLesson vocabularyLesson = vocabularyLessonService.get(vocabularyLessonId);
-        model.addAttribute("lessonManagement", true);
         model.addAttribute("vocabularyLesson", vocabularyLesson);
+        model.addAttribute("courseManagement", true);
         return "admin/courses/lessons/vocabulary-lesson";
     }
 
     @GetMapping("/grammar-lessons/{grammarLessonId}")
     public String grammarLesson(@PathVariable("grammarLessonId") UUID grammarLessonId, Model model) {
         GrammarLesson grammarLesson = grammarLessonService.get(grammarLessonId);
-        model.addAttribute("lessonManagement", true);
+        model.addAttribute("courseManagement", true);
         model.addAttribute("grammarLesson", grammarLesson);
         return "admin/courses/lessons/grammar-lesson";
     }
@@ -88,7 +89,7 @@ public class CourseManagementController {
     @GetMapping("/grammar-lessons/{grammarLessonId}/quiz")
     public String grammarLessonQuiz(@PathVariable("grammarLessonId") UUID grammarLessonId, Model model) {
         GrammarLesson grammarLesson = grammarLessonService.get(grammarLessonId);
-        model.addAttribute("lessonManagement", true);
+        model.addAttribute("courseManagement", true);
         model.addAttribute("grammarLesson", grammarLesson);
         return "admin/courses/lessons/grammar-lesson-quiz";
     }

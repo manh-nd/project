@@ -1,8 +1,10 @@
 package com.selflearning.englishcourses.controller.rest.v1;
 
 import com.selflearning.englishcourses.domain.Course;
+import com.selflearning.englishcourses.exception.SimpleFieldErrorException;
 import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.dto.CourseDto;
+import com.selflearning.englishcourses.service.error.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,9 @@ public class CourseRestController {
     @PostMapping("/courses")
     public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CourseDto courseDto) {
         Course course = courseService.convertDtoToEntity(courseDto);
+        if(courseService.get(courseDto.getName()).isPresent()){
+            throw new SimpleFieldErrorException(new SimpleFieldError("course.name", "duplicate"));
+        }
         courseService.save(course);
         return new ResponseEntity<>(courseService.convertEntityToDto(course), HttpStatus.CREATED);
     }

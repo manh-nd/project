@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class SimpleFieldError {
 
-    private String key;
-    private String message;
+    private final String key;
+    private final String message;
 
 }

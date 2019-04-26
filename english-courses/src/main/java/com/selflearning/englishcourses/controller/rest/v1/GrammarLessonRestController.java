@@ -2,7 +2,9 @@ package com.selflearning.englishcourses.controller.rest.v1;
 
 import com.selflearning.englishcourses.domain.GrammarLesson;
 import com.selflearning.englishcourses.domain.GrammarQuestion;
+import com.selflearning.englishcourses.exception.SimpleFieldErrorException;
 import com.selflearning.englishcourses.service.GrammarLessonService;
+import com.selflearning.englishcourses.service.error.SimpleFieldError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,9 +39,11 @@ public class GrammarLessonRestController {
 
     @PutMapping("/grammar-lesson/{id}/questions")
     public ResponseEntity<GrammarLesson> updateQuestions(@PathVariable("id") UUID id, @RequestBody List<GrammarQuestion> questions) {
+        if(questions.isEmpty())
+            throw new SimpleFieldErrorException(new SimpleFieldError("grammarLesson.quiz.questions", "File không hợp lệ"));
         GrammarLesson grammarLesson = grammarLessonService.get(id);
         grammarLesson.setQuestions(questions);
-        grammarLesson.getQuestions().forEach(question -> {
+        questions.forEach(question -> {
             question.setGrammarLesson(grammarLesson);
             question.getAnswers().forEach(answer -> {
                 answer.setQuestion(question);

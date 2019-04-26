@@ -14,10 +14,11 @@ public class ErrorCustomController implements ErrorController {
 
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request){
+        System.out.println(request.getRequestURL().toString());
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
         if (status != null) {
-            Integer statusCode = Integer.valueOf(status.toString());
+            int statusCode = Integer.valueOf(status.toString());
 
             if(statusCode == HttpStatus.FORBIDDEN.value()){
                 return "errors/403";
@@ -32,12 +33,12 @@ public class ErrorCustomController implements ErrorController {
             }
 
         }
-        return "error";
+        return "errors/error";
     }
 
     @Override
     public String getErrorPath() {
-        return "/errors";
+        return "/error";
     }
 
 }

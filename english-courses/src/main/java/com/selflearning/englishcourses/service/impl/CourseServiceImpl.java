@@ -6,6 +6,7 @@ import com.selflearning.englishcourses.repository.jpa.CourseJpaRepository;
 import com.selflearning.englishcourses.repository.jpa.UserCourseJpaRepository;
 import com.selflearning.englishcourses.service.CourseService;
 import com.selflearning.englishcourses.service.dto.CourseDto;
+import com.selflearning.englishcourses.service.dto.MyCourse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,16 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course get(UUID id) {
         return courseJpaRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Optional<Course> get(String name) {
+        return courseJpaRepository.findByName(name);
+    }
+
+    @Override
+    public List<MyCourse> getCoursesForUser(UUID userId) {
+        return courseJpaRepository.findAllByUserId(userId);
     }
 
     @Override
@@ -88,5 +100,7 @@ public class CourseServiceImpl implements CourseService {
     public void createUserCourse(UserCourse userCourse) {
         userCourseJpaRepository.save(userCourse);
     }
+
+
 
 }

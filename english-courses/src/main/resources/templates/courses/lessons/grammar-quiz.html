@@ -22,6 +22,7 @@
                 <i class="fa fa-caret-right"></i>
                 <a id="grammar-lesson"
                    th:data-lesson-module-id="${grammarLesson.lessonModule.id}"
+                   th:data-grammar-lesson-id="${grammarLesson.id}"
                    th:href="@{/courses/__${courseId}__/lessons/__${lessonId}__/modules/__${lessonModuleId}__}"
                    style="text-decoration: none" class="text-dark">
                     <span th:text="${grammarLesson.title}">Luyện ngữ pháp</span>

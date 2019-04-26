@@ -15,8 +15,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
+@ToString(exclude = {"answers"})
+@EqualsAndHashCode(exclude = {"answers"})
 @Entity
 @Table(name = "grammar_questions")
 @Document(indexName="grammar_questions", shards = 2)
@@ -29,7 +29,7 @@ public class GrammarQuestion {
     private UUID id;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "GRAMMAR_LESSON_ID", nullable = false)
     private GrammarLesson grammarLesson;
 

@@ -2,8 +2,8 @@ package com.selflearning.englishcourses.controller.web;
 
 import com.selflearning.englishcourses.domain.Course;
 import com.selflearning.englishcourses.domain.User;
-import com.selflearning.englishcourses.domain.UserCourse;
 import com.selflearning.englishcourses.service.CourseService;
+import com.selflearning.englishcourses.service.dto.MyCourse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +23,16 @@ public class HomeController {
     private final CourseService courseService;
 
     @GetMapping("/")
-    public String index(Model model) {
-        List<Course> courses = courseService.findAll(PageRequest.of(0, 10)).getContent();
+    public String index(Model model, Authentication authentication) {
+        if (Objects.nonNull(authentication)) {
+            User user = (User) authentication.getPrincipal();
+            List<MyCourse> myCourses = courseService.getCoursesForUser(user.getId());
+            model.addAttribute("myCourses", myCourses);
+        } else {
+            List<Course> courses = courseService.findAll(PageRequest.of(0, 10)).getContent();
+            model.addAttribute("courses", courses);
+        }
         model.addAttribute("home", true);
-        model.addAttribute("courses", courses);
         return "index";
     }
 

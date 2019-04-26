@@ -29,10 +29,10 @@
                         <a style="text-decoration: none" class="text-dark"
                            th:href="@{/courses/__${grammarLesson.lessonModule.lesson.course.id}__/lessons/__${grammarLesson.lessonModule.lesson.id}__}"
                            th:text="|Bài ${grammarLesson.lessonModule.lesson.orderNumber}|">Bài 1</a>
-                        <i class="fa fa-caret-right"></i>
+                        <i th:if="${grammarLesson.title} != null" class="fa fa-caret-right"></i>
                         <span th:text="${grammarLesson.title}">Luyện ngữ pháp</span>
                     </div>
-                    <div class="col-md-3 mt-sm-1 mt-md-0">
+                    <div th:if="${grammarLesson.content} != null" class="col-md-3 mt-sm-1 mt-md-0">
                         <a class="btn btn-sm btn-success btn-block" th:href="@{/courses/__${courseId}__/lessons/__${lessonId}__/modules/__${lessonModuleId}__/quiz}">
                             <i class="fa fa-book"></i> <span>Làm bài tập</span>
                         </a>

@@ -35,7 +35,7 @@ public class GrammarLesson {
     @Column(name = "GRAMMAR_CONTENT", columnDefinition = "LONGTEXT", nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "grammarLesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "grammarLesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GrammarQuestion> questions;
 
     @Column(name="CREATED_TIME", insertable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

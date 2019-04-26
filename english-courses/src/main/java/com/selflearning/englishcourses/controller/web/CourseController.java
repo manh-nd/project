@@ -50,8 +50,9 @@ public class CourseController {
             userCourse.setUser(user);
             userCourse.setJoinedTime(new Date());
             courseService.createUserCourse(userCourse);
+            return "redirect:/courses/" + id;
         }
-        return "redirect:/courses/" + id;
+        return "redirect:/";
     }
 
     @GetMapping("/{id}/lessons/{lessonId}")

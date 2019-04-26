@@ -4,7 +4,7 @@ $(document).ready(function () {
     var controls = document.getElementById('controls');
     var mark = 0;
     $.ajax({
-        url: '/api/v1/grammar-lessons/a7e398ac-ce71-40cf-9474-48d418cb25d7/questions',
+        url: '/api/v1/grammar-lessons/' + grammarLesson.dataset.grammarLessonId + '/questions',
         method: 'GET',
         dataType: 'json',
         success: function (questions) {
@@ -16,6 +16,11 @@ $(document).ready(function () {
     });
 
     function renderGrammarQuiz(questions) {
+        if(!questions){
+            console.log(questions);
+            quizContainer.textContent = 'Không có nội dung';
+            return;
+        }
         for (var i in questions) {
             var questionDivElement = document.createElement('div');
             var questionTitle = document.createElement('h6');

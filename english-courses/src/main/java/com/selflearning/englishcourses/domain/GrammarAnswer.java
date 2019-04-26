@@ -29,12 +29,15 @@ public class GrammarAnswer {
     private UUID id;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "GRAMMAR_QUESTION_ID", nullable = false)
     private GrammarQuestion question;
 
     @Column(name="GRAMMAR_ANSWER_TEXT", nullable = false)
     private String answer;
+
+    @Column(name="GRAMMAR_ANSWER_MEANING")
+    private String meaning;
 
     @Column(name="GRAMMAR_ANSWER_EXPLAIN")
     private String explain;

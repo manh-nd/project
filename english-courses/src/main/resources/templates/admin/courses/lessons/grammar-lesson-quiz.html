@@ -15,83 +15,66 @@
 <div layout:fragment="content" class="page-content fade-in-up">
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Quiz</div>
+            <div class="ibox-title">
+                <a class="text-dark"
+                   th:href="@{/admin/management/courses/__${grammarLesson.lessonModule.lesson.course.id}__/lessons}">
+                    <i class="fa fa-home"></i>
+                    <span th:text="${grammarLesson.lessonModule.lesson.course.name}"></span>
+                </a>
+                <i class="fa fa-caret-right"></i>
+                <span id="grammar-lesson-id"
+                      th:text="|Bài ${grammarLesson.lessonModule.lesson.orderNumber}|"
+                      th:data-id="${grammarLesson.id}">Bài 1</span>
+                <i class="fa fa-caret-right"></i>
+                <a class="text-dark"
+                   th:href="@{/admin/management/grammar-lessons/__${grammarLesson.id}__}"
+                   th:text="${grammarLesson.lessonModule.module.name}">Luyện ngữ pháp</a>
+                <i class="fa fa-caret-right"></i>
+                <span>Bài trắc nghiệm</span>
+            </div>
         </div>
         <div class="ibox-body">
             <div id="alert-container"></div>
-            <form id="quiz-form" novalidate>
-                <h4>Câu hỏi</h4>
-                <div class="form-group">
-                    <label for="question"><strong>Câu hỏi</strong></label>
-                    <input id="question" type="text" class="form-control" placeholder="Câu hỏi"/>
-                </div>
-                <h4>Đáp án</h4>
-                <div class="form-group">
-                    <label for="answer1"><strong>Đáp án 1</strong></label>
-                    <label><input type="radio" name="rightAnswer"> <span> Đáp án đúng</span></label>
-                    <input id="answer1" type="text" class="form-control" placeholder="Đáp án 1">
-                </div>
-                <div class="form-group">
-                    <label for="answer2"><strong>Đáp án 2</strong></label>
-                    <label><input type="radio" name="rightAnswer"> <span> Đáp án đúng</span></label>
-                    <input id="answer2" type="text" class="form-control" placeholder="Đáp án 2">
-                </div>
-                <div class="form-group">
-                    <label for="answer3"><strong>Đáp án 3</strong></label>
-                    <label><input type="radio" name="rightAnswer"> <span> Đáp án đúng</span></label>
-                    <input id="answer3" type="text" class="form-control" placeholder="Đáp án 3">
-                </div>
-                <div class="form-group">
-                    <label for="answer4"><strong>Đáp án 4</strong></label>
-                    <label><input type="radio" name="rightAnswer"> <span> Đáp án đúng</span></label>
-                    <input id="answer4" type="text" class="form-control" placeholder="Đáp án 4">
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary">Thêm vào bài quiz</button>
-                </div>
-            </form>
+            <div class="mb-2"><input type="file" id="quiz-file-input"/></div>
+            <button id="upload-quiz-button" class="btn btn-primary">Upload</button>
         </div>
     </div>
+
+    <div class="ibox" th:if="${grammarLesson.questions != null && not #lists.isEmpty(grammarLesson.questions)}">
+        <div class="ibox-head">
+            <div class="ibox-title">Nội dung bài trắc nghiệm</div>
+        </div>
+        <div class="ibox-body">
+            <div th:each="q, qStat : ${grammarLesson.questions}" class="mb-4">
+                <h6 th:text="|${qStat.count}. ${q.question}|"></h6>
+                <table class="table table-sm table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Đáp án</th>
+                        <th>Nghĩa</th>
+                        <th>Giải thích</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="a,aStat : ${q.answers}" th:classappend="${a.rightAnswer? 'bg-success' : ''}">
+                        <td class="align-middle" width="20px" th:text="${aStat.count}"></td>
+                        <td class="align-middle" width="40%" th:text="${a.answer}"></td>
+                        <td class="align-middle" width="20%"
+                            th:text="${a.meaning == null || a.meaning == '' ? 'Không có nội dung' : a.meaning}"></td>
+                        <td class="align-middle" th:text="${a.explain}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 <th:block layout:fragment="page-level-scripts">
     <!-- PAGE LEVEL SCRIPTS-->
-    <script>
-        $(document).ready(function () {
-            var alertContainer = document.getElementById('alert-container');
-            var quizForm = document.getElementById('quiz-form');
-            var questionHTMLElement = document.getElementById('question');
-            var answer1HTMLElement = document.getElementById('answer1');
-            var answer2HTMLElement = document.getElementById('answer2');
-            var answer3HTMLElement = document.getElementById('answer3');
-            var answer4HTMLElement = document.getElementById('answer4');
-
-            var rightAnswerRadios = document.querySelectorAll('input[name="rightAnswer"]');
-            for (var i = 0; i < rightAnswerRadios.length; i++) {
-                rightAnswerRadios[i].addEventListener('change', handleRightAnswerChecked);
-            }
-
-            function handleRightAnswerChecked() {
-                for (var i = 0; i < rightAnswerRadios.length; i++) {
-                    var textInput;
-                    if(rightAnswerRadios[i] === this){
-                        textInput = this.parentElement.nextElementSibling;
-                        textInput.dataset.rightAnswer = 'true';
-                    } else {
-                        textInput = rightAnswerRadios[i].parentElement.nextElementSibling;
-                        textInput.dataset.rightAnswer = 'false';
-                    }
-                }
-            }
-
-            function saveQuestion() {
-                var question = questionHTMLElement.value;
-                var answer1 = answer1HTMLElement.value;
-                var answer2 = answer2HTMLElement.value;
-                var answer3 = answer3HTMLElement.value;
-                var answer4 = answer4HTMLElement.value;
-            }
-        });
-    </script>
+    <script th:src="@{/js/services/service.js}"></script>
+    <script th:src="@{/js/pages/grammar-lesson-quiz.js}"></script>
 </th:block>
 </body>
 </html>
