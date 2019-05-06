@@ -8,7 +8,7 @@ public class StringUtils {
         if (Objects.isNull(text))
             return null;
         return (text.replaceAll
-                ("[(\\,+)(\\:+)(\\\"+)(\\s+)(\\/+)(\\?+)(\\<+)(\\>+)(\\{+)(\\}+)(\\[+)(\\]+)(\\\\+)(\\t+)(\\:+)]",
+                ("[(\\,)(\\:)(\\\"+)(\\s)(\\/)(\\?)(\\<)(\\>)(\\{+)(\\})(\\[+)(\\])(\\\\)(\\t)(\\:)(\\-)]+",
                         "-").replaceAll("(\\.+)", "") + "." + extension).toLowerCase();
     }
 
